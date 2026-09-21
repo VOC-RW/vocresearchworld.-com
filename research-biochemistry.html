@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biochemistry — Research Areas — VOC Research World</title>
+<meta name="description" content="The Biochemistry research area at VOC Research World: metabolism, enzymes, metabolic regulation, biochemical pathways, proteins and biomolecules.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0A1930; --navy-2:#102544; --ink:#10192B; --blue:#2C6CA6; --blue-bright:#3E8BD6;
+    --green:#2E8B63; --green-bright:#38A876; --grey-100:#F5F6F8; --grey-200:#E7EAEE; --grey-500:#6B7686;
+    --serif:'Newsreader',Georgia,serif; --sans:'Inter',-apple-system,sans-serif; --mono:'IBM Plex Mono',monospace; --maxw:1200px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);color:var(--ink);background:#fff;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px;}
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:600;color:var(--navy);line-height:1.2;}
+  .section-tag{font-family:var(--mono);font-size:12.5px;letter-spacing:.02em;color:var(--blue);}
+  :focus-visible{outline:2.5px solid var(--blue-bright);outline-offset:2px;}
+
+  header{position:sticky;top:0;z-index:100;background:rgba(10,25,48,.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px;}
+  .logo{display:flex;align-items:center;gap:10px;color:#fff;}
+  .logo-mark{width:30px;height:30px;flex-shrink:0;}
+  .logo-text{font-family:var(--serif);font-weight:600;font-size:16px;color:#fff;}
+  .nav-links{display:flex;align-items:center;gap:26px;}
+  .nav-links a{color:rgba(255,255,255,.78);font-size:14px;font-weight:500;}
+  .nav-links a:hover{color:#fff;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:3px;font-weight:600;font-size:14px;cursor:pointer;border:1.5px solid transparent;}
+  .btn-ghost{border-color:rgba(255,255,255,.35);color:#fff;}
+  .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.06);}
+  .btn-dark{border-color:var(--navy);color:var(--navy);}
+  .btn-dark:hover{background:var(--navy);color:#fff;}
+  @media (max-width:900px){.nav-links{display:none;}}
+
+  .crumb{background:var(--grey-100);padding:18px 0;border-bottom:1px solid var(--grey-200);}
+  .crumb .wrap{display:flex;gap:8px;font-size:13px;color:var(--grey-500);}
+  .crumb a{color:var(--blue);font-weight:500;}
+
+  .area-hero{background:radial-gradient(ellipse at 80% 10%,#123059 0,var(--navy) 55%);padding:64px 0 56px;}
+  .area-hero .wrap{max-width:820px;}
+  .area-hero .section-tag{color:var(--green-bright);}
+  .area-hero h1{color:#fff;font-size:clamp(30px,4vw,44px);margin:16px 0 18px;}
+  .area-hero p{color:rgba(255,255,255,.68);font-size:16.5px;max-width:640px;}
+
+  .stat-strip{border-bottom:1px solid var(--grey-200);}
+  .stat-strip .wrap{display:flex;gap:0;flex-wrap:wrap;}
+  .stat{flex:1;min-width:160px;padding:26px 30px;border-left:1px solid var(--grey-200);}
+  .stat:first-child{border-left:none;}
+  .stat strong{display:block;font-family:var(--serif);font-size:26px;color:var(--navy);}
+  .stat span{font-size:12.5px;color:var(--grey-500);}
+
+  .content{padding:72px 0;}
+  .content .wrap{display:grid;grid-template-columns:1.4fr .8fr;gap:64px;}
+  .content h2{font-size:24px;margin-bottom:16px;}
+  .content > .wrap > div > p{color:#293344;font-size:15.5px;margin-bottom:16px;}
+  .topic-list{list-style:none;margin:24px 0 36px;}
+  .topic-list li{padding:12px 0;border-top:1px solid var(--grey-200);font-size:15px;display:flex;gap:10px;}
+  .topic-list li:first-child{border-top:none;}
+  .topic-list li::before{content:"—";color:var(--green);font-weight:700;}
+
+  .sidebar{background:var(--grey-100);padding:28px 26px;align-self:start;}
+  .sidebar h4{font-size:14px;font-family:var(--mono);color:var(--blue);margin-bottom:16px;}
+  .sidebar-list{list-style:none;}
+  .sidebar-list li{padding:12px 0;border-top:1px solid var(--grey-200);font-size:13.5px;}
+  .sidebar-list li:first-child{border-top:none;}
+  .sidebar-list a{font-weight:600;color:var(--navy);}
+  .sidebar-list span{display:block;color:var(--grey-500);font-size:12px;margin-top:3px;}
+
+  .pubs{background:var(--grey-100);padding:72px 0;}
+  .pub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:36px;}
+  .pub-card{background:#fff;border:1px solid var(--grey-200);padding:24px 22px;}
+  .pub-card span.tag{font-family:var(--mono);font-size:10.5px;color:var(--green);display:block;margin-bottom:12px;}
+  .pub-card h4{font-size:16px;margin-bottom:10px;line-height:1.35;}
+  .pub-card a{font-size:13px;font-weight:600;color:var(--blue);}
+  @media (max-width:900px){.content .wrap{grid-template-columns:1fr;}.pub-grid{grid-template-columns:1fr;}}
+
+  footer{background:var(--navy);padding:36px 0;color:rgba(255,255,255,.5);text-align:center;font-size:13px;}
+  footer a{color:rgba(255,255,255,.7);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="index.html" class="logo">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="#3E8BD6" stroke-width="1.4"/><ellipse cx="20" cy="20" rx="18" ry="7" stroke="#38A876" stroke-width="1.4" transform="rotate(35 20 20)"/><circle cx="20" cy="20" r="3.2" fill="#3E8BD6"/></svg>
+      <span class="logo-text">VOC RESEARCH WORLD</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#research">Research</a>
+      <a href="index.html#knowledge-hub">Knowledge Hub</a>
+      <a href="index.html#publications">Publications</a>
+      <a href="index.html#authors">Authors</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <a href="index.html#submit" class="btn btn-ghost">Submit Research</a>
+  </div>
+</header>
+
+<div class="crumb">
+  <div class="wrap"><a href="index.html">Home</a><span>/</span><a href="index.html#research">Research Areas</a><span>/</span><span>Biochemistry</span></div>
+</div>
+
+<section class="area-hero">
+  <div class="wrap">
+    <span class="section-tag">RESEARCH AREA — BIOCHEMISTRY</span>
+    <h1>Biochemistry</h1>
+    <p>Investigating metabolism, enzymes, metabolic regulation, molecular processes, biochemical pathways, proteins and biomolecules — from mechanism to clinical relevance.</p>
+  </div>
+</section>
+
+<div class="stat-strip">
+  <div class="wrap">
+    <div class="stat"><strong>3</strong><span>Active publications</span></div>
+    <div class="stat"><strong>2</strong><span>Contributing researchers</span></div>
+    <div class="stat"><strong>4</strong><span>Core topic clusters</span></div>
+  </div>
+</div>
+
+<section class="content">
+  <div class="wrap">
+    <div>
+      <h2>About this research area</h2>
+      <p>Biochemistry at VOC Research World is concerned with the molecular logic of living systems — how metabolic pathways are regulated, how enzymes achieve catalytic specificity, and how disruptions to these systems present as disease.</p>
+      <p>Work in this area draws on coursework in metabolic regulation and bio-inorganic biochemistry, translating classroom-level mechanism into publication-ready research notes, reviews and worked examples suited to exam preparation and applied laboratory understanding alike.</p>
+
+      <h2 style="margin-top:36px;">Current research interests</h2>
+      <ul class="topic-list">
+        <li>Allosteric and hormonal regulation of glycolysis and gluconeogenesis</li>
+        <li>Enzyme kinetics and inhibition mechanisms</li>
+        <li>Metal ion cofactors in enzyme catalysis (bio-inorganic biochemistry)</li>
+        <li>Clinical correlations between metabolic dysregulation and disease</li>
+      </ul>
+    </div>
+
+    <aside class="sidebar">
+      <h4>RESEARCHERS IN THIS AREA</h4>
+      <ul class="sidebar-list">
+        <li><a href="index.html#authors">VOC Research Team</a><span>Biochemistry Research Group</span></li>
+      </ul>
+      <h4 style="margin-top:26px;">RELATED AREAS</h4>
+      <ul class="sidebar-list">
+        <li><a href="index.html#research">Analytical Science</a></li>
+        <li><a href="index.html#research">Natural Products</a></li>
+      </ul>
+      <a href="index.html#submit" class="btn btn-dark" style="margin-top:22px;width:100%;justify-content:center;">Submit research here →</a>
+    </aside>
+  </div>
+</section>
+
+<section class="pubs">
+  <div class="wrap">
+    <span class="section-tag">Publications in Biochemistry</span>
+    <h2 style="margin-top:12px;">Articles &amp; research notes</h2>
+    <div class="pub-grid">
+      <div class="pub-card"><span class="tag">RESEARCH ARTICLE</span><h4>Regulatory Control Points in Hepatic Carbohydrate Metabolism</h4><a href="article.html">Read article →</a></div>
+      <div class="pub-card"><span class="tag">RESEARCH NOTE</span><h4>Enzyme Kinetics in Inorganic Cofactor Systems</h4><a href="index.html#publications">Read article →</a></div>
+      <div class="pub-card"><span class="tag">REVIEW</span><h4>Metabolic Regulation: From Substrate Cycles to Clinical Disease</h4><a href="index.html#publications">Read article →</a></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">© 2026 VOC Research World · <a href="index.html">Home</a></div>
+</footer>
+
+</body>
+</html>
