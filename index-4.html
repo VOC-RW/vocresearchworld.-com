@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOC Research World — Science · Innovation · Global Impact</title>
+<meta name="description" content="VOC Research World is a scientific research and publication platform connecting researchers, students, laboratories and industry through rigorous laboratory science, innovation and global scientific collaboration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #0A1930;
+    --navy-2: #102544;
+    --ink: #10192B;
+    --blue: #2C6CA6;
+    --blue-bright: #3E8BD6;
+    --green: #2E8B63;
+    --green-bright: #38A876;
+    --grey-100: #F5F6F8;
+    --grey-200: #E7EAEE;
+    --grey-500: #6B7686;
+    --white: #FFFFFF;
+    --serif: 'Newsreader', Georgia, serif;
+    --sans: 'Inter', -apple-system, sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --maxw: 1200px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans); color:var(--ink); background:var(--white); line-height:1.6; -webkit-font-smoothing:antialiased;}
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 32px;}
+  h1,h2,h3,h4{font-family:var(--serif); font-weight:600; line-height:1.15; color:var(--navy);}
+  .section-tag{font-family:var(--mono); font-size:12.5px; letter-spacing:.02em; color:var(--blue); margin-bottom:14px; display:block;}
+  .btn{display:inline-flex; align-items:center; gap:8px; padding:13px 26px; border-radius:3px; font-weight:600; font-size:15px; cursor:pointer; border:1.5px solid transparent; transition:all .15s ease;}
+  .btn-primary{background:var(--green); color:#fff;}
+  .btn-primary:hover{background:var(--green-bright);}
+  .btn-ghost{border-color:rgba(255,255,255,.35); color:#fff;}
+  .btn-ghost:hover{border-color:#fff; background:rgba(255,255,255,.06);}
+  .btn-dark{border-color:var(--navy); color:var(--navy);}
+  .btn-dark:hover{background:var(--navy); color:#fff;}
+  :focus-visible{outline:2.5px solid var(--blue-bright); outline-offset:2px;}
+
+  /* HEADER */
+  header{position:sticky; top:0; z-index:100; background:rgba(10,25,48,.97); backdrop-filter:blur(8px); border-bottom:1px solid rgba(255,255,255,.08);}
+  .nav{display:flex; align-items:center; justify-content:space-between; height:72px;}
+  .logo{display:flex; align-items:center; gap:10px; color:#fff;}
+  .logo-mark{width:34px; height:34px; flex-shrink:0;}
+  .logo-text{font-family:var(--serif); font-weight:600; font-size:18px; letter-spacing:.01em; color:#fff;}
+  .logo-text small{display:block; font-family:var(--mono); font-size:9.5px; letter-spacing:.14em; color:var(--blue-bright); font-weight:500; margin-top:2px;}
+  .nav-links{display:flex; align-items:center; gap:30px;}
+  .nav-links a{color:rgba(255,255,255,.78); font-size:14.5px; font-weight:500; transition:color .15s;}
+  .nav-links a:hover{color:#fff;}
+  .nav-cta{display:flex; align-items:center; gap:14px;}
+  .menu-btn{display:none; background:none; border:none; color:#fff; cursor:pointer; padding:8px;}
+  @media (max-width:980px){
+    .nav-links, .nav-cta .btn-ghost{display:none;}
+    .menu-btn{display:block;}
+    .nav-cta{gap:0;}
+  }
+  .mobile-menu{display:none; flex-direction:column; background:var(--navy-2); border-top:1px solid rgba(255,255,255,.1); padding:14px 32px 24px;}
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{color:rgba(255,255,255,.85); padding:12px 0; font-size:15px; border-bottom:1px solid rgba(255,255,255,.07);}
+
+  /* HERO */
+  .hero{background:radial-gradient(ellipse at 75% 20%, #123059 0%, var(--navy) 55%); position:relative; overflow:hidden; padding:88px 0 96px;}
+  .hero .wrap{display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center; position:relative; z-index:2;}
+  .hero-eyebrow{font-family:var(--mono); font-size:12.5px; color:var(--green-bright); letter-spacing:.03em; margin-bottom:22px; display:block;}
+  .hero h1{color:#fff; font-size:clamp(34px,4.6vw,56px); font-weight:600; line-height:1.08; margin-bottom:24px;}
+  .hero h1 em{font-style:italic; font-weight:500; color:#BFD9F5;}
+  .hero p{color:rgba(255,255,255,.72); font-size:17.5px; max-width:520px; margin-bottom:36px;}
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:44px;}
+  .hero-stats{display:flex; gap:36px; flex-wrap:wrap;}
+  .hero-stats div{border-left:2px solid rgba(255,255,255,.18); padding-left:14px;}
+  .hero-stats strong{display:block; font-family:var(--serif); font-size:26px; color:#fff; font-weight:600;}
+  .hero-stats span{font-size:12.5px; color:rgba(255,255,255,.55);}
+  .hero-visual{position:relative; height:460px;}
+  @media (max-width:980px){
+    .hero .wrap{grid-template-columns:1fr;}
+    .hero-visual{height:320px; order:-1;}
+  }
+
+  /* THREE PILLARS */
+  .pillars{background:var(--white); padding:80px 0;}
+  .pillars-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--grey-200); border:1px solid var(--grey-200);}
+  .pillar{background:#fff; padding:42px 36px;}
+  .pillar-icon{width:44px; height:44px; margin-bottom:22px;}
+  .pillar h3{font-size:21px; margin-bottom:12px;}
+  .pillar p{color:var(--grey-500); font-size:15px;}
+  @media (max-width:820px){.pillars-grid{grid-template-columns:1fr;}}
+
+  /* ABOUT */
+  .about{background:var(--grey-100); padding:96px 0;}
+  .about .wrap{display:grid; grid-template-columns:.85fr 1.15fr; gap:64px; align-items:start;}
+  .about h2{font-size:clamp(28px,3.2vw,38px); margin-bottom:20px;}
+  .about-lead{font-size:17px; color:var(--ink); max-width:420px;}
+  .about-body p{color:var(--grey-500); margin-bottom:18px; font-size:15.5px;}
+  .about-body p:first-child{color:var(--ink); font-size:17px; font-family:var(--serif); line-height:1.5;}
+  @media (max-width:900px){.about .wrap{grid-template-columns:1fr; gap:32px;}}
+
+  /* RESEARCH AREAS */
+  .areas{background:var(--white); padding:96px 0;}
+  .section-head{max-width:640px; margin-bottom:56px;}
+  .section-head h2{font-size:clamp(28px,3.2vw,38px);}
+  .areas-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--grey-200); border:1px solid var(--grey-200);}
+  .area-card{background:#fff; padding:34px 30px 30px; transition:background .15s;}
+  .area-card:hover{background:var(--grey-100);}
+  .area-num{font-family:var(--mono); font-size:11.5px; color:var(--blue); margin-bottom:16px; display:block;}
+  .area-card h3{font-size:19px; margin-bottom:10px;}
+  .area-card p{color:var(--grey-500); font-size:14.5px; margin-bottom:18px;}
+  .area-link{font-size:13.5px; font-weight:600; color:var(--navy); border-bottom:1.5px solid var(--green);}
+  @media (max-width:900px){.areas-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:600px){.areas-grid{grid-template-columns:1fr;}}
+
+  /* FEATURED RESEARCH */
+  .featured{background:var(--navy); padding:96px 0;}
+  .featured .section-tag{color:var(--green-bright);}
+  .featured .section-head h2{color:#fff;}
+  .featured .section-head p{color:rgba(255,255,255,.6);}
+  .pub-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:24px;}
+  .pub-card{background:var(--navy-2); border:1px solid rgba(255,255,255,.08); padding:28px 26px; display:flex; flex-direction:column; height:100%;}
+  .pub-meta{display:flex; gap:10px; align-items:center; margin-bottom:16px; font-family:var(--mono); font-size:11px; color:var(--green-bright);}
+  .pub-meta .dot{width:3px; height:3px; background:rgba(255,255,255,.3); border-radius:50%;}
+  .pub-card h3{color:#fff; font-size:18px; margin-bottom:12px; flex-grow:0;}
+  .pub-card p{color:rgba(255,255,255,.58); font-size:14px; margin-bottom:20px; flex-grow:1;}
+  .pub-foot{display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,.1); padding-top:16px; font-size:13px; color:rgba(255,255,255,.5);}
+  .pub-foot a{color:var(--blue-bright); font-weight:600;}
+  @media (max-width:900px){.pub-grid{grid-template-columns:1fr;}}
+
+  /* KNOWLEDGE HUB */
+  .khub{background:var(--white); padding:96px 0;}
+  .khub-top{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:44px; flex-wrap:wrap;}
+  .search-bar{display:flex; border:1.5px solid var(--grey-200); border-radius:3px; overflow:hidden; max-width:480px; width:100%;}
+  .search-bar input{flex:1; border:none; padding:14px 16px; font-size:14.5px; font-family:var(--sans); background:var(--grey-100);}
+  .search-bar input:focus{outline:none;}
+  .search-bar button{background:var(--navy); color:#fff; border:none; padding:0 22px; font-weight:600; cursor:pointer; font-size:14px;}
+  .khub-filters{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:36px;}
+  .filter-chip{font-size:13px; padding:7px 14px; border:1px solid var(--grey-200); border-radius:20px; color:var(--grey-500); font-weight:500; cursor:pointer;}
+  .filter-chip.active{background:var(--navy); color:#fff; border-color:var(--navy);}
+  .khub-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:22px;}
+  .khub-card{border:1px solid var(--grey-200); padding:22px 20px;}
+  .khub-card .tag{font-family:var(--mono); font-size:10.5px; color:var(--green); margin-bottom:12px; display:block;}
+  .khub-card h4{font-size:15.5px; font-weight:600; color:var(--navy); margin-bottom:10px; line-height:1.35;}
+  .khub-card span.meta{font-size:12px; color:var(--grey-500);}
+  @media (max-width:980px){.khub-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:560px){.khub-grid{grid-template-columns:1fr;}}
+
+  /* INSTRUMENTATION / DATA-AI / QA — feature band */
+  .capability{padding:96px 0; border-top:1px solid var(--grey-200);}
+  .capability .wrap{display:grid; grid-template-columns:.9fr 1.1fr; gap:64px; align-items:center;}
+  .capability.reverse .wrap{grid-template-columns:1.1fr .9fr;}
+  .capability.reverse .cap-media{order:2;}
+  .capability.reverse .cap-text{order:1;}
+  .cap-media{background:var(--grey-100); border:1px solid var(--grey-200); aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; padding:32px;}
+  .cap-text h2{font-size:clamp(26px,3vw,34px); margin-bottom:18px;}
+  .cap-text p{color:var(--grey-500); font-size:15.5px; margin-bottom:22px; max-width:480px;}
+  .cap-list{list-style:none; margin-bottom:26px;}
+  .cap-list li{display:flex; gap:10px; font-size:14.5px; color:var(--ink); padding:9px 0; border-top:1px solid var(--grey-200);}
+  .cap-list li:first-child{border-top:none;}
+  .cap-list li::before{content:"—"; color:var(--green); font-weight:700; flex-shrink:0;}
+  @media (max-width:900px){
+    .capability .wrap, .capability.reverse .wrap{grid-template-columns:1fr;}
+    .capability.reverse .cap-media{order:1;} .capability.reverse .cap-text{order:2;}
+  }
+
+  /* AUTHORS */
+  .authors{background:var(--grey-100); padding:96px 0;}
+  .authors-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:26px;}
+  .author-card{background:#fff; border:1px solid var(--grey-200); padding:26px 22px; text-align:left;}
+  .author-avatar{width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,var(--blue),var(--green)); margin-bottom:16px; display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--serif); font-weight:600; font-size:19px;}
+  .author-card h4{font-size:16px; color:var(--navy); margin-bottom:4px;}
+  .author-card .role{font-size:12.5px; color:var(--blue); margin-bottom:12px; display:block;}
+  .author-card p{font-size:13.5px; color:var(--grey-500);}
+  @media (max-width:980px){.authors-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:560px){.authors-grid{grid-template-columns:1fr;}}
+
+  /* SUBMISSION CTA */
+  .submit-cta{background:linear-gradient(120deg,var(--navy) 0%,#183a68 100%); padding:80px 0; text-align:center;}
+  .submit-cta h2{color:#fff; font-size:clamp(26px,3.4vw,36px); margin-bottom:16px;}
+  .submit-cta p{color:rgba(255,255,255,.65); max-width:540px; margin:0 auto 32px; font-size:16px;}
+
+  /* CONTACT */
+  .contact{padding:96px 0;}
+  .contact .wrap{display:grid; grid-template-columns:1fr 1fr; gap:64px;}
+  .contact-form{display:flex; flex-direction:column; gap:16px;}
+  .contact-form input, .contact-form select, .contact-form textarea{padding:13px 15px; border:1.5px solid var(--grey-200); border-radius:3px; font-family:var(--sans); font-size:14.5px; background:var(--grey-100);}
+  .contact-form label{font-size:13px; font-weight:600; color:var(--navy); margin-bottom:6px; display:block;}
+  .field{display:flex; flex-direction:column;}
+  .contact-info h3{font-size:22px; margin-bottom:16px;}
+  .contact-info p{color:var(--grey-500); margin-bottom:28px; font-size:15px;}
+  .contact-row{display:flex; gap:14px; padding:16px 0; border-top:1px solid var(--grey-200);}
+  .contact-row:last-child{border-bottom:1px solid var(--grey-200);}
+  .contact-row strong{display:block; font-size:14px; color:var(--navy);}
+  .contact-row span{font-size:13.5px; color:var(--grey-500);}
+  @media (max-width:900px){.contact .wrap{grid-template-columns:1fr;}}
+
+  /* FOOTER */
+  footer{background:var(--navy); padding:64px 0 28px; color:rgba(255,255,255,.6);}
+  .footer-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:48px;}
+  .footer-logo{color:#fff; margin-bottom:14px;}
+  .footer-grid p{font-size:14px; color:rgba(255,255,255,.5); max-width:280px;}
+  .footer-grid h5{font-family:var(--sans); font-size:13px; color:#fff; margin-bottom:16px; font-weight:600;}
+  .footer-grid ul{list-style:none;}
+  .footer-grid li{margin-bottom:11px;}
+  .footer-grid a{font-size:14px; color:rgba(255,255,255,.55); transition:color .15s;}
+  .footer-grid a:hover{color:#fff;}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,.1); padding-top:24px; display:flex; justify-content:space-between; font-size:13px; color:rgba(255,255,255,.4); flex-wrap:wrap; gap:12px;}
+  @media (max-width:900px){.footer-grid{grid-template-columns:1fr 1fr; gap:32px 24px;}}
+
+  ::selection{background:var(--green); color:#fff;}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="logo">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="18" stroke="#3E8BD6" stroke-width="1.4"/>
+        <ellipse cx="20" cy="20" rx="18" ry="7" stroke="#38A876" stroke-width="1.4" transform="rotate(35 20 20)"/>
+        <ellipse cx="20" cy="20" rx="18" ry="7" stroke="#38A876" stroke-width="1.1" opacity=".5" transform="rotate(-35 20 20)"/>
+        <circle cx="20" cy="20" r="3.2" fill="#3E8BD6"/>
+      </svg>
+      <span class="logo-text">VOC RESEARCH WORLD<small>SCIENCE · INNOVATION · GLOBAL IMPACT</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#research">Research</a>
+      <a href="#knowledge-hub">Knowledge Hub</a>
+      <a href="#publications">Publications</a>
+      <a href="#authors">Authors</a>
+      <a href="#instrumentation">Instrumentation</a>
+      <a href="#data-ai">Data &amp; AI</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="#submit" class="btn btn-ghost">Submit Research</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#research">Research</a>
+    <a href="#knowledge-hub">Knowledge Hub</a>
+    <a href="#publications">Publications</a>
+    <a href="#authors">Authors</a>
+    <a href="#instrumentation">Instrumentation</a>
+    <a href="#data-ai">Data &amp; AI</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <a href="#submit">Submit Research</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="hero-eyebrow">A scientific research &amp; publication platform</span>
+        <h1>Where laboratory science<br>meets <em>global impact</em>.</h1>
+        <p>VOC Research World connects researchers, students, laboratories and industry through rigorous research, applied laboratory science, and scientific communication — from the bench to the wider world.</p>
+        <div class="hero-actions">
+          <a href="#research" class="btn btn-primary">Explore Research →</a>
+          <a href="#submit" class="btn btn-ghost">Submit Research</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>6</strong><span>Research areas</span></div>
+          <div><strong>4</strong><span>Active coursework tracks</span></div>
+          <div><strong>Global</strong><span>Scientific network</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <svg viewBox="0 0 480 460" width="100%" height="100%" style="overflow:visible">
+          <g opacity="0.9">
+            <circle cx="240" cy="230" r="150" stroke="#3E8BD6" stroke-width="1" fill="none" opacity="0.35"/>
+            <ellipse cx="240" cy="230" rx="150" ry="55" stroke="#38A876" stroke-width="1" fill="none" opacity="0.5" transform="rotate(20 240 230)"/>
+            <ellipse cx="240" cy="230" rx="150" ry="55" stroke="#3E8BD6" stroke-width="1" fill="none" opacity="0.4" transform="rotate(-25 240 230)"/>
+            <ellipse cx="240" cy="230" rx="150" ry="55" stroke="#38A876" stroke-width="0.7" fill="none" opacity="0.3" transform="rotate(80 240 230)"/>
+          </g>
+          <g fill="#BFD9F5">
+            <circle cx="240" cy="230" r="7"/>
+            <circle cx="112" cy="230" r="4.5" fill="#38A876"/>
+            <circle cx="368" cy="230" r="4.5" fill="#38A876"/>
+            <circle cx="205" cy="128" r="4" fill="#3E8BD6"/>
+            <circle cx="290" cy="330" r="4" fill="#3E8BD6"/>
+            <circle cx="140" cy="310" r="3.5"/>
+            <circle cx="335" cy="150" r="3.5"/>
+          </g>
+          <g stroke="#3E8BD6" stroke-width="1" opacity="0.5">
+            <line x1="240" y1="230" x2="112" y2="230"/>
+            <line x1="240" y1="230" x2="368" y2="230"/>
+            <line x1="240" y1="230" x2="205" y2="128"/>
+            <line x1="240" y1="230" x2="290" y2="330"/>
+          </g>
+          <g fill="none" stroke="#38A876" stroke-width="1" opacity="0.45">
+            <path d="M60 60 L60 90 M60 60 L90 60" stroke-linecap="round"/>
+            <path d="M420 380 L420 410 M420 380 L390 380" stroke-linecap="round"/>
+          </g>
+          <text x="60" y="420" font-family="IBM Plex Mono" font-size="10" fill="#8AB4E0" opacity="0.7">C₆H₁₂O₆ → 2C₃H₄O₃ + 2ATP</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- THREE PILLARS -->
+  <section class="pillars">
+    <div class="wrap">
+      <div class="pillars-grid">
+        <div class="pillar">
+          <svg class="pillar-icon" viewBox="0 0 44 44" fill="none"><rect x="10" y="6" width="24" height="10" rx="1.5" stroke="#2C6CA6" stroke-width="1.6"/><path d="M16 16v12a6 6 0 0 0 6 6h4a6 6 0 0 0 6-6V16" stroke="#2C6CA6" stroke-width="1.6"/><circle cx="22" cy="34" r="2" fill="#2C6CA6"/></svg>
+          <h3>Science</h3>
+          <p>Rigorous research and laboratory knowledge across biochemistry, analytical science and applied laboratory technology.</p>
+        </div>
+        <div class="pillar">
+          <svg class="pillar-icon" viewBox="0 0 44 44" fill="none"><path d="M22 6c-7 0-11 5-11 11 0 5 3 7 4 10h14c1-3 4-5 4-10 0-6-4-11-11-11z" stroke="#2E8B63" stroke-width="1.6"/><path d="M17 33h10M18.5 38h7" stroke="#2E8B63" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <h3>Innovation</h3>
+          <p>Modern instrumentation, scientific methods, data analysis and responsible artificial intelligence applied to real research.</p>
+        </div>
+        <div class="pillar">
+          <svg class="pillar-icon" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="15" stroke="#2C6CA6" stroke-width="1.6"/><ellipse cx="22" cy="22" rx="15" ry="6" stroke="#2C6CA6" stroke-width="1.2"/><line x1="22" y1="7" x2="22" y2="37" stroke="#2C6CA6" stroke-width="1.2"/></svg>
+          <h3>Global Impact</h3>
+          <p>Connecting scientific knowledge and research across institutions, geographies and scientific communities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="wrap">
+      <div>
+        <span class="section-tag">About the organization</span>
+        <h2>An emerging scientific research and knowledge organization</h2>
+        <p class="about-lead">Built around laboratory science, applied knowledge, and scientific communication.</p>
+      </div>
+      <div class="about-body">
+        <p>VOC Research World is being built as a research and publication platform spanning biochemistry, laboratory science, analytical science, quality assurance, instrumentation, natural products, data analysis, artificial intelligence, industrial science, scientific education and research publication.</p>
+        <p>The platform exists to give laboratory-based research a proper home — a place where findings, methods and scientific reasoning can be documented, reviewed and shared with the rigor of a scientific journal, while remaining understandable to students, laboratory professionals, industry personnel and the wider public.</p>
+        <p>Its long-term mission is to grow from a static knowledge platform into a full research ecosystem — with researcher profiles, project management, manuscript submission, editorial review and open scientific data — connecting laboratory science to industry and society.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH AREAS -->
+  <section class="areas" id="research">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-tag">Research areas</span>
+        <h2>Six fields of active scientific interest</h2>
+      </div>
+      <div class="areas-grid">
+        <div class="area-card">
+          <span class="area-num">AREA — BIOCHEM</span>
+          <h3>Biochemistry</h3>
+          <p>Metabolism, enzymes, metabolic regulation, biochemical pathways, proteins and biomolecules.</p>
+          <a href="research-biochemistry.html" class="area-link">View research area</a>
+        </div>
+        <div class="area-card">
+          <span class="area-num">AREA — ANALYTICAL</span>
+          <h3>Analytical Science</h3>
+          <p>Analytical methods, spectroscopy, chromatography and instrumental measurement.</p>
+          <a href="#" class="area-link">View research area</a>
+        </div>
+        <div class="area-card">
+          <span class="area-num">AREA — QUALITY</span>
+          <h3>Quality Assurance</h3>
+          <p>Laboratory quality systems, calibration, validation, SOPs and regulatory compliance.</p>
+          <a href="#" class="area-link">View research area</a>
+        </div>
+        <div class="area-card">
+          <span class="area-num">AREA — NATURAL</span>
+          <h3>Natural Products</h3>
+          <p>Phytochemistry, natural compounds, extraction, characterization and biological activity.</p>
+          <a href="#" class="area-link">View research area</a>
+        </div>
+        <div class="area-card">
+          <span class="area-num">AREA — DATA/AI</span>
+          <h3>Data &amp; AI</h3>
+          <p>Scientific data analysis, statistics, visualization and responsible machine learning.</p>
+          <a href="#" class="area-link">View research area</a>
+        </div>
+        <div class="area-card">
+          <span class="area-num">AREA — INDUSTRIAL</span>
+          <h3>Industrial Science</h3>
+          <p>Industrial raw materials, production testing and applied quality assurance.</p>
+          <a href="#" class="area-link">View research area</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED RESEARCH -->
+  <section class="featured" id="publications">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-tag">Featured research</span>
+        <h2>Recent publications</h2>
+        <p>Research articles, reviews and technical reports from across VOC Research World's focus areas.</p>
+      </div>
+      <div class="pub-grid">
+        <div class="pub-card">
+          <div class="pub-meta"><span>BIOCHEMISTRY</span><span class="dot"></span><span>RESEARCH ARTICLE</span></div>
+          <h3>Regulatory Control Points in Hepatic Carbohydrate Metabolism</h3>
+          <p>An examination of allosteric and hormonal control in glycolysis and gluconeogenesis, with clinical correlations to metabolic disease.</p>
+          <div class="pub-foot"><span>VOC Research Team</span><a href="article.html">Read article</a></div>
+        </div>
+        <div class="pub-card">
+          <div class="pub-meta"><span>QUALITY ASSURANCE</span><span class="dot"></span><span>TECHNICAL REPORT</span></div>
+          <h3>Validating Laboratory Test Methods Under NAFDAC and SON Frameworks</h3>
+          <p>A structured approach to method validation and documentation for laboratories operating under Nigerian regulatory standards.</p>
+          <div class="pub-foot"><span>VOC Research Team</span><a href="#">Read article</a></div>
+        </div>
+        <div class="pub-card">
+          <div class="pub-meta"><span>ANALYTICAL SCIENCE</span><span class="dot"></span><span>REVIEW</span></div>
+          <h3>Spectrophotometric Methods in Routine Quality Control</h3>
+          <p>A review of UV-visible and atomic absorption techniques as applied to food, water and industrial sample analysis.</p>
+          <div class="pub-foot"><span>VOC Research Team</span><a href="#">Read article</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KNOWLEDGE HUB -->
+  <section class="khub" id="knowledge-hub">
+    <div class="wrap">
+      <div class="khub-top">
+        <div class="section-head" style="margin-bottom:0;">
+          <span class="section-tag">Knowledge hub</span>
+          <h2>A scientific library, built for search</h2>
+        </div>
+        <form class="search-bar" role="search" onsubmit="return false;">
+          <input type="text" placeholder="Search: enzymes, spectroscopy, HACCP…" aria-label="Search the knowledge hub">
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <div class="khub-filters">
+        <span class="filter-chip active">All topics</span>
+        <span class="filter-chip">Biochemistry</span>
+        <span class="filter-chip">Analytical Science</span>
+        <span class="filter-chip">Quality Assurance</span>
+        <span class="filter-chip">Natural Products</span>
+        <span class="filter-chip">Instrumentation</span>
+        <span class="filter-chip">Data &amp; AI</span>
+        <span class="filter-chip">Student Research</span>
+      </div>
+      <div class="khub-grid">
+        <div class="khub-card"><span class="tag">METABOLISM</span><h4>Hormonal Regulation of Glycolysis</h4><span class="meta">Article · 9 min read</span></div>
+        <div class="khub-card"><span class="tag">INSTRUMENTATION</span><h4>Principles of FTIR Spectroscopy</h4><span class="meta">Reference · 6 min read</span></div>
+        <div class="khub-card"><span class="tag">QUALITY</span><h4>Writing a Defensible SOP</h4><span class="meta">Guide · 7 min read</span></div>
+        <div class="khub-card"><span class="tag">DATA &amp; AI</span><h4>Cleaning Laboratory Data in Excel</h4><span class="meta">Tutorial · 11 min read</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTRUMENTATION -->
+  <section class="capability" id="instrumentation">
+    <div class="wrap">
+      <div class="cap-media">
+        <svg width="100%" height="100%" viewBox="0 0 200 160" fill="none">
+          <rect x="30" y="100" width="140" height="14" rx="2" stroke="#2C6CA6" stroke-width="1.4"/>
+          <rect x="60" y="40" width="14" height="60" stroke="#2C6CA6" stroke-width="1.4"/>
+          <rect x="126" y="30" width="14" height="70" stroke="#38A876" stroke-width="1.4"/>
+          <circle cx="67" cy="30" r="8" stroke="#2C6CA6" stroke-width="1.4"/>
+          <path d="M133 20 l7 10 l-14 0 z" stroke="#38A876" stroke-width="1.4"/>
+          <line x1="20" y1="130" x2="180" y2="130" stroke="#2C6CA6" stroke-width="1" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="cap-text">
+        <span class="section-tag">Instrumentation</span>
+        <h2>A reference library for laboratory instruments</h2>
+        <p>Each instrument page covers the scientific principle behind the method, its major components, applications and how to interpret the data it produces.</p>
+        <ul class="cap-list">
+          <li>UV-visible &amp; atomic absorption spectrophotometry</li>
+          <li>FTIR and NMR systems</li>
+          <li>HPLC and chromatographic methods</li>
+          <li>Microscopy, refractometry and polarimetry</li>
+        </ul>
+        <a href="#" class="btn btn-dark">Browse instruments →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATA & AI -->
+  <section class="capability reverse" id="data-ai">
+    <div class="wrap">
+      <div class="cap-media">
+        <svg width="100%" height="100%" viewBox="0 0 200 160" fill="none">
+          <polyline points="20,120 55,90 85,105 120,55 150,70 180,30" stroke="#38A876" stroke-width="1.6" fill="none"/>
+          <g fill="#2C6CA6"><circle cx="55" cy="90" r="3"/><circle cx="120" cy="55" r="3"/><circle cx="180" cy="30" r="3"/></g>
+          <line x1="20" y1="130" x2="180" y2="130" stroke="#8895A6" stroke-width="1"/>
+          <line x1="20" y1="130" x2="20" y2="20" stroke="#8895A6" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="cap-text">
+        <span class="section-tag">Data &amp; AI</span>
+        <h2>Turning laboratory data into scientific insight</h2>
+        <p>Resources on collecting, cleaning, visualizing and modelling scientific data — built for researchers moving from raw results to responsible conclusions.</p>
+        <ul class="cap-list">
+          <li>Statistics and scientific data visualization</li>
+          <li>Python and spreadsheet-based data workflows</li>
+          <li>Laboratory informatics</li>
+          <li>Responsible application of machine learning to research</li>
+        </ul>
+        <a href="#" class="btn btn-dark">Explore Data &amp; AI →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUALITY ASSURANCE -->
+  <section class="capability" id="quality">
+    <div class="wrap">
+      <div class="cap-media">
+        <svg width="100%" height="100%" viewBox="0 0 200 160" fill="none">
+          <rect x="55" y="20" width="90" height="120" rx="3" stroke="#2C6CA6" stroke-width="1.4"/>
+          <line x1="70" y1="45" x2="130" y2="45" stroke="#8895A6" stroke-width="1.2"/>
+          <line x1="70" y1="60" x2="130" y2="60" stroke="#8895A6" stroke-width="1.2"/>
+          <line x1="70" y1="75" x2="110" y2="75" stroke="#8895A6" stroke-width="1.2"/>
+          <path d="M75 100 l10 10 l20 -22" stroke="#38A876" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="cap-text">
+        <span class="section-tag">Quality assurance</span>
+        <h2>Structured knowledge for laboratory quality systems</h2>
+        <p>Covering quality control, calibration, validation, HACCP, good laboratory practice and the regulatory frameworks that govern laboratory work in Nigeria and beyond.</p>
+        <ul class="cap-list">
+          <li>Standard operating procedures &amp; documentation</li>
+          <li>Measurement uncertainty and process control</li>
+          <li>NAFDAC, SON and RMRDC regulatory context</li>
+          <li>Good laboratory &amp; manufacturing practice</li>
+        </ul>
+        <a href="#" class="btn btn-dark">View QA resources →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTHORS -->
+  <section class="authors" id="authors">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-tag">Authors &amp; researchers</span>
+        <h2>The people behind the research</h2>
+      </div>
+      <div class="authors-grid">
+        <div class="author-card">
+          <div class="author-avatar">AI</div>
+          <h4>Research Author</h4>
+          <span class="role">Biochemistry</span>
+          <p>Profile, biography, research interests and publication history.</p>
+        </div>
+        <div class="author-card">
+          <div class="author-avatar">RA</div>
+          <h4>Research Author</h4>
+          <span class="role">Analytical Science</span>
+          <p>Profile, biography, research interests and publication history.</p>
+        </div>
+        <div class="author-card">
+          <div class="author-avatar">QA</div>
+          <h4>Research Author</h4>
+          <span class="role">Quality Assurance</span>
+          <p>Profile, biography, research interests and publication history.</p>
+        </div>
+        <div class="author-card">
+          <div class="author-avatar">DS</div>
+          <h4>Research Author</h4>
+          <span class="role">Data &amp; AI</span>
+          <p>Profile, biography, research interests and publication history.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBMISSION CTA -->
+  <section class="submit-cta" id="submit">
+    <div class="wrap">
+      <span class="section-tag" style="color:#8AB4E0;">Research submission</span>
+      <h2>Publish your research with VOC Research World</h2>
+      <p>Submit manuscripts, research notes, reviews and technical reports for review and publication across our research areas.</p>
+      <a href="#contact" class="btn btn-primary">Start a submission →</a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="wrap">
+      <div class="contact-info">
+        <span class="section-tag">Contact</span>
+        <h3>Get in touch</h3>
+        <p>For research collaboration, publication enquiries, student research or general questions, reach out below.</p>
+        <div class="contact-row"><div><strong>Research collaboration</strong><span>Partner with VOC Research World on a project</span></div></div>
+        <div class="contact-row"><div><strong>Publication enquiries</strong><span>Questions about submitting or citing research</span></div></div>
+        <div class="contact-row"><div><strong>General enquiries</strong><span>Anything else — we'll route it to the right place</span></div></div>
+      </div>
+      <form class="contact-form" onsubmit="return false;">
+        <div class="field"><label for="cname">Name</label><input id="cname" type="text" placeholder="Your full name"></div>
+        <div class="field"><label for="cemail">Email</label><input id="cemail" type="email" placeholder="you@example.com"></div>
+        <div class="field"><label for="creason">Reason for contact</label>
+          <select id="creason">
+            <option>Research collaboration</option>
+            <option>Publication enquiry</option>
+            <option>Student research</option>
+            <option>Industry collaboration</option>
+            <option>General enquiry</option>
+          </select>
+        </div>
+        <div class="field"><label for="cmsg">Message</label><textarea id="cmsg" rows="4" placeholder="How can we help?"></textarea></div>
+        <button type="submit" class="btn btn-primary" style="align-self:flex-start;">Send message</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="logo footer-logo">
+          <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="18" stroke="#3E8BD6" stroke-width="1.4"/>
+            <ellipse cx="20" cy="20" rx="18" ry="7" stroke="#38A876" stroke-width="1.4" transform="rotate(35 20 20)"/>
+            <circle cx="20" cy="20" r="3.2" fill="#3E8BD6"/>
+          </svg>
+          <span class="logo-text">VOC RESEARCH WORLD</span>
+        </div>
+        <p>A scientific research and publication platform connecting laboratory science with global impact.</p>
+      </div>
+      <div>
+        <h5>Platform</h5>
+        <ul>
+          <li><a href="#research">Research</a></li>
+          <li><a href="#knowledge-hub">Knowledge Hub</a></li>
+          <li><a href="#publications">Publications</a></li>
+          <li><a href="#submit">Submit Research</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Research areas</h5>
+        <ul>
+          <li><a href="#research">Biochemistry</a></li>
+          <li><a href="#research">Analytical Science</a></li>
+          <li><a href="#quality">Quality Assurance</a></li>
+          <li><a href="#data-ai">Data &amp; AI</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Organization</h5>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#authors">Authors</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 VOC Research World. All rights reserved.</span>
+      <span>Privacy · Terms</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open);
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }));
+
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
