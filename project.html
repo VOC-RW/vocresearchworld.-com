@@ -1,7 +1,58 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Research Project | VOC Research World</title><link rel="stylesheet" href="style.css"></head><body><div id="header"></div><section class="content"><article class="wrap article" id="project"></article></section><div id="footer"></div><script src="data.js"></script><script src="app.js"></script><script>
-const p=project(new URLSearchParams(location.search).get('id')||'natural-products'); const lead=author(p.leadAuthorId); document.title=p.title+' | VOC Research World';
-const team=p.team.map(id=>`<a href="author.html?id=${encodeURIComponent(id)}">${esc(author(id).name)}</a>`).join(' · ');
-const articleLinks=p.articles.map(id=>`<li><a href="article.html?id=${encodeURIComponent(id)}">${esc(article(id).title)}</a></li>`).join('');
-const pubLinks=p.publications.map(id=>`<li><a href="publications.html?id=${encodeURIComponent(id)}">${esc(publication(id).title)}</a></li>`).join('');
-document.getElementById('project').innerHTML=`<div class="meta">${esc(p.status)} · ${esc(p.area)}</div><h1>${esc(p.title)}</h1><p class="lead">${esc(p.summary)}</p><p><b>Lead:</b> <a href="author.html?id=${encodeURIComponent(lead.id)}">${esc(lead.name)}</a><br><b>Team:</b> ${team}</p><h2>Research objectives</h2><ul>${p.objectives.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h2>Methods & approaches</h2><ul>${p.methods.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h2>Intended outputs</h2><ul>${p.outputs.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h2>Connected articles</h2><ul>${articleLinks||'<li>No articles connected yet.</li>'}</ul><h2>Connected publications</h2><ul>${pubLinks||'<li>No publications connected yet.</li>'}</ul><div class="abstract"><b>Research integrity note</b><p>This page describes a research direction and its documented structure. Results, claims and datasets should only be added after the underlying work has been performed and appropriately reviewed.</p></div><p><a href="research-projects.html">← All research projects</a></p>`;
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Research Project | VOC Research World</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="header"></div>
+<section class="content"><article class="wrap article" id="project"><p>Loading research project…</p></article></section>
+<div id="footer"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script>
+(function(){
+  function render(){
+    const root=document.getElementById('project');
+    try {
+      const id=new URLSearchParams(window.location.search).get('id') || 'natural-products';
+      const p=window.VOC.projects[id] || window.VOC.projects['natural-products'];
+      if(!p){ throw new Error('Research project data could not be loaded.'); }
+      const lead=window.VOC.author(p.leadAuthorId);
+      document.title=p.title+' | VOC Research World';
+      const team=(p.team||[]).map(function(id){
+        const a=window.VOC.author(id);
+        return '<a href="author.html?id='+encodeURIComponent(id)+'">'+window.VOC.esc(a.name)+'</a>';
+      }).join(' · ');
+      const articleLinks=(p.articles||[]).map(function(id){
+        const a=window.VOC.article(id);
+        return '<li><a href="article.html?id='+encodeURIComponent(id)+'">'+window.VOC.esc(a.title)+'</a></li>';
+      }).join('');
+      const pubLinks=(p.publications||[]).map(function(id){
+        const pub=window.VOC.publication(id);
+        return '<li><a href="publications.html?id='+encodeURIComponent(id)+'">'+window.VOC.esc(pub.title)+'</a></li>';
+      }).join('');
+      root.innerHTML=
+        '<div class="meta">'+window.VOC.esc(p.status)+' · '+window.VOC.esc(p.area)+'</div>'+
+        '<h1>'+window.VOC.esc(p.title)+'</h1>'+
+        '<p class="lead">'+window.VOC.esc(p.summary)+'</p>'+
+        '<p><b>Lead:</b> <a href="author.html?id='+encodeURIComponent(lead.id)+'">'+window.VOC.esc(lead.name)+'</a><br><b>Team:</b> '+(team||'Not yet assigned')+'</p>'+
+        '<h2>Research objectives</h2><ul>'+(p.objectives||[]).map(function(x){return '<li>'+window.VOC.esc(x)+'</li>';}).join('')+'</ul>'+
+        '<h2>Methods &amp; approaches</h2><ul>'+(p.methods||[]).map(function(x){return '<li>'+window.VOC.esc(x)+'</li>';}).join('')+'</ul>'+
+        '<h2>Intended outputs</h2><ul>'+(p.outputs||[]).map(function(x){return '<li>'+window.VOC.esc(x)+'</li>';}).join('')+'</ul>'+
+        '<h2>Connected articles</h2><ul>'+(articleLinks||'<li>No articles connected yet.</li>')+'</ul>'+
+        '<h2>Connected publications</h2><ul>'+(pubLinks||'<li>No publications connected yet.</li>')+'</ul>'+
+        '<div class="abstract"><b>Research integrity note</b><p>This page describes a research direction and its documented structure. Results, claims and datasets should only be added after the underlying work has been performed and appropriately reviewed.</p></div>'+
+        '<p><a href="research-projects.html">← All research projects</a></p>';
+    } catch(err){
+      root.innerHTML='<div class="abstract"><b>Project could not be displayed.</b><p>'+window.VOC.esc(err.message||'Unknown error')+'</p><p><a href="research-projects.html">← Return to Research Projects</a></p></div>';
+      console.error(err);
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',render); else render();
+})();
+</script>
+</body>
+</html>
