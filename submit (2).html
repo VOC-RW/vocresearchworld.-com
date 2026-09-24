@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Submit Research | VOC Research World</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="header"></div>
+<section class="page">
+  <div class="wrap">
+    <p class="eyebrow">RESEARCH SUBMISSION</p>
+    <h1>Submit your scientific work.</h1>
+    <p>Send a manuscript or research proposal to the VOC Research World editorial team using our email-based submission workflow.</p>
+  </div>
+</section>
+<section class="content">
+  <div class="wrap submission-layout">
+    <form class="form" id="submissionForm" novalidate>
+      <div class="submission-notice">
+        <strong>How submission works</strong>
+        <p>Your manuscript details are prepared as an email to <a class="email-link" href="mailto:vocresearchworld@gmail.com">vocresearchworld@gmail.com</a> with <a class="email-link" href="mailto:aolaniyan59@gmail.com">aolaniyan59@gmail.com</a> copied. If your device supports file sharing, the selected manuscript can be attached through your email/share app. Otherwise, your email app will open and you can attach the manuscript manually.</p>
+      </div>
+
+      <div class="two">
+        <div class="field"><label for="fullName">Full name *</label><input id="fullName" name="fullName" autocomplete="name" required></div>
+        <div class="field"><label for="email">Email address *</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+      </div>
+      <div class="field"><label for="institution">Institution / affiliation</label><input id="institution" name="institution" autocomplete="organization"></div>
+      <div class="field"><label for="title">Manuscript title *</label><input id="title" name="title" required></div>
+      <div class="two">
+        <div class="field"><label for="area">Research area *</label><select id="area" name="area" required><option value="">Select an area</option><option>Biochemistry</option><option>Analytical Science</option><option>Quality Assurance</option><option>Natural Products</option><option>Instrumentation</option><option>Data & AI</option><option>Industrial Science</option><option>Other</option></select></div>
+        <div class="field"><label for="type">Submission type *</label><select id="type" name="type" required><option value="">Select type</option><option>Research Article</option><option>Review Article</option><option>Research Note</option><option>Technical Note</option><option>Method</option><option>Educational Resource</option><option>Research Proposal</option></select></div>
+      </div>
+      <div class="field"><label for="keywords">Keywords</label><input id="keywords" name="keywords" placeholder="e.g. UV-Vis, calibration, analytical chemistry"></div>
+      <div class="field"><label for="abstract">Abstract / research summary *</label><textarea id="abstract" name="abstract" required placeholder="Provide a concise scientific summary of the work."></textarea></div>
+      <div class="field"><label for="manuscript">Manuscript file *</label><input id="manuscript" name="manuscript" type="file" accept=".pdf,.doc,.docx,.txt" required><small class="small">Recommended: PDF. Accepted formats: PDF, DOC, DOCX or TXT. Maximum size for the browser sharing workflow: 10 MB.</small></div>
+
+      <div class="submission-actions">
+        <button class="btn primary" type="submit">Prepare &amp; Send Submission</button>
+        <button class="btn secondary" type="button" id="clearSubmission">Clear form</button>
+      </div>
+      <div id="submissionResult" class="submission-result" hidden aria-live="polite"></div>
+    </form>
+
+    <aside class="submission-side">
+      <div class="card">
+        <p class="eyebrow">EDITORIAL CONTACT</p>
+        <h3>VOC Research World</h3>
+        <p>Research submissions, publication enquiries and collaboration proposals can be directed to either editorial address.</p>
+        <p><a class="email-link" href="mailto:vocresearchworld@gmail.com">vocresearchworld@gmail.com</a></p>
+        <p><a class="email-link" href="mailto:aolaniyan59@gmail.com">aolaniyan59@gmail.com</a></p>
+      </div>
+      <div class="card">
+        <p class="eyebrow">EDITORIAL WORKFLOW</p>
+        <ol class="submission-steps">
+          <li><b>Submission</b><span>Manuscript and metadata are sent to the editorial inbox.</span></li>
+          <li><b>Initial screening</b><span>Scope, completeness and basic submission requirements are checked.</span></li>
+          <li><b>Review</b><span>Appropriate review and revision processes can be arranged as the publication system develops.</span></li>
+          <li><b>Publication</b><span>Accepted work can be structured into the VOC publication architecture.</span></li>
+        </ol>
+      </div>
+      <div class="submission-note"><strong>Important:</strong> This version uses the submitter's email/share application rather than a server-side manuscript database. Do not submit highly sensitive or confidential material until a dedicated secure manuscript backend is connected.</div>
+    </aside>
+  </div>
+</section>
+<div id="footer"></div>
+<script src="app.js"></script>
+<script>
+(function(){
+  const form=document.getElementById('submissionForm');
+  const result=document.getElementById('submissionResult');
+  const fileInput=document.getElementById('manuscript');
+  const clearBtn=document.getElementById('clearSubmission');
+  const TO='vocresearchworld@gmail.com';
+  const CC='aolaniyan59@gmail.com';
+  const MAX=10*1024*1024;
+
+  function ref(){
+    const d=new Date();
+    const date=d.toISOString().slice(0,10).replace(/-/g,'');
+    const rand=Math.random().toString(36).slice(2,7).toUpperCase();
+    return 'VOC-'+date+'-'+rand;
+  }
+  function val(id){return document.getElementById(id).value.trim();}
+  function show(html,ok){
+    result.hidden=false;
+    result.className='submission-result '+(ok?'success':'error');
+    result.innerHTML=html;
+    result.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  function emailBody(data,id){
+    return [
+      'VOC RESEARCH WORLD — RESEARCH SUBMISSION',
+      '',
+      'Submission reference: '+id,
+      'Submitted by: '+data.fullName,
+      'Email: '+data.email,
+      'Institution / affiliation: '+(data.institution||'Not provided'),
+      'Research area: '+data.area,
+      'Submission type: '+data.type,
+      'Keywords: '+(data.keywords||'Not provided'),
+      '',
+      'MANUSCRIPT TITLE',
+      data.title,
+      '',
+      'ABSTRACT / RESEARCH SUMMARY',
+      data.abstract,
+      '',
+      'MANUSCRIPT FILE',
+      data.fileName,
+      '',
+      'Please review the attached manuscript before sending this email.'
+    ].join('\\n');
+  }
+  function openMail(data,id){
+    const subject='VOC Research World Submission — '+id+' — '+data.title;
+    const body=emailBody(data,id);
+    window.location.href='mailto:'+encodeURIComponent(TO)+'?cc='+encodeURIComponent(CC)+'&subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  }
+  async function shareFile(data,id,file){
+    if(!navigator.share || !navigator.canShare || !navigator.canShare({files:[file]})) return false;
+    try{
+      await navigator.share({title:'VOC Research World Submission '+id,text:'To: '+TO+'\nCC: '+CC+'\n\n'+emailBody(data,id),files:[file]});
+      return true;
+    }catch(e){
+      if(e && e.name==='AbortError') return 'cancelled';
+      return false;
+    }
+  }
+
+  form.addEventListener('submit',async function(e){
+    e.preventDefault();
+    result.hidden=true;
+    const required=['fullName','email','title','area','type','abstract'];
+    for(const id of required){ if(!val(id)){ document.getElementById(id).focus(); show('<b>Please complete all required fields.</b><p>Fields marked with * are required before a submission can be prepared.</p>',false); return; } }
+    const email=val('email');
+    if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){document.getElementById('email').focus();show('<b>Please enter a valid email address.</b>',false);return;}
+    const file=fileInput.files[0];
+    if(!file){fileInput.focus();show('<b>Please select the manuscript file.</b><p>Choose a PDF, DOC, DOCX or TXT file before sending.</p>',false);return;}
+    if(file.size>MAX){show('<b>The selected manuscript is larger than 10 MB.</b><p>Please reduce the file size or use the email fallback and attach the manuscript directly in your email application.</p>',false);return;}
+    const id=ref();
+    const data={fullName:val('fullName'),email,title:val('title'),institution:val('institution'),area:val('area'),type:val('type'),keywords:val('keywords'),abstract:val('abstract'),fileName:file.name};
+    const shared=await shareFile(data,id,file);
+    if(shared===true){show('<b>Submission package prepared.</b><p>Use your email/share application to send the message to <a class="email-link" href="mailto:'+TO+'">'+TO+'</a> with a copy to <a class="email-link" href="mailto:'+CC+'">'+CC+'</a>.</p><p><b>Reference:</b> '+id+'</p>',true);return;}
+    if(shared==='cancelled'){show('<b>Submission cancelled.</b><p>No manuscript was sent. Your form remains available so you can try again.</p>',false);return;}
+    show('<b>Your email draft is being opened.</b><p>Reference: <b>'+id+'</b>. If your email application opens, check the recipient, subject and manuscript attachment, then press Send. If the manuscript is not attached automatically, attach <b>'+window.VOC.esc(file.name)+'</b> before sending.</p>',true);
+    openMail(data,id);
+  });
+  clearBtn.addEventListener('click',function(){form.reset();result.hidden=true;});
+})();
+</script>
+</body>
+</html>

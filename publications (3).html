@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publications | VOC Research World</title><link rel="stylesheet" href="style.css"></head><body><div id="header"></div><section class="page"><div class="wrap"><p class="eyebrow">PUBLICATION LIBRARY</p><h1>Scientific publications and research notes.</h1><p>A developing library in which each publication is connected to its authors, article record, project and publication identifier.</p><div class="publication-search"><input id="pubSearch" type="search" placeholder="Search publications, authors, type or identifier…" aria-label="Search publications"></div></div></section><section class="content"><div class="wrap cards three" id="publicationGrid"></div><div class="wrap" id="publicationEmpty" hidden><div class="abstract"><b>No publications found.</b><p>Try another title, author, type or identifier.</p></div></div></section><div id="footer"></div><script src="data.js"></script><script src="app.js"></script><script>
+(function(){
+ const selected=new URLSearchParams(location.search).get('id');
+ const all=Object.values(VOC.publications);
+ function render(q=''){
+  const term=q.trim().toLowerCase();
+  const list=selected?[VOC.publication(selected)]:all.filter(p=>{const names=p.authors.map(id=>VOC.author(id).name).join(' ');return (p.title+' '+names+' '+p.type+' '+p.identifier+' '+p.status).toLowerCase().includes(term)});
+  document.getElementById('publicationGrid').innerHTML=list.map(p=>{const names=p.authors.map(id=>VOC.author(id).name).join(', ');return `<article class="card"><label>${VOC.esc(p.type)} · ${p.year}</label><h3>${VOC.esc(p.title)}</h3><p>${VOC.esc(names)}</p><p class="small">${VOC.esc(p.status)} · <b>${VOC.esc(p.identifier)}</b></p><p><a href="article.html?id=${encodeURIComponent(p.articleId)}">Article →</a> &nbsp; <a href="project.html?id=${encodeURIComponent(p.projectId)}">Project →</a></p></article>`}).join('');
+  document.getElementById('publicationEmpty').hidden=list.length!==0;
+ }
+ document.getElementById('pubSearch').addEventListener('input',e=>{if(!selected)render(e.target.value)}); render();
+})();
+</script></body></html>
