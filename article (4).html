@@ -1,0 +1,58 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Research Article | VOC Research World"><link rel="stylesheet" href="style.css"></head><body><div id="header"></div><section class="content"><article class="wrap article" id="article"><p>Loading article…</p></article></section><div id="footer"></div><script src="data.js"></script><script src="app.js"></script><script>
+(function(){
+  const id=new URLSearchParams(location.search).get('id')||'metabolism';
+  const a=VOC.article(id), au=VOC.author(a.authorId), pr=VOC.project(a.projectId);
+  const pub=Object.values(VOC.publications).find(x=>x.articleId===a.id);
+  const year=a.date.slice(0,4);
+  document.title=a.title+' | VOC Research World';
+
+  const refs=(a.references||[]).map(rid=>VOC.references[rid]).filter(Boolean);
+  const related=(a.related||[]).map(rid=>VOC.articles[rid]).filter(Boolean);
+  const reading=Math.max(3,Math.ceil(a.sections.reduce((n,s)=>n+s[1].split(/\s+/).length,0)/220));
+
+  function citation(style){
+    const author=au.name;
+    const identifier=pub?.identifier ? ` ${pub.identifier}.` : '';
+    if(style==='harvard') return `${author} (${year}) '${a.title}', VOC Research World, ${a.type}.${identifier}`;
+    if(style==='vancouver') return `${author}. ${a.title}. VOC Research World; ${year}.${identifier}`;
+    return `${author}. (${year}). ${a.title}. VOC Research World.${identifier}`;
+  }
+  async function copyCitation(){
+    const style=document.getElementById('citationStyle').value, text=citation(style);
+    try{await navigator.clipboard.writeText(text);document.getElementById('copyStatus').textContent='Citation copied to clipboard.'}
+    catch(e){const t=document.getElementById('citationText');t.select();document.execCommand('copy');document.getElementById('copyStatus').textContent='Citation copied.'}
+  }
+  function render(){
+    const sectionLinks=a.sections.map((s,i)=>`<a href="#section-${i}">${VOC.esc(s[0])}</a>`).join('');
+    const refHtml=refs.length?refs.map((r,i)=>`<li id="ref-${VOC.esc(r.id)}"><span class="ref-number">${i+1}.</span> ${VOC.esc(r.authors)} (${r.year}). <i>${VOC.esc(r.title)}</i>. ${VOC.esc(r.source)}</li>`).join(''):'<li>No references recorded.</li>';
+    const relatedHtml=related.length?related.map(x=>VOC.articleCard(x)).join(''):'<p class="muted">No related articles recorded yet.</p>';
+    document.getElementById('article').innerHTML=`
+      <div class="article-shell">
+        <aside class="article-sidebar" aria-label="Article navigation">
+          <div class="reader-box"><span>ARTICLE</span><strong>${VOC.esc(a.type)}</strong><small>${year} · ${reading} min read</small></div>
+          <div class="toc"><b>CONTENTS</b>${sectionLinks}<a href="#article-info">Article information</a><a href="#citation">Citation</a><a href="#references">References</a><a href="#related">Related research</a></div>
+        </aside>
+        <div class="article-main">
+          <div class="meta">${VOC.esc(a.category)} · ${VOC.esc(a.type)} · ${year}</div>
+          <h1>${VOC.esc(a.title)}</h1>
+          <p class="article-byline">By <a href="author.html?id=${encodeURIComponent(au.id)}"><b>${VOC.esc(au.name)}</b></a> · ${VOC.esc(au.affiliation)}</p>
+          <p class="lead">${VOC.esc(a.subtitle)}</p>
+          <div class="article-tools"><a class="btn" href="#citation">Cite this article</a><button class="btn" type="button" onclick="window.print()">Print / Save PDF</button></div>
+          <div class="abstract"><b>Abstract</b><p>${VOC.esc(a.sections[0][1])}</p></div>
+          ${a.sections.slice(1).map((s,i)=>`<section id="section-${i+1}" class="reader-section"><h2>${VOC.esc(s[0])}</h2><p>${VOC.esc(s[1])}</p></section>`).join('')}
+          <section id="article-info" class="article-info"><p class="eyebrow">ARTICLE INFORMATION</p><div class="info-grid"><div><span>Author</span><b>${VOC.esc(au.name)}</b></div><div><span>Research area</span><b>${VOC.esc(a.category)}</b></div><div><span>Article type</span><b>${VOC.esc(a.type)}</b></div><div><span>Published</span><b>${VOC.esc(a.date)}</b></div><div><span>Affiliation</span><b>${VOC.esc(au.affiliation)}</b></div><div><span>Reading time</span><b>${reading} minutes</b></div></div><div class="tag-row">${a.keywords.map(k=>`<span>${VOC.esc(k)}</span>`).join('')}</div></section>
+          <section class="research-link"><p class="eyebrow">RESEARCH CONNECTION</p><h2>Research project</h2><p>This article is connected to <a href="project.html?id=${encodeURIComponent(pr.id)}"><b>${VOC.esc(pr.title)}</b></a>.</p><a class="text-link" href="project.html?id=${encodeURIComponent(pr.id)}">Explore project →</a></section>
+          ${pub?`<section class="publication-record"><p class="eyebrow">PUBLICATION RECORD</p><h2>${VOC.esc(pub.title)}</h2><div class="pub-meta-grid"><div><span>Type</span><b>${VOC.esc(pub.type)}</b></div><div><span>Year</span><b>${pub.year}</b></div><div><span>Status</span><b>${VOC.esc(pub.status)}</b></div><div><span>Identifier</span><b>${VOC.esc(pub.identifier)}</b></div></div><p><a href="publications.html?id=${encodeURIComponent(pub.id)}">View publication record →</a></p></section>`:''}
+          <section id="citation" class="citation-box"><p class="eyebrow">CITATION</p><h2>How to cite this article</h2><div class="citation-controls"><label for="citationStyle">Style</label><select id="citationStyle"><option value="apa">APA</option><option value="harvard">Harvard</option><option value="vancouver">Vancouver</option></select><button class="btn primary" id="copyCitation" type="button">Copy citation</button></div><textarea id="citationText" readonly>${VOC.esc(citation('apa'))}</textarea><p id="copyStatus" class="small" aria-live="polite"></p></section>
+          <section id="references" class="references"><p class="eyebrow">REFERENCES</p><h2>References</h2><ol>${refHtml}</ol></section>
+          <section id="related" class="related-section"><p class="eyebrow">DISCOVER MORE</p><h2>Related research</h2><div class="cards three">${relatedHtml}</div></section>
+          <p><a class="btn primary" href="knowledge.html">← Back to Knowledge Hub</a></p>
+        </div>
+      </div>`;
+    const sel=document.getElementById('citationStyle'),txt=document.getElementById('citationText');
+    sel.addEventListener('change',()=>{txt.value=citation(sel.value);document.getElementById('copyStatus').textContent=''});
+    document.getElementById('copyCitation').addEventListener('click',copyCitation);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render);else render();
+})();
+</script></script></body></html>
