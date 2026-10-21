@@ -61,6 +61,57 @@
 
     const grid = document.getElementById('publicationGrid');
     const status = document.getElementById('publicationStatus');
+    async function loadPublicationStatistics() {
+const totalElement = document.getElementById('totalPublications');
+const categoriesElement = document.getElementById('totalCategories');
+const featuredElement = document.getElementById('totalFeatured');
+
+  try {
+    // Count all published articles.
+    const { count: total, error: totalError } = await supabase
+      .from('publications')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'published');
+
+    if (totalError) throw totalError;
+
+    totalElement.textContent = total ?? 0;
+
+    // Retrieve categories represented by published articles.
+    const { data: articles, error: articlesError } = await supabase
+      .from('publications')
+      .select('category_id')
+      .eq('status', 'published');
+
+    if (articlesError) throw articlesError;
+
+    const uniqueCategories = new Set(
+      (articles || [])
+        .map(article => article.category_id)
+        .filter(Boolean)
+    );
+
+    categoriesElement.textContent = uniqueCategories.size;
+
+    // Count featured articles that are published.
+    const { count: featured, error: featuredError } = await supabase
+      .from('publications')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'published')
+      .eq('featured', true);
+
+    if (featuredError) throw featuredError;
+
+    featuredElement.textContent = featured ?? 0;
+
+  } catch (error) {
+    console.error('Publication statistics error:', error);
+
+    totalElement.textContent = '—';
+    categoriesElement.textContent = '—';
+    featuredElement.textContent = '—';
+  }
+    }
 
     const esc = value =>
       String(value ?? '').replace(/[&<>'"]/g, character => ({
