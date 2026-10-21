@@ -5,14 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Admin Dashboard | VOC Research World</title>
-
 <link rel="stylesheet" href="style.css">
 
 <style>
-/* =========================
-   ADMIN NAVIGATION
-========================= */
-
 .admin-nav {
   position: sticky;
   top: 0;
@@ -43,8 +38,6 @@
   letter-spacing: 2px;
 }
 
-/* Three-line hamburger button */
-
 .admin-menu-button {
   display: flex;
   flex-direction: column;
@@ -66,14 +59,7 @@
   height: 3px;
   background: #fff;
   border-radius: 3px;
-  transition: transform .2s ease;
 }
-
-.admin-menu-button:hover {
-  background: #153b60;
-}
-
-/* Dropdown navigation */
 
 .admin-navigation {
   display: none;
@@ -118,10 +104,6 @@
 .admin-navigation button {
   color: #ffb8b8;
 }
-
-/* =========================
-   DASHBOARD LAYOUT
-========================= */
 
 .admin-wrap {
   max-width: 1180px;
@@ -250,12 +232,29 @@
   cursor: pointer;
 }
 
-#submissions {
+#submissions,
+#reviewerAssignments,
+#overview {
   scroll-margin-top: 90px;
 }
 
-#overview {
-  scroll-margin-top: 90px;
+#assignReviewerForm select,
+#assignReviewerForm input {
+  box-sizing: border-box;
+  max-width: 100%;
+  border: 1px solid #dbe5ea;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+}
+
+#assignReviewerForm button {
+  cursor: pointer;
+}
+
+#assignReviewerForm button:disabled {
+  opacity: .6;
+  cursor: wait;
 }
 
 @media (max-width: 800px) {
@@ -299,10 +298,6 @@
 
 <body>
 
-<!-- =========================
-     ADMIN NAVIGATION
-========================= -->
-
 <header class="admin-nav">
 
   <a class="admin-brand" href="admin.html">
@@ -329,11 +324,10 @@
     aria-label="Admin navigation"
   >
     <a href="#overview">Admin Overview</a>
-
+    <a href="#reviewerAssignments">Reviewer Assignments</a>
     <a href="#submissions">Research Submissions</a>
-
     <a href="dashboard.html">Author Dashboard</a>
-
+    <a href="reviewer.html">Reviewer Dashboard</a>
     <a href="index.html">Public Website</a>
 
     <button type="button" id="adminNavLogout">
@@ -343,10 +337,6 @@
 
 </header>
 
-<!-- =========================
-     ADMIN DASHBOARD
-========================= -->
-
 <main class="admin-wrap" id="overview">
 
   <p class="eyebrow">EDITORIAL OPERATIONS</p>
@@ -354,8 +344,8 @@
   <h1>Admin Dashboard</h1>
 
   <p>
-    Manage research submissions and oversee the
-    editorial workflow of VOC Research World.
+    Manage research submissions, assign peer reviewers,
+    and oversee the editorial workflow of VOC Research World.
   </p>
 
   <section class="admin-card">
@@ -375,6 +365,10 @@
         Author Dashboard
       </a>
 
+      <a class="btn secondary" href="reviewer.html">
+        Reviewer Dashboard
+      </a>
+
       <a class="btn secondary" href="index.html">
         Public Website
       </a>
@@ -390,8 +384,6 @@
     </p>
 
   </section>
-
-  <!-- DASHBOARD STATISTICS -->
 
   <section class="stats" id="stats" hidden>
 
@@ -413,6 +405,88 @@
     <div class="stat">
       <strong id="published">0</strong>
       <span>Published</span>
+    </div>
+
+  </section>
+
+  <!-- REVIEWER ASSIGNMENTS -->
+
+  <section class="admin-card" id="reviewerAssignments">
+
+    <h2>Reviewer Assignment</h2>
+
+    <p>
+      Assign submitted manuscripts to registered reviewers
+      and set deadlines for completing peer reviews.
+    </p>
+
+    <form id="assignReviewerForm">
+
+      <p>
+        <label for="assignmentSubmission">
+          <strong>Select manuscript</strong>
+        </label>
+
+        <select
+          id="assignmentSubmission"
+          required
+          style="display:block;width:100%;padding:12px;margin-top:8px"
+        >
+          <option value="">Loading manuscripts...</option>
+        </select>
+      </p>
+
+      <p>
+        <label for="assignmentReviewer">
+          <strong>Select reviewer</strong>
+        </label>
+
+        <select
+          id="assignmentReviewer"
+          required
+          style="display:block;width:100%;padding:12px;margin-top:8px"
+        >
+          <option value="">Loading reviewers...</option>
+        </select>
+      </p>
+
+      <p>
+        <label for="assignmentDeadline">
+          <strong>Review deadline</strong>
+        </label>
+
+        <input
+          id="assignmentDeadline"
+          type="date"
+          required
+          style="display:block;width:100%;padding:12px;margin-top:8px"
+        >
+      </p>
+
+      <button
+        class="btn primary"
+        type="submit"
+        id="assignReviewerButton"
+      >
+        Assign Reviewer
+      </button>
+
+    </form>
+
+    <div
+      id="assignmentMessage"
+      class="admin-message"
+      role="status"
+      aria-live="polite"
+      style="margin-top:16px"
+    >
+      Preparing reviewer assignment tools...
+    </div>
+
+    <h3>Existing Assignments</h3>
+
+    <div id="existingAssignments">
+      Assignments will appear here.
     </div>
 
   </section>
@@ -444,15 +518,23 @@
 
 import { supabase } from "./supabase-config.js";
 
-/* =========================
+/* =========================================
    ELEMENT REFERENCES
-========================= */
+========================================= */
 
 const message = document.querySelector("#adminMessage");
 const submissionList = document.querySelector("#submissionList");
 
 const menuButton = document.querySelector("#adminMenuButton");
 const navigation = document.querySelector("#adminNavigation");
+
+const assignmentForm = document.querySelector("#assignReviewerForm");
+const assignmentMessage = document.querySelector("#assignmentMessage");
+const assignmentSubmission = document.querySelector("#assignmentSubmission");
+const assignmentReviewer = document.querySelector("#assignmentReviewer");
+const assignmentDeadline = document.querySelector("#assignmentDeadline");
+const assignReviewerButton = document.querySelector("#assignReviewerButton");
+const existingAssignments = document.querySelector("#existingAssignments");
 
 const allowedStatuses = [
   "submitted",
@@ -463,18 +545,15 @@ const allowedStatuses = [
   "published"
 ];
 
-/* =========================
-   HAMBURGER MENU
-========================= */
+/* =========================================
+   NAVIGATION MENU
+========================================= */
 
 menuButton.addEventListener("click", () => {
 
   const isOpen = navigation.classList.toggle("open");
 
-  menuButton.setAttribute(
-    "aria-expanded",
-    String(isOpen)
-  );
+  menuButton.setAttribute("aria-expanded", String(isOpen));
 
   menuButton.setAttribute(
     "aria-label",
@@ -482,8 +561,6 @@ menuButton.addEventListener("click", () => {
   );
 
 });
-
-/* Close the menu after choosing a navigation link. */
 
 navigation.querySelectorAll("a").forEach(link => {
 
@@ -493,16 +570,9 @@ navigation.querySelectorAll("a").forEach(link => {
 
     menuButton.setAttribute("aria-expanded", "false");
 
-    menuButton.setAttribute(
-      "aria-label",
-      "Open admin navigation"
-    );
-
   });
 
 });
-
-/* Close the menu when the user clicks outside it. */
 
 document.addEventListener("click", event => {
 
@@ -510,21 +580,11 @@ document.addEventListener("click", event => {
     !navigation.contains(event.target) &&
     !menuButton.contains(event.target)
   ) {
-
     navigation.classList.remove("open");
-
     menuButton.setAttribute("aria-expanded", "false");
-
-    menuButton.setAttribute(
-      "aria-label",
-      "Open admin navigation"
-    );
-
   }
 
 });
-
-/* Close the menu with the Escape key. */
 
 document.addEventListener("keydown", event => {
 
@@ -534,31 +594,24 @@ document.addEventListener("keydown", event => {
 
     menuButton.setAttribute("aria-expanded", "false");
 
-    menuButton.setAttribute(
-      "aria-label",
-      "Open admin navigation"
-    );
-
     menuButton.focus();
 
   }
 
 });
 
-/* =========================
+/* =========================================
    GENERAL HELPERS
-========================= */
+========================================= */
 
 function escapeHTML(value) {
 
   return String(value ?? "").replace(/[&<>"']/g, character => ({
-
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#39;"
-
   })[character]);
 
 }
@@ -568,6 +621,15 @@ function showMessage(text, isError = false) {
   message.textContent = text;
 
   message.className =
+    "admin-message" + (isError ? " error" : "");
+
+}
+
+function showAssignmentMessage(text, isError = false) {
+
+  assignmentMessage.textContent = text;
+
+  assignmentMessage.className =
     "admin-message" + (isError ? " error" : "");
 
 }
@@ -586,9 +648,9 @@ function formatDate(value) {
 
 }
 
-/* =========================
-   VERIFY ADMINISTRATOR
-========================= */
+/* =========================================
+   VERIFY ADMINISTRATOR ACCESS
+========================================= */
 
 async function initializeDashboard() {
 
@@ -599,9 +661,7 @@ async function initializeDashboard() {
       error: sessionError
     } = await supabase.auth.getSession();
 
-    if (sessionError) {
-      throw sessionError;
-    }
+    if (sessionError) throw sessionError;
 
     if (!session) {
 
@@ -614,6 +674,7 @@ async function initializeDashboard() {
       }, 1200);
 
       return;
+
     }
 
     const {
@@ -625,9 +686,7 @@ async function initializeDashboard() {
       .eq("id", session.user.id)
       .single();
 
-    if (profileError) {
-      throw profileError;
-    }
+    if (profileError) throw profileError;
 
     if (profile.role !== "admin") {
 
@@ -641,7 +700,11 @@ async function initializeDashboard() {
       submissionList.textContent =
         "Your account is not authorized to manage submissions.";
 
+      assignmentForm.querySelectorAll("input, select, button")
+        .forEach(element => element.disabled = true);
+
       return;
+
     }
 
     showMessage(
@@ -652,37 +715,39 @@ async function initializeDashboard() {
     document.querySelector("#stats").hidden = false;
 
     await loadSubmissions();
+    await loadAssignmentSubmissions();
+    await loadReviewerOptions();
+    await loadReviewerAssignments();
 
   } catch (error) {
 
     console.error("Admin verification error:", error);
 
     showMessage(
-      "Unable to verify administrator access: " +
+      "Unable to initialize the dashboard: " +
       (error.message || "Unknown error"),
       true
     );
 
-    submissionList.textContent =
-      "Please check your account and database permissions.";
+    showAssignmentMessage(
+      "Dashboard initialization failed. Check the database permissions and reload.",
+      true
+    );
 
   }
 
 }
 
-/* =========================
-   LOAD SUBMISSIONS
-========================= */
+/* =========================================
+   LOAD RESEARCH SUBMISSIONS
+========================================= */
 
 async function loadSubmissions() {
 
   submissionList.innerHTML =
     "<p>Loading research submissions...</p>";
 
-  const {
-    data,
-    error
-  } = await supabase
+  const { data, error } = await supabase
     .from("submissions")
     .select(`
       id,
@@ -701,16 +766,11 @@ async function loadSubmissions() {
     `)
     .order("created_at", { ascending: false });
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw error;
 
   const rows = data || [];
 
-  /* Update statistics. */
-
-  document.querySelector("#total").textContent =
-    rows.length;
+  document.querySelector("#total").textContent = rows.length;
 
   document.querySelector("#submitted").textContent =
     rows.filter(row => row.status === "submitted").length;
@@ -727,9 +787,8 @@ async function loadSubmissions() {
       "<p>No research submissions have been received yet.</p>";
 
     return;
-  }
 
-  /* Build the submissions table. */
+  }
 
   const tableRows = rows.map(row => {
 
@@ -737,8 +796,7 @@ async function loadSubmissions() {
       ? row.status
       : "submitted";
 
-    const reference =
-      row.submission_reference || row.id;
+    const reference = row.submission_reference || row.id;
 
     const rowId = escapeHTML(row.id);
 
@@ -749,20 +807,14 @@ async function loadSubmissions() {
           <strong>${escapeHTML(reference)}</strong>
 
           <div class="reference">
-            ${escapeHTML(
-              formatDate(row.submitted_at || row.created_at)
-            )}
+            ${escapeHTML(formatDate(row.submitted_at || row.created_at))}
           </div>
         </td>
 
         <td>
-          <strong>
-            ${escapeHTML(row.title || "Untitled")}
-          </strong>
+          <strong>${escapeHTML(row.title || "Untitled")}</strong>
 
-          <div>
-            ${escapeHTML(row.author_name || "Author not provided")}
-          </div>
+          <div>${escapeHTML(row.author_name || "Author not provided")}</div>
 
           <div class="reference">
             ${escapeHTML(row.author_email || "")}
@@ -775,7 +827,6 @@ async function loadSubmissions() {
 
         <td>
           <details>
-
             <summary>View manuscript details</summary>
 
             <p>
@@ -797,7 +848,6 @@ async function loadSubmissions() {
               <strong>Editorial note:</strong><br>
               ${escapeHTML(row.reviewer_notes || "No note yet")}
             </p>
-
           </details>
         </td>
 
@@ -808,16 +858,9 @@ async function loadSubmissions() {
         </td>
 
         <td>
+          <label for="status-${rowId}">New status</label>
 
-          <label for="status-${rowId}">
-            New status
-          </label>
-
-          <select
-            id="status-${rowId}"
-            data-status="${rowId}"
-          >
-
+          <select id="status-${rowId}" data-status="${rowId}">
             ${allowedStatuses.map(option => `
               <option
                 value="${option}"
@@ -826,13 +869,9 @@ async function loadSubmissions() {
                 ${option.replaceAll("_", " ")}
               </option>
             `).join("")}
-
           </select>
 
-          <button
-            type="button"
-            data-save="${rowId}"
-          >
+          <button type="button" data-save="${rowId}">
             Save
           </button>
 
@@ -841,7 +880,6 @@ async function loadSubmissions() {
             id="result-${rowId}"
             aria-live="polite"
           ></div>
-
         </td>
 
       </tr>
@@ -850,11 +888,8 @@ async function loadSubmissions() {
   }).join("");
 
   submissionList.innerHTML = `
-
     <div class="table-scroll">
-
       <table class="admin-table">
-
         <thead>
           <tr>
             <th>Reference</th>
@@ -864,181 +899,104 @@ async function loadSubmissions() {
             <th>Editorial Action</th>
           </tr>
         </thead>
-
-        <tbody>
-          ${tableRows}
-        </tbody>
-
+        <tbody>${tableRows}</tbody>
       </table>
-
     </div>
-
   `;
 
-  /* Attach the Save buttons. */
-
-  submissionList
-    .querySelectorAll("button[data-save]")
+  submissionList.querySelectorAll("button[data-save]")
     .forEach(button => {
-
       button.addEventListener("click", () => {
-
         updateStatus(button.dataset.save, button);
-
       });
-
     });
 
 }
 
-/* =========================
-   UPDATE SUBMISSION STATUS
-========================= */
+/* =========================================
+   LOAD MANUSCRIPTS FOR ASSIGNMENT
+========================================= */
 
-async function updateStatus(id, button) {
+async function loadAssignmentSubmissions() {
 
-  const select = submissionList.querySelector(
-    `[data-status="${CSS.escape(id)}"]`
-  );
+  const { data, error } = await supabase
+    .from("submissions")
+    .select("id, title, status, submission_reference")
+    .order("created_at", { ascending: false });
 
-  const result = document.querySelector(
-    `#result-${CSS.escape(id)}`
-  );
+  if (error) throw error;
 
-  if (!select || !result) {
-    return;
-  }
+  assignmentSubmission.replaceChildren();
 
-  const newStatus = select.value;
+  const placeholder = document.createElement("option");
 
-  if (!allowedStatuses.includes(newStatus)) {
+  placeholder.value = "";
+  placeholder.textContent = data?.length
+    ? "Choose a manuscript"
+    : "No manuscripts available";
 
-    result.textContent = "Invalid status.";
+  assignmentSubmission.appendChild(placeholder);
 
-    return;
-  }
+  (data || []).forEach(item => {
 
-  button.disabled = true;
-  button.textContent = "Saving...";
-  result.textContent = "";
+    const option = document.createElement("option");
 
-  try {
+    option.value = item.id;
 
-    const {
-      data: { user },
-      error: userError
-    } = await supabase.auth.getUser();
+    option.textContent =
+      (item.submission_reference || item.id.slice(0, 8)) +
+      " — " +
+      (item.title || "Untitled") +
+      " [" +
+      (item.status || "submitted").replaceAll("_", " ") +
+      "]";
 
-    if (userError) {
-      throw userError;
-    }
+    assignmentSubmission.appendChild(option);
 
-    if (!user) {
-
-      throw new Error(
-        "Your session has expired. Please log in again."
-      );
-
-    }
-
-    /*
-      Supabase Row Level Security must independently
-      authorize this database update.
-    */
-
-    const { error } = await supabase
-      .from("submissions")
-      .update({
-        status: newStatus,
-        reviewed_at: new Date().toISOString()
-      })
-      .eq("id", id);
-
-    if (error) {
-      throw error;
-    }
-
-    result.textContent = "Status updated successfully.";
-
-    await loadSubmissions();
-
-    showMessage(
-      "Submission status updated successfully."
-    );
-
-  } catch (error) {
-
-    console.error("Status update error:", error);
-
-    result.textContent =
-      "Update failed: " +
-      (error.message || "Permission denied.");
-
-  } finally {
-
-    button.disabled = false;
-    button.textContent = "Save";
-
-  }
-
-}
-
-/* =========================
-   LOG OUT
-========================= */
-
-async function logOut() {
-
-  const logoutButtons = [
-    document.querySelector("#logout"),
-    document.querySelector("#adminNavLogout")
-  ];
-
-  logoutButtons.forEach(button => {
-    button.disabled = true;
   });
 
-  try {
+}
 
-    const { error } = await supabase.auth.signOut();
+/* =========================================
+   LOAD REGISTERED REVIEWERS
+========================================= */
 
-    if (error) {
-      throw error;
-    }
+async function loadReviewerOptions() {
 
-    window.location.href = "auth.html";
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, full_name, email")
+    .eq("role", "reviewer")
+    .order("full_name", { ascending: true });
 
-  } catch (error) {
+  if (error) throw error;
 
-    showMessage(
-      "Unable to log out: " +
-      (error.message || "Unknown error"),
-      true
-    );
+  assignmentReviewer.replaceChildren();
 
-    logoutButtons.forEach(button => {
-      button.disabled = false;
-    });
+  const placeholder = document.createElement("option");
 
-  }
+  placeholder.value = "";
+  placeholder.textContent = data?.length
+    ? "Choose a reviewer"
+    : "No reviewer accounts found";
+
+  assignmentReviewer.appendChild(placeholder);
+
+  (data || []).forEach(reviewer => {
+
+    const option = document.createElement("option");
+
+    option.value = reviewer.id;
+
+    option.textContent =
+      (reviewer.full_name || "Reviewer") +
+      " — " +
+      (reviewer.email || "No email listed");
+
+    assignmentReviewer.appendChild(option);
+
+  });
 
 }
 
-document.querySelector("#logout").addEventListener(
-  "click",
-  logOut
-);
-
-document.querySelector("#adminNavLogout").addEventListener(
-  "click",
-  logOut
-);
-
-/* Start the dashboard. */
-
-initializeDashboard();
-
-</script>
-
-</body>
-</html>
+/* ===================
