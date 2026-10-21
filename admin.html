@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -9,6 +9,120 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
+/* =========================
+   ADMIN NAVIGATION
+========================= */
+
+.admin-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 5%;
+  background: #071b33;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,.15);
+}
+
+.admin-brand {
+  color: #fff;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+
+.admin-brand small {
+  display: block;
+  margin-top: 4px;
+  color: #80c8f4;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+/* Three-line hamburger button */
+
+.admin-menu-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 46px;
+  height: 44px;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid #66809b;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.admin-menu-button span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: #fff;
+  border-radius: 3px;
+  transition: transform .2s ease;
+}
+
+.admin-menu-button:hover {
+  background: #153b60;
+}
+
+/* Dropdown navigation */
+
+.admin-navigation {
+  display: none;
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 5%;
+  width: 270px;
+  max-width: 90vw;
+  padding: 10px;
+  background: #071b33;
+  border: 1px solid #304b67;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+}
+
+.admin-navigation.open {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-navigation a,
+.admin-navigation button {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 13px;
+  color: #fff;
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  text-align: left;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.admin-navigation a:hover,
+.admin-navigation button:hover {
+  background: #153b60;
+}
+
+.admin-navigation button {
+  color: #ffb8b8;
+}
+
+/* =========================
+   DASHBOARD LAYOUT
+========================= */
+
 .admin-wrap {
   max-width: 1180px;
   margin: 40px auto;
@@ -86,24 +200,69 @@
   font: inherit;
 }
 
+.admin-table select {
+  max-width: 100%;
+  margin: 6px 0;
+}
+
 .admin-table button {
   background: #1687c9;
   color: white;
   border: none;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .admin-table button:disabled {
   opacity: .5;
+  cursor: wait;
 }
 
 .reference {
   font-size: 12px;
   color: #637683;
   overflow-wrap: anywhere;
+  margin-top: 4px;
 }
 
-@media(max-width:650px) {
+.admin-table details {
+  max-width: 350px;
+}
+
+.admin-table summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.admin-table details p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-actions button {
+  cursor: pointer;
+}
+
+#submissions {
+  scroll-margin-top: 90px;
+}
+
+#overview {
+  scroll-margin-top: 90px;
+}
+
+@media (max-width: 800px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .admin-wrap {
     margin: 24px auto;
     padding: 0 12px;
@@ -113,8 +272,26 @@
     padding: 15px;
   }
 
+  .admin-brand {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 380px) {
+  .admin-brand {
+    font-size: 12px;
+  }
+
   .stats {
-    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat {
+    padding: 12px;
+  }
+
+  .stat strong {
+    font-size: 24px;
   }
 }
 </style>
@@ -122,9 +299,55 @@
 
 <body>
 
-<div id="header"></div>
+<!-- =========================
+     ADMIN NAVIGATION
+========================= -->
 
-<main class="admin-wrap">
+<header class="admin-nav">
+
+  <a class="admin-brand" href="admin.html">
+    VOC RESEARCH WORLD
+    <small>ADMINISTRATION</small>
+  </a>
+
+  <button
+    class="admin-menu-button"
+    id="adminMenuButton"
+    type="button"
+    aria-label="Open admin navigation"
+    aria-expanded="false"
+    aria-controls="adminNavigation"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <nav
+    class="admin-navigation"
+    id="adminNavigation"
+    aria-label="Admin navigation"
+  >
+    <a href="#overview">Admin Overview</a>
+
+    <a href="#submissions">Research Submissions</a>
+
+    <a href="dashboard.html">Author Dashboard</a>
+
+    <a href="index.html">Public Website</a>
+
+    <button type="button" id="adminNavLogout">
+      Log Out
+    </button>
+  </nav>
+
+</header>
+
+<!-- =========================
+     ADMIN DASHBOARD
+========================= -->
+
+<main class="admin-wrap" id="overview">
 
   <p class="eyebrow">EDITORIAL OPERATIONS</p>
 
@@ -146,7 +369,8 @@
       Verifying administrator access...
     </div>
 
-    <p>
+    <p class="admin-actions">
+
       <a class="btn primary" href="dashboard.html">
         Author Dashboard
       </a>
@@ -162,9 +386,12 @@
       >
         Log Out
       </button>
+
     </p>
 
   </section>
+
+  <!-- DASHBOARD STATISTICS -->
 
   <section class="stats" id="stats" hidden>
 
@@ -190,7 +417,9 @@
 
   </section>
 
-  <section class="admin-card">
+  <!-- RESEARCH SUBMISSIONS -->
+
+  <section class="admin-card" id="submissions">
 
     <h2>Research Submissions</h2>
 
@@ -215,8 +444,15 @@
 
 import { supabase } from "./supabase-config.js";
 
+/* =========================
+   ELEMENT REFERENCES
+========================= */
+
 const message = document.querySelector("#adminMessage");
 const submissionList = document.querySelector("#submissionList");
+
+const menuButton = document.querySelector("#adminMenuButton");
+const navigation = document.querySelector("#adminNavigation");
 
 const allowedStatuses = [
   "submitted",
@@ -227,24 +463,117 @@ const allowedStatuses = [
   "published"
 ];
 
+/* =========================
+   HAMBURGER MENU
+========================= */
+
+menuButton.addEventListener("click", () => {
+
+  const isOpen = navigation.classList.toggle("open");
+
+  menuButton.setAttribute(
+    "aria-expanded",
+    String(isOpen)
+  );
+
+  menuButton.setAttribute(
+    "aria-label",
+    isOpen ? "Close admin navigation" : "Open admin navigation"
+  );
+
+});
+
+/* Close the menu after choosing a navigation link. */
+
+navigation.querySelectorAll("a").forEach(link => {
+
+  link.addEventListener("click", () => {
+
+    navigation.classList.remove("open");
+
+    menuButton.setAttribute("aria-expanded", "false");
+
+    menuButton.setAttribute(
+      "aria-label",
+      "Open admin navigation"
+    );
+
+  });
+
+});
+
+/* Close the menu when the user clicks outside it. */
+
+document.addEventListener("click", event => {
+
+  if (
+    !navigation.contains(event.target) &&
+    !menuButton.contains(event.target)
+  ) {
+
+    navigation.classList.remove("open");
+
+    menuButton.setAttribute("aria-expanded", "false");
+
+    menuButton.setAttribute(
+      "aria-label",
+      "Open admin navigation"
+    );
+
+  }
+
+});
+
+/* Close the menu with the Escape key. */
+
+document.addEventListener("keydown", event => {
+
+  if (event.key === "Escape") {
+
+    navigation.classList.remove("open");
+
+    menuButton.setAttribute("aria-expanded", "false");
+
+    menuButton.setAttribute(
+      "aria-label",
+      "Open admin navigation"
+    );
+
+    menuButton.focus();
+
+  }
+
+});
+
+/* =========================
+   GENERAL HELPERS
+========================= */
+
 function escapeHTML(value) {
+
   return String(value ?? "").replace(/[&<>"']/g, character => ({
+
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#39;"
+
   })[character]);
+
 }
 
 function showMessage(text, isError = false) {
+
   message.textContent = text;
 
   message.className =
     "admin-message" + (isError ? " error" : "");
+
 }
 
 function formatDate(value) {
+
   if (!value) return "—";
 
   const date = new Date(value);
@@ -253,10 +582,14 @@ function formatDate(value) {
     return "—";
   }
 
-  return date.toLocaleDateString();
+  return date.toLocaleString();
+
 }
 
-/* Verify the signed-in user's role. */
+/* =========================
+   VERIFY ADMINISTRATOR
+========================= */
+
 async function initializeDashboard() {
 
   try {
@@ -266,7 +599,9 @@ async function initializeDashboard() {
       error: sessionError
     } = await supabase.auth.getSession();
 
-    if (sessionError) throw sessionError;
+    if (sessionError) {
+      throw sessionError;
+    }
 
     if (!session) {
 
@@ -290,7 +625,9 @@ async function initializeDashboard() {
       .eq("id", session.user.id)
       .single();
 
-    if (profileError) throw profileError;
+    if (profileError) {
+      throw profileError;
+    }
 
     if (profile.role !== "admin") {
 
@@ -328,10 +665,15 @@ async function initializeDashboard() {
 
     submissionList.textContent =
       "Please check your account and database permissions.";
+
   }
+
 }
 
-/* Load all submissions permitted by Supabase RLS. */
+/* =========================
+   LOAD SUBMISSIONS
+========================= */
+
 async function loadSubmissions() {
 
   submissionList.innerHTML =
@@ -359,9 +701,13 @@ async function loadSubmissions() {
     `)
     .order("created_at", { ascending: false });
 
-  if (error) throw error;
+  if (error) {
+    throw error;
+  }
 
   const rows = data || [];
+
+  /* Update statistics. */
 
   document.querySelector("#total").textContent =
     rows.length;
@@ -383,6 +729,8 @@ async function loadSubmissions() {
     return;
   }
 
+  /* Build the submissions table. */
+
   const tableRows = rows.map(row => {
 
     const status = allowedStatuses.includes(row.status)
@@ -392,22 +740,29 @@ async function loadSubmissions() {
     const reference =
       row.submission_reference || row.id;
 
+    const rowId = escapeHTML(row.id);
+
     return `
       <tr>
 
         <td>
           <strong>${escapeHTML(reference)}</strong>
+
           <div class="reference">
-            ${escapeHTML(formatDate(
-              row.submitted_at || row.created_at
-            ))}
+            ${escapeHTML(
+              formatDate(row.submitted_at || row.created_at)
+            )}
           </div>
         </td>
 
         <td>
-          <strong>${escapeHTML(row.title || "Untitled")}</strong>
+          <strong>
+            ${escapeHTML(row.title || "Untitled")}
+          </strong>
 
-          <div>${escapeHTML(row.author_name || "Author not provided")}</div>
+          <div>
+            ${escapeHTML(row.author_name || "Author not provided")}
+          </div>
 
           <div class="reference">
             ${escapeHTML(row.author_email || "")}
@@ -420,6 +775,7 @@ async function loadSubmissions() {
 
         <td>
           <details>
+
             <summary>View manuscript details</summary>
 
             <p>
@@ -441,6 +797,7 @@ async function loadSubmissions() {
               <strong>Editorial note:</strong><br>
               ${escapeHTML(row.reviewer_notes || "No note yet")}
             </p>
+
           </details>
         </td>
 
@@ -451,14 +808,16 @@ async function loadSubmissions() {
         </td>
 
         <td>
-          <label for="status-${escapeHTML(row.id)}">
+
+          <label for="status-${rowId}">
             New status
           </label>
 
           <select
-            id="status-${escapeHTML(row.id)}"
-            data-status="${escapeHTML(row.id)}"
+            id="status-${rowId}"
+            data-status="${rowId}"
           >
+
             ${allowedStatuses.map(option => `
               <option
                 value="${option}"
@@ -467,27 +826,31 @@ async function loadSubmissions() {
                 ${option.replaceAll("_", " ")}
               </option>
             `).join("")}
+
           </select>
 
           <button
             type="button"
-            data-save="${escapeHTML(row.id)}"
+            data-save="${rowId}"
           >
             Save
           </button>
 
           <div
             class="reference"
-            id="result-${escapeHTML(row.id)}"
+            id="result-${rowId}"
             aria-live="polite"
           ></div>
+
         </td>
 
       </tr>
     `;
+
   }).join("");
 
   submissionList.innerHTML = `
+
     <div class="table-scroll">
 
       <table class="admin-table">
@@ -509,34 +872,49 @@ async function loadSubmissions() {
       </table>
 
     </div>
+
   `;
+
+  /* Attach the Save buttons. */
 
   submissionList
     .querySelectorAll("button[data-save]")
     .forEach(button => {
 
       button.addEventListener("click", () => {
+
         updateStatus(button.dataset.save, button);
+
       });
 
     });
+
 }
 
-/* Save a status change through Supabase. */
+/* =========================
+   UPDATE SUBMISSION STATUS
+========================= */
+
 async function updateStatus(id, button) {
 
   const select = submissionList.querySelector(
     `[data-status="${CSS.escape(id)}"]`
   );
 
-  const result = document.querySelector(""+
-    "#result-" + CSS.escape(id)
+  const result = document.querySelector(
+    `#result-${CSS.escape(id)}`
   );
+
+  if (!select || !result) {
+    return;
+  }
 
   const newStatus = select.value;
 
   if (!allowedStatuses.includes(newStatus)) {
+
     result.textContent = "Invalid status.";
+
     return;
   }
 
@@ -551,16 +929,23 @@ async function updateStatus(id, button) {
       error: userError
     } = await supabase.auth.getUser();
 
-    if (userError) throw userError;
+    if (userError) {
+      throw userError;
+    }
 
     if (!user) {
-      throw new Error("Your session has expired. Please log in again.");
+
+      throw new Error(
+        "Your session has expired. Please log in again."
+      );
+
     }
 
     /*
-      Supabase RLS must independently authorize this update.
-      The page's role check is not the security boundary.
+      Supabase Row Level Security must independently
+      authorize this database update.
     */
+
     const { error } = await supabase
       .from("submissions")
       .update({
@@ -569,18 +954,25 @@ async function updateStatus(id, button) {
       })
       .eq("id", id);
 
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     result.textContent = "Status updated successfully.";
 
     await loadSubmissions();
+
+    showMessage(
+      "Submission status updated successfully."
+    );
 
   } catch (error) {
 
     console.error("Status update error:", error);
 
     result.textContent =
-      "Update failed: " + (error.message || "Permission denied.");
+      "Update failed: " +
+      (error.message || "Permission denied.");
 
   } finally {
 
@@ -588,37 +980,61 @@ async function updateStatus(id, button) {
     button.textContent = "Save";
 
   }
+
 }
 
-/* Log out safely. */
+/* =========================
+   LOG OUT
+========================= */
+
+async function logOut() {
+
+  const logoutButtons = [
+    document.querySelector("#logout"),
+    document.querySelector("#adminNavLogout")
+  ];
+
+  logoutButtons.forEach(button => {
+    button.disabled = true;
+  });
+
+  try {
+
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      throw error;
+    }
+
+    window.location.href = "auth.html";
+
+  } catch (error) {
+
+    showMessage(
+      "Unable to log out: " +
+      (error.message || "Unknown error"),
+      true
+    );
+
+    logoutButtons.forEach(button => {
+      button.disabled = false;
+    });
+
+  }
+
+}
+
 document.querySelector("#logout").addEventListener(
   "click",
-  async () => {
-
-    const button = document.querySelector("#logout");
-
-    button.disabled = true;
-
-    try {
-
-      const { error } = await supabase.auth.signOut();
-
-      if (error) throw error;
-
-      window.location.href = "auth.html";
-
-    } catch (error) {
-
-      showMessage(
-        "Unable to log out: " + error.message,
-        true
-      );
-
-      button.disabled = false;
-
-    }
-  }
+  logOut
 );
+
+document.querySelector("#adminNavLogout").addEventListener(
+  "click",
+  logOut
+);
+
+/* Start the dashboard. */
 
 initializeDashboard();
 
