@@ -1,24 +1,205 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Publications | VOC Research World</title><link rel="stylesheet" href="style.css"></head>
-<body><div id="header"></div>
-<section class="page"><div class="wrap"><p class="eyebrow">PUBLICATION LIBRARY</p><h1>Published scientific research.</h1><p>Explore research approved for publication by VOC Research World.</p></div></section>
-<section class="content"><div class="wrap"><div id="publicationStatus" role="status" class="small">Loading published research…</div><div class="cards three" id="publicationGrid"></div></div></section>
-<div id="footer"></div><script src="app.js"></script>
-<script type="module">
-import { supabase } from './supabase-config.js';
-const grid=document.getElementById('publicationGrid');
-const status=document.getElementById('publicationStatus');
-const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
-async function load(){
-  const {data,error}=await supabase.from('publications').select('id,title,slug,abstract,publication_date,doi,pdf_url,featured,categories(name)').eq('status','published').order('publication_date',{ascending:false});
-  if(error){status.textContent='Published research could not be loaded right now. Please try again later.';console.error(error);return;}
-  if(!data?.length){status.textContent='No journal submissions have been published yet.';return;}
-  const ids=data.map(p=>p.id);
-  const {data:authorRows,error:authorError}=await supabase.from('publication_authors').select('publication_id,author_order,profiles(full_name,affiliation)').in('publication_id',ids).order('author_order',{ascending:true});
-  const byPublication={};
-  if(!authorError)(authorRows||[]).forEach(a=>{const n=a.profiles?.full_name;if(n){(byPublication[a.publication_id]??=[]).push(n);}});
-  status.textContent=data.length+' published '+(data.length===1?'article':'articles');
-  grid.innerHTML=data.map(p=>{const authors=byPublication[p.id]?.join(', ')||'Author information pending';const date=p.publication_date?new Date(p.publication_date+'T00:00:00').toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}):'Publication date pending';return `<article class="card"><label>${esc(p.categories?.name||'Research Article')} · PUBLISHED</label><h3>${esc(p.title)}</h3><p class="small">${esc(authors)}</p><p class="small">${esc(date)}${p.doi?' · DOI: '+esc(p.doi):''}</p>${p.abstract?'<details><summary>Read abstract</summary><p>'+esc(p.abstract)+'</p></details>':'<p>Abstract not available.</p>'}${p.pdf_url?'<p><a class="btn primary" href="'+esc(p.pdf_url)+'" target="_blank" rel="noopener">Read full paper</a></p>':'<p class="small">Full-text access is not yet available online.</p>'}</article>`;}).join('');
-}
-load();
-</script></body></html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Publications | VOC Research World</title>
+  <link rel="stylesheet" href="style.css">
+</head><body>
+  <div id="header"></div>  <section class="page">
+    <div class="wrap">
+      <p class="eyebrow">PUBLICATION LIBRARY</p>
+      <h1>Published scientific research.</h1>
+      <p>Explore research approved for publication by VOC Research World.</p>
+    </div>
+  </section>  <section class="content">
+    <div class="wrap">
+      <div id="publicationStatus" role="status" class="small">
+        Loading published research…
+      </div>
+      <div class="cards three" id="publicationGrid"></div>
+    </div>
+  </section>  <div id="footer"></div>  <script src="app.js"></script>  <script type="module">
+    import { supabase } from './supabase-config.js';
+
+    const grid = document.getElementById('publicationGrid');
+    const status = document.getElementById('publicationStatus');
+
+    const esc = value =>
+      String(value ?? '').replace(/[&<>'"]/g, character => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[character]));
+
+    async function loadPublications() {
+      status.textContent = 'Loading published research…';
+
+      const { data, error } = await supabase
+        .from('publications')
+        .select(
+          'id,title,slug,abstract,publication_date,doi,pdf_url,featured,categories(name)'
+        )
+        .eq('status', 'published')
+        .order('publication_date', { ascending: false });
+
+      if (error) {
+        console.error('Publication loading error:', error);
+        status.textContent =
+          'Published research could not be loaded. Please try again later.';
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        status.textContent = 'No journal submissions have been published yet.';
+        return;
+      }
+
+      const publicationIds = data.map(publication => publication.id);
+
+      const { data: authorRows, error: authorError } = await supabase
+        .from('publication_authors')
+        .select('publication_id,author_order,profiles(full_name,affiliation)')
+        .in('publication_id', publicationIds)
+        .order('author_order', { ascending: true });
+
+      const authorsByPublication = {};
+
+      if (!authorError && authorRows) {
+        authorRows.forEach(author => {
+          const name = author.profiles?.full_name;
+
+          if (name) {
+            (authorsByPublication[author.publication_id] ??= []).push(name);
+          }
+        });
+      }
+
+      const cards = await Promise.all(
+        data.map(async publication => {
+          const authors =
+            authorsByPublication[publication.id]?.join(', ') ||
+            'Author information pending';
+
+          const date = publication.publication_date
+            ? new Date(
+                publication.publication_date + 'T00:00:00'
+              ).toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })
+            : 'Publication date pending';
+
+          let paperUrl = '';
+
+          if (publication.pdf_url) {
+            try {
+              const originalUrl = new URL(publication.pdf_url);
+              const storageMarker = '/storage/v1/object/manuscripts/';
+              const markerPosition =
+                originalUrl.pathname.indexOf(storageMarker);
+
+              if (
+                originalUrl.origin ===
+                  'https://wngsqgjkendxqmlgwvjy.supabase.co' &&
+                markerPosition >= 0
+              ) {
+                const objectPath = decodeURIComponent(
+                  originalUrl.pathname.slice(
+                    markerPosition + storageMarker.length
+                  )
+                );
+
+                const { data: signedData, error: signedError } =
+                  await supabase.storage
+                    .from('manuscripts')
+                    .createSignedUrl(objectPath, 3600);
+
+                if (signedError) {
+                  console.error(
+                    'Could not create manuscript access link:',
+                    signedError
+                  );
+                } else if (signedData?.signedUrl) {
+                  paperUrl = signedData.signedUrl;
+                }
+              } else if (
+                originalUrl.protocol === 'https:' &&
+                originalUrl.origin !==
+                  'https://wngsqgjkendxqmlgwvjy.supabase.co'
+              ) {
+                paperUrl = publication.pdf_url;
+              }
+            } catch (error) {
+              console.error('Could not prepare manuscript link:', error);
+            }
+          }
+
+          const abstractHtml = publication.abstract
+            ? `<details>
+                 <summary>Read abstract</summary>
+                 <p>${esc(publication.abstract)}</p>
+               </details>`
+            : '<p>Abstract not available.</p>';
+
+          const paperHtml = paperUrl
+            ? `<p>
+                 <a class="btn primary"
+                    href="${esc(paperUrl)}"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                   Read full paper
+                 </a>
+               </p>`
+            : `<p class="small">
+                 Full-text access is not available right now.
+                 Please try again later.
+               </p>`;
+
+          return `
+            <article class="card">
+              <label>
+                ${esc(publication.categories?.name || 'Research Article')}
+                · PUBLISHED
+              </label>
+
+              <h3>${esc(publication.title)}</h3>
+
+              <p class="small">${esc(authors)}</p>
+
+              <p class="small">
+                ${esc(date)}
+                ${
+                  publication.doi
+                    ? ' · DOI: ' + esc(publication.doi)
+                    : ''
+                }
+              </p>
+
+              ${abstractHtml}
+
+              ${paperHtml}
+            </article>
+          `;
+        })
+      );
+
+      grid.innerHTML = cards.join('');
+
+      status.textContent =
+        data.length +
+        ' published ' +
+        (data.length === 1 ? 'article' : 'articles');
+    }
+
+    loadPublications().catch(error => {
+      console.error('Unexpected publication page error:', error);
+      status.textContent =
+        'An unexpected error occurred while loading publications.';
+    });
+  </script></body>
+  </html>
