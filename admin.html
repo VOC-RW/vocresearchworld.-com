@@ -527,10 +527,10 @@ async function loadSubmissions() {
         submission.submitted_at || submission.created_at;
 
       const manuscriptLink = submission.manuscript_url
-        ? '<p><a target="_blank" rel="noopener noreferrer" href="' +
-          esc(submission.manuscript_url) +
-          '">Open manuscript</a></p>'
-        : "";
+  ? '<p><button type="button" class="secondary" data-open-manuscript="' +
+    esc(submission.id) +
+    '">Open manuscript</button></p>'
+  : "";
 
       return `
         <tr>
@@ -575,7 +575,63 @@ async function loadSubmissions() {
         button.addEventListener("click", () => {
           saveSubmission(button.dataset.save, button);
         });
-      });
+      }); $("submissionsBody")
+  .querySelectorAll("[data-open-manuscript]")
+  .forEach(button => {
+    button.addEventListener("click", async () => {
+      const submission = submissions.find(
+        item => item.id === button.dataset.openManuscript
+      );
+
+      if (!submission?.manuscript_url) {
+        msg(
+          "submissionMessage",
+          "The manuscript file path is missing.",
+          "error"
+        );
+        return;
+      }
+
+      const newWindow = window.open("about:blank", "_blank");
+
+      if (!newWindow) {
+        msg(
+          "submissionMessage",
+          "Your browser blocked the new tab. Allow pop-ups and try again.",
+          "error"
+        );
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Preparing link…";
+
+      try {
+        const { data, error } = await supabase.storage
+          .from("manuscripts")
+          .createSignedUrl(submission.manuscript_url, 3600);
+
+        if (error || !data?.signedUrl) {
+          throw new Error(
+            error?.message || "Could not generate a manuscript access link."
+          );
+        }
+
+        newWindow.location.href = data.signedUrl;
+      } catch (error) {
+        newWindow.close();
+
+        msg(
+          "submissionMessage",
+          "Could not open manuscript: " + error.message,
+          "error"
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "Open manuscript";
+      }
+    });
+  });
   }
 
   $("totalCount").textContent = submissions.length;
