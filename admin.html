@@ -493,7 +493,7 @@ async function loadSubmissions() {
     .from("submissions")
     .select(
       "id,title,abstract,category_id,manuscript_url,status," +
-      "reviewer_note,submitted_at,created_at,submission_reference," +
+      "reviewer_notes,submitted_at,created_at,submission_reference," +
       "author_name,author_email,institution,submitted_by"
     )
     .order("created_at", { ascending: false });
@@ -558,7 +558,7 @@ async function loadSubmissions() {
           <td>
             <textarea id="note-${submission.id}" rows="3"
               placeholder="Optional note to author">${
-                esc(submission.reviewer_note || "")
+                esc(submission.reviewer_notes || "")
               }</textarea>
           </td>
 
@@ -630,7 +630,7 @@ async function saveSubmission(id, button) {
       .from("submissions")
       .update({
         status: nextStatus,
-        reviewer_note: note,
+        reviewer_notes: note,
         reviewed_at: now,
         updated_at: now
       })
