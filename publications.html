@@ -96,48 +96,61 @@
 
           let paperUrl = '';
 
-          if (publication.pdf_url) {
-            try {
-              const originalUrl = new URL(publication.pdf_url);
-              const storageMarker = '/storage/v1/object/manuscripts/';
-              const markerPosition =
-                originalUrl.pathname.indexOf(storageMarker);
+if (publication.pdf_url) {
+  try {
+    const storedValue = publication.pdf_url.trim();
+    let objectPath = '';
 
-              if (
-                originalUrl.origin ===
-                  'https://wngsqgjkendxqmlgwvjy.supabase.co' &&
-                markerPosition >= 0
-              ) {
-                const objectPath = decodeURIComponent(
-                  originalUrl.pathname.slice(
-                    markerPosition + storageMarker.length
-                  )
-                );
+    if (
+      storedValue.startsWith(
+        'https://wngsqgjkendxqmlgwvjy.supabase.co/storage/v1/object/'
+      )
+    ) {
+      const originalUrl = new URL(storedValue);
+      const marker = '/storage/v1/object/';
+      const markerPosition = originalUrl.pathname.indexOf(marker);
 
-                const { data: signedData, error: signedError } =
-                  await supabase.storage
-                    .from('manuscripts')
-                    .createSignedUrl(objectPath, 3600);
+      if (markerPosition >= 0) {
+        const remainingPath = originalUrl.pathname.slice(
+          markerPosition + marker.length
+        );
 
-                if (signedError) {
-                  console.error(
-                    'Could not create manuscript access link:',
-                    signedError
-                  );
-                } else if (signedData?.signedUrl) {
-                  paperUrl = signedData.signedUrl;
-                }
-              } else if (
-                originalUrl.protocol === 'https:' &&
-                originalUrl.origin !==
-                  'https://wngsqgjkendxqmlgwvjy.supabase.co'
-              ) {
-                paperUrl = publication.pdf_url;
-              }
-            } catch (error) {
-              console.error('Could not prepare manuscript link:', error);
-            }
-          }
+        objectPath = decodeURIComponent(
+          remainingPath.replace(/^sign\//, '').replace(/^public\//, '')
+        );
+
+        if (objectPath.startsWith('manuscripts/')) {
+          objectPath = objectPath.slice('manuscripts/'.length);
+        }
+      }
+    } else if (
+      storedValue.startsWith('http://') ||
+      storedValue.startsWith('https://')
+    ) {
+      paperUrl = storedValue;
+    } else {
+      objectPath = storedValue;
+    }
+
+    if (objectPath) {
+      const { data: signedData, error: signedError } =
+        await supabase.storage
+          .from('manuscripts')
+          .createSignedUrl(objectPath, 3600);
+
+      if (signedError) {
+        console.error(
+          'Could not create manuscript access link:',
+          signedError
+        );
+      } else if (signedData?.signedUrl) {
+        paperUrl = signedData.signedUrl;
+      }
+    }
+  } catch (error) {
+    console.error('Could not prepare manuscript link:', error);
+  }
+        }
 
           const abstractHtml = publication.abstract
             ? `<details>
