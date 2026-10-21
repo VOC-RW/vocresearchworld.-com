@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Submit Research | VOC Research World</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.backend-form{max-width:920px;margin:auto}.backend-form .field{margin:15px 0}.backend-form input,.backend-form select,.backend-form textarea{width:100%;box-sizing:border-box}.backend-form textarea{min-height:160px}.backend-notice{padding:16px;border-radius:10px;background:#eff6ff;border-left:4px solid #2363a8;margin:18px 0}.backend-result{padding:14px;border-radius:10px;margin-top:18px;white-space:pre-wrap}.backend-result[hidden]{display:none}.backend-result.error{background:#fff0f0;color:#8b1b1b}.backend-result.success{background:#effaf2;color:#176b36}.backend-actions{display:flex;gap:10px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div id="header"></div>
+<section class="page"><div class="wrap">
+  <p class="eyebrow">RESEARCH SUBMISSION</p>
+  <h1>Submit your scientific work.</h1>
+  <p>Submit your manuscript securely to the VOC Research World editorial workflow.</p>
+</div></section>
+<section class="content"><div class="wrap backend-form">
+  <div class="backend-notice"><strong>Before you submit</strong><p>You need an author account. Your manuscript is uploaded to a private storage bucket, and its metadata is saved to the submission database. The editorial team can review submissions through its authorized account.</p><p><a href="auth.html">Log in or create an author account</a></p></div>
+  <form id="submissionForm">
+    <div class="two">
+      <div class="field"><label for="fullName">Full name *</label><input id="fullName" required autocomplete="name"></div>
+      <div class="field"><label for="email">Email address *</label><input id="email" type="email" required autocomplete="email"></div>
+    </div>
+    <div class="field"><label for="institution">Institution / affiliation</label><input id="institution" autocomplete="organization"></div>
+    <div class="field"><label for="title">Manuscript title *</label><input id="title" required maxlength="300"></div>
+    <div class="two">
+      <div class="field"><label for="area">Research area *</label><select id="area" required>
+        <option value="">Select an area</option><option>Biochemistry</option><option>Analytical Science</option><option>Quality Assurance</option><option>Natural Products</option><option>Instrumentation</option><option>Data & AI</option><option>Industrial Science</option><option>Laboratory Science</option><option>Student Research</option><option>Other</option>
+      </select></div>
+      <div class="field"><label for="type">Submission type *</label><select id="type" required><option value="">Select type</option><option>Research Article</option><option>Review Article</option><option>Research Note</option><option>Technical Note</option><option>Method</option><option>Educational Resource</option><option>Research Proposal</option></select></div>
+    </div>
+    <div class="field"><label for="keywords">Keywords</label><input id="keywords" placeholder="e.g. UV-Vis, calibration, analytical chemistry"></div>
+    <div class="field"><label for="abstract">Abstract / research summary *</label><textarea id="abstract" required maxlength="15000" placeholder="Provide a concise scientific summary of the work."></textarea></div>
+    <div class="field"><label for="manuscript">Manuscript file * (PDF, DOC, DOCX or TXT; maximum 10 MB)</label><input id="manuscript" type="file" accept=".pdf,.doc,.docx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" required><small class="small">Avoid uploading confidential patient information or sensitive personal data.</small></div>
+    <label style="display:flex;gap:10px;align-items:flex-start;margin:18px 0"><input type="checkbox" id="declaration" required style="width:auto;margin-top:4px"><span>I confirm that I am authorized to submit this work and that the information provided is accurate. *</span></label>
+    <div class="backend-actions"><button class="btn primary" id="submitBtn" type="submit">Upload &amp; Submit</button><button class="btn secondary" id="clearBtn" type="reset">Clear form</button></div>
+    <div id="result" class="backend-result" hidden aria-live="polite"></div>
+  </form>
+</div></section>
+<div id="footer"></div>
+<script src="app.js"></script>
+<script type="module">
+import {supabase} from "./supabase-config.js";
+const form=document.querySelector("#submissionForm"), result=document.querySelector("#result"), submitBtn=document.querySelector("#submitBtn");
+const MAX=10*1024*1024;
+const slugMap={
+ "Biochemistry":"biochemistry","Analytical Science":"analytical-science","Quality Assurance":"quality-assurance",
+ "Natural Products":"natural-products","Instrumentation":"instrumentation","Data & AI":"data-and-ai",
+ "Industrial Science":"industrial-science","Laboratory Science":"laboratory-science","Student Research":"student-research"
+};
+function show(message,ok=false){result.hidden=false;result.className="backend-result "+(ok?"success":"error");result.textContent=message;result.scrollIntoView({behavior:"smooth",block:"center"});}
+function value(id){return document.getElementById(id).value.trim();}
+function makeRef(){return "VOC-"+new Date().toISOString().slice(0,10).replaceAll("-","")+"-"+crypto.randomUUID().slice(0,5).toUpperCase();}
+form.addEventListener("submit",async e=>{
+ e.preventDefault(); result.hidden=true;
+ const {data:{session},error:sessionError}=await supabase.auth.getSession();
+ if(sessionError||!session){show("Please log in or create an author account first.");return;}
+ const file=document.querySelector("#manuscript").files[0];
+ if(!file){show("Choose a manuscript file before submitting.");return;}
+ if(file.size>MAX){show("The manuscript is larger than 10 MB. Please choose a smaller file.");return;}
+ const allowed=["application/pdf","application/msword","application/vnd.openxmlformats-officedocument.wordprocessingml.document","text/plain"];
+ const ext=file.name.split(".").pop().toLowerCase();
+ if(!["pdf","doc","docx","txt"].includes(ext) || (file.type && !allowed.includes(file.type))){show("Unsupported file type. Upload PDF, DOC, DOCX or TXT.");return;}
+ if(!value("fullName")||!value("email")||!value("title")||!value("area")||!value("type")||!value("abstract")||!document.querySelector("#declaration").checked){show("Complete all required fields and confirm the submission declaration.");return;}
+ submitBtn.disabled=true;submitBtn.textContent="Uploading manuscript…";
+ let uploadedPath=null;
+ try{
+   const ref=makeRef();
+   const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+   uploadedPath=`${session.user.id}/${ref}/${safeName}`;
+   const {error:uploadError}=await supabase.storage.from("manuscripts").upload(uploadedPath,file,{upsert:false,contentType:file.type||"application/octet-stream"});
+   if(uploadError) throw uploadError;
+   const categoryName=slugMap[value("area")];
+   let categoryId=null;
+   if(categoryName){
+     const {data:category,error:catError}=await supabase.from("categories").select("id").eq("slug",categoryName).maybeSingle();
+     if(catError) throw catError;
+     categoryId=category?.id||null;
+   }
+   const {error:insertError}=await supabase.from("submissions").insert({
+     title:value("title"),abstract:value("abstract"),manuscript_url:uploadedPath,category_id:categoryId,
+     submitted_by:session.user.id,status:"submitted",submitted_at:new Date().toISOString(),
+     submission_type:value("type"),author_name:value("fullName"),author_email:value("email"),
+     institution:value("institution")||null,keywords:value("keywords")||null,submission_reference:ref
+   });
+   if(insertError) throw insertError;
+   show("Submission received successfully.\\nReference: "+ref+"\\nYou can track its status from your author dashboard.",true);
+   form.reset();
+ }catch(err){
+   if(uploadedPath){try{await supabase.storage.from("manuscripts").remove([uploadedPath]);}catch(cleanupError){}}
+   show("Submission could not be completed. "+(err?.message||"Please try again.")+"\\nIf this continues, sign in again and contact the site administrator.");
+ }finally{submitBtn.disabled=false;submitBtn.textContent="Upload & Submit";}
+});
+</script>
+</body>
+</html>
