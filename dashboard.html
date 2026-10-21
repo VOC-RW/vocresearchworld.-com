@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Author Dashboard | VOC Research World</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.dash-wrap{max-width:1050px;margin:42px auto;padding:0 18px}.dash-card{background:#fff;border:1px solid #dfe5ec;border-radius:14px;padding:22px;margin:18px 0;overflow-x:auto}.submission-table{width:100%;border-collapse:collapse;min-width:650px}.submission-table th,.submission-table td{text-align:left;border-bottom:1px solid #e5eaf0;padding:12px 10px;vertical-align:top}.pill{display:inline-block;border-radius:999px;background:#eaf2ff;padding:5px 10px;font-size:.85rem}.dash-status{padding:12px;border-radius:10px;background:#f2f6fb;white-space:pre-wrap}.dash-status.error{background:#fff0f0;color:#8b1b1b}
+</style>
+</head>
+<body>
+<div id="header"></div>
+<main class="dash-wrap">
+  <p class="eyebrow">AUTHOR PORTAL</p>
+  <h1>My submissions</h1>
+  <p>View the manuscripts you have submitted and check their editorial status.</p>
+  <div class="dash-card">
+    <div id="dashStatus" class="dash-status">Checking your account…</div>
+    <p style="margin-top:16px"><a class="btn primary" href="submit.html">Submit new research</a> <button id="signOut" class="btn secondary" type="button">Log out</button></p>
+  </div>
+  <div class="dash-card">
+    <h2>Submission history</h2>
+    <div id="tableWrap">Loading submissions…</div>
+  </div>
+</main>
+<div id="footer"></div>
+<script src="app.js"></script>
+<script type="module">
+import {supabase} from "./supabase-config.js";
+const statusBox=document.querySelector("#dashStatus"), tableWrap=document.querySelector("#tableWrap");
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function status(message,error=false){statusBox.textContent=message;statusBox.className="dash-status"+(error?" error":"");}
+const {data:{session}}=await supabase.auth.getSession();
+if(!session){status("You are not logged in. Redirecting to account access…",true);setTimeout(()=>location.href="auth.html",900);}
+else{
+  status("Signed in as "+session.user.email);
+  const {data,error}=await supabase.from("submissions")
+    .select("id,title,status,submission_reference,submission_type,submitted_at,created_at,reviewer_note")
+    .eq("submitted_by",session.user.id).order("created_at",{ascending:false});
+  if(error){tableWrap.textContent="Could not load submissions: "+error.message;}
+  else if(!data.length){tableWrap.innerHTML="<p>You have not submitted any manuscripts yet.</p>";}
+  else{
+    tableWrap.innerHTML=`<table class="submission-table"><thead><tr><th>Reference</th><th>Title</th><th>Type</th><th>Status</th><th>Submitted</th><th>Editorial note</th></tr></thead><tbody>${
+      data.map(row=>`<tr><td>${escapeHtml(row.submission_reference||row.id.slice(0,8))}</td><td>${escapeHtml(row.title)}</td><td>${escapeHtml(row.submission_type||"—")}</td><td><span class="pill">${escapeHtml((row.status||"submitted").replaceAll("_"," "))}</span></td><td>${row.submitted_at||row.created_at?escapeHtml(new Date(row.submitted_at||row.created_at).toLocaleDateString()):"—"}</td><td>${escapeHtml(row.reviewer_note||"No note yet")}</td></tr>`).join("")
+    }</tbody></table>`;
+  }
+}
+document.querySelector("#signOut").addEventListener("click",async()=>{await supabase.auth.signOut();location.href="auth.html";});
+</script>
+</body>
+</html>
