@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Become a Reviewer | VOC Research World</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .reviewer-section {
+      padding: 50px 0;
+    }
+
+    .reviewer-card {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 30px;
+      background: #fff;
+      border: 1px solid #dfe5ec;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(20, 40, 70, 0.06);
+    }
+
+    .reviewer-card .field {
+      margin-bottom: 20px;
+    }
+
+    .reviewer-card label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 600;
+    }
+
+    .reviewer-card input,
+    .reviewer-card textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      border: 1px solid #ccd5df;
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    .reviewer-card textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .reviewer-notice {
+      margin-bottom: 24px;
+      padding: 16px;
+      border-left: 4px solid #2865b4;
+      border-radius: 7px;
+      background: #eef5ff;
+    }
+
+    .reviewer-result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .reviewer-result.success {
+      color: #176b36;
+      background: #effaf2;
+    }
+
+    .reviewer-result.error {
+      color: #8b1b1b;
+      background: #fff0f0;
+    }
+
+    .reviewer-result[hidden] {
+      display: none;
+    }
+
+    .reviewer-card button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .reviewer-card .field-help {
+      display: block;
+      margin-top: 6px;
+      color: #526173;
+      font-size: 0.9rem;
+    }
+
+    /* Hidden anti-spam field */
+    .website-field {
+      position: absolute;
+      left: -10000px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+
+    @media (max-width: 600px) {
+      .reviewer-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="header"></div>
+
+  <section class="page">
+    <div class="wrap">
+      <p class="eyebrow">EDITORIAL AND PEER REVIEW</p>
+
+      <h1>Become a Reviewer</h1>
+
+      <p>
+        Join the VOC Research World reviewer community and contribute
+        to responsible scientific evaluation and research communication.
+      </p>
+    </div>
+  </section>
+
+  <section class="content reviewer-section">
+    <div class="wrap">
+
+      <div class="reviewer-card">
+
+        <div class="reviewer-notice">
+          <strong>Application and approval process</strong>
+
+          <p>
+            Complete this form to request reviewer consideration.
+            Submitting an application does not automatically create
+            an account or grant access to confidential manuscripts.
+            The VOC Research World administrator will assess your request.
+          </p>
+        </div>
+
+        <form id="reviewerForm">
+
+          <div class="field">
+            <label for="fullName">Full name *</label>
+
+            <input
+              id="fullName"
+              name="fullName"
+              autocomplete="name"
+              maxlength="150"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="email">Professional email address *</label>
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              maxlength="320"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="affiliation">
+              Institution or professional affiliation
+            </label>
+
+            <input
+              id="affiliation"
+              name="affiliation"
+              maxlength="250"
+              placeholder="University, laboratory, research institute, etc."
+            >
+          </div>
+
+          <div class="field">
+            <label for="qualifications">
+              Academic qualifications and relevant experience *
+            </label>
+
+            <textarea
+              id="qualifications"
+              name="qualifications"
+              maxlength="5000"
+              minlength="20"
+              required
+              placeholder="Describe your qualifications, research experience, and areas of expertise."
+            ></textarea>
+          </div>
+
+          <div class="field">
+            <label for="interests">
+              Research interests and reviewing expertise *
+            </label>
+
+            <textarea
+              id="interests"
+              name="interests"
+              maxlength="3000"
+              minlength="10"
+              required
+              placeholder="For example: biochemistry, analytical science, laboratory instrumentation, quality assurance, or data science."
+            ></textarea>
+          </div>
+
+          <!-- Hidden honeypot field for basic bot detection -->
+          <div class="website-field" aria-hidden="true">
+            <label for="website">Leave this field empty</label>
+            <input
+              id="website"
+              name="website"
+              type="text"
+              tabindex="-1"
+              autocomplete="off"
+            >
+          </div>
+
+          <button
+            id="submitButton"
+            class="btn primary"
+            type="submit"
+          >
+            Submit Reviewer Application
+          </button>
+
+          <div
+            id="reviewerResult"
+            class="reviewer-result"
+            role="status"
+            aria-live="polite"
+            hidden
+          ></div>
+
+        </form>
+
+      </div>
+
+    </div>
+  </section>
+
+  <div id="footer"></div>
+
+  <script src="app.js"></script>
+
+  <script type="module">
+    import { supabase } from "./supabase-config.js";
+
+    const form = document.querySelector("#reviewerForm");
+    const submitButton = document.querySelector("#submitButton");
+    const resultBox = document.querySelector("#reviewerResult");
+
+    function showResult(message, success = false) {
+      resultBox.textContent = message;
+      resultBox.className =
+        "reviewer-result " + (success ? "success" : "error");
+      resultBox.hidden = false;
+
+      resultBox.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!form.reportValidity()) {
+        return;
+      }
+
+      // Basic honeypot check.
+      // Server-side rate limiting and abuse protection should
+      // also be added before this form is used widely.
+      if (document.querySelector("#website").value.trim() !== "") {
+        showResult(
+          "Your application could not be processed. Please try again."
+        );
+        return;
+      }
+
+      const fullName =
+        document.querySelector("#fullName").value.trim();
+
+      const email =
+        document.querySelector("#email").value.trim();
+
+      const affiliation =
+        document.querySelector("#affiliation").value.trim();
+
+      const qualifications =
+        document.querySelector("#qualifications").value.trim();
+
+      const interests =
+        document.querySelector("#interests").value.trim();
+
+      if (
+        fullName.length < 2 ||
+        qualifications.length < 20 ||
+        interests.length < 10
+      ) {
+        showResult(
+          "Please provide your full name, relevant qualifications, " +
+          "and sufficient details about your research interests."
+        );
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Submitting application...";
+
+      try {
+        const { error } = await supabase
+          .from("reviewer_requests")
+          .insert({
+            full_name: fullName,
+            email: email,
+            affiliation: affiliation || null,
+            qualifications: qualifications,
+            research_interests: interests,
+            status: "pending"
+          });
+
+        if (error) {
+          if (error.code === "23505") {
+            throw new Error(
+              "An application with this email address is already " +
+              "pending. Please wait for the administrator's decision."
+            );
+          }
+
+          throw error;
+        }
+
+        form.reset();
+
+        showResult(
+          "Your reviewer application has been received. " +
+          "It is pending administrative review. " +
+          "Submitting this form does not grant account access.",
+          true
+        );
+
+      } catch (error) {
+        console.error("Reviewer application error:", error);
+
+        showResult(
+          error.message ||
+          "We could not submit your application. Please try again later."
+        );
+
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit Reviewer Application";
+      }
+    });
+  </script>
+
+</body>
+</html>
