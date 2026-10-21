@@ -2,154 +2,711 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Submit Research | VOC Research World</title>
 <link rel="stylesheet" href="style.css">
+
+<style>
+.submission-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(250px, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.submission-card,
+.submission-side .card {
+  background: #fff;
+  border: 1px solid #dfe5ec;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.submission-card .field {
+  margin-bottom: 18px;
+}
+
+.submission-card input,
+.submission-card select,
+.submission-card textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.submission-card textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.submission-card input[type="file"] {
+  padding: 12px;
+  border: 1px solid #dfe5ec;
+  border-radius: 8px;
+}
+
+.submission-notice {
+  background: #eef5ff;
+  border-left: 4px solid #2865b4;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 22px;
+}
+
+.submission-notice p {
+  margin-bottom: 0;
+}
+
+.submission-result {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+
+.submission-result.success {
+  background: #effaf2;
+  color: #176b36;
+}
+
+.submission-result.error {
+  background: #fff0f0;
+  color: #8b1b1b;
+}
+
+.submission-result[hidden] {
+  display: none;
+}
+
+.submission-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.submission-actions button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.field-help {
+  display: block;
+  margin-top: 7px;
+  color: #526173;
+  font-size: .9rem;
+}
+
+.submission-side ol {
+  padding-left: 22px;
+}
+
+.submission-side li {
+  margin-bottom: 12px;
+}
+
+@media (max-width: 760px) {
+  .submission-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .submission-card,
+  .submission-side .card {
+    padding: 17px;
+  }
+}
+</style>
 </head>
+
 <body>
+
 <div id="header"></div>
+
 <section class="page">
   <div class="wrap">
     <p class="eyebrow">RESEARCH SUBMISSION</p>
     <h1>Submit your scientific work.</h1>
-    <p>Send a manuscript or research proposal to the VOC Research World editorial team using our email-based submission workflow.</p>
+    <p>
+      Submit your manuscript to VOC Research World and track
+      its editorial progress through your author account.
+    </p>
   </div>
 </section>
+
 <section class="content">
   <div class="wrap submission-layout">
-    <form class="form" id="submissionForm" novalidate>
+
+    <main class="submission-card">
+
       <div class="submission-notice">
-        <strong>How submission works</strong>
-        <p>Your manuscript details are prepared as an email to <a class="email-link" href="mailto:vocresearchworld@gmail.com">vocresearchworld@gmail.com</a> with <a class="email-link" href="mailto:aolaniyan59@gmail.com">aolaniyan59@gmail.com</a> copied. If your device supports file sharing, the selected manuscript can be attached through your email/share app. Otherwise, your email app will open and you can attach the manuscript manually.</p>
+        <strong>Before you submit</strong>
+        <p>
+          Sign in to your author account first. Complete the manuscript
+          details and upload your file. Your submission record will be
+          saved in the VOC Research World database.
+        </p>
       </div>
 
-      <div class="two">
-        <div class="field"><label for="fullName">Full name *</label><input id="fullName" name="fullName" autocomplete="name" required></div>
-        <div class="field"><label for="email">Email address *</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+      <div id="accountStatus" class="submission-notice">
+        Checking your account...
       </div>
-      <div class="field"><label for="institution">Institution / affiliation</label><input id="institution" name="institution" autocomplete="organization"></div>
-      <div class="field"><label for="title">Manuscript title *</label><input id="title" name="title" required></div>
-      <div class="two">
-        <div class="field"><label for="area">Research area *</label><select id="area" name="area" required><option value="">Select an area</option><option>Biochemistry</option><option>Analytical Science</option><option>Quality Assurance</option><option>Natural Products</option><option>Instrumentation</option><option>Data & AI</option><option>Industrial Science</option><option>Other</option></select></div>
-        <div class="field"><label for="type">Submission type *</label><select id="type" name="type" required><option value="">Select type</option><option>Research Article</option><option>Review Article</option><option>Research Note</option><option>Technical Note</option><option>Method</option><option>Educational Resource</option><option>Research Proposal</option></select></div>
-      </div>
-      <div class="field"><label for="keywords">Keywords</label><input id="keywords" name="keywords" placeholder="e.g. UV-Vis, calibration, analytical chemistry"></div>
-      <div class="field"><label for="abstract">Abstract / research summary *</label><textarea id="abstract" name="abstract" required placeholder="Provide a concise scientific summary of the work."></textarea></div>
-      <div class="field"><label for="manuscript">Manuscript file *</label><input id="manuscript" name="manuscript" type="file" accept=".pdf,.doc,.docx,.txt" required><small class="small">Recommended: PDF. Accepted formats: PDF, DOC, DOCX or TXT. Maximum size for the browser sharing workflow: 10 MB.</small></div>
 
-      <div class="submission-actions">
-        <button class="btn primary" type="submit">Prepare &amp; Send Submission</button>
-        <button class="btn secondary" type="button" id="clearSubmission">Clear form</button>
-      </div>
-      <div id="submissionResult" class="submission-result" hidden aria-live="polite"></div>
-    </form>
+      <form id="submissionForm">
+
+        <div class="field">
+          <label for="fullName">Full name *</label>
+          <input
+            id="fullName"
+            name="fullName"
+            autocomplete="name"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="email">Email address *</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="institution">Institution / affiliation</label>
+          <input
+            id="institution"
+            name="institution"
+            autocomplete="organization"
+          >
+        </div>
+
+        <div class="field">
+          <label for="title">Manuscript title *</label>
+          <input id="title" name="title" required maxlength="300">
+        </div>
+
+        <div class="field">
+          <label for="area">Research area *</label>
+          <select id="area" name="area" required>
+            <option value="">Loading research areas...</option>
+          </select>
+          <small class="field-help">
+            Choose the category that best describes your work.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="type">Submission type *</label>
+          <select id="type" name="type" required>
+            <option value="">Select submission type</option>
+            <option value="Research Article">Research Article</option>
+            <option value="Review Article">Review Article</option>
+            <option value="Research Note">Research Note</option>
+            <option value="Technical Note">Technical Note</option>
+            <option value="Method">Method</option>
+            <option value="Educational Resource">Educational Resource</option>
+            <option value="Research Proposal">Research Proposal</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="keywords">Keywords</label>
+          <input
+            id="keywords"
+            name="keywords"
+            placeholder="e.g. Biochemistry, UV-Vis, data analysis"
+          >
+        </div>
+
+        <div class="field">
+          <label for="abstract">Abstract / research summary *</label>
+          <textarea
+            id="abstract"
+            name="abstract"
+            required
+            placeholder="Provide a concise summary of the research, its objectives, methods, major findings and conclusion."
+          ></textarea>
+        </div>
+
+        <div class="field">
+          <label for="manuscript">Manuscript file *</label>
+          <input
+            id="manuscript"
+            name="manuscript"
+            type="file"
+            accept=".pdf,.doc,.docx,.txt"
+            required
+          >
+          <small class="field-help">
+            Accepted formats: PDF, DOC, DOCX and TXT.
+            Maximum file size: 10 MB.
+          </small>
+        </div>
+
+        <div class="submission-actions">
+          <button
+            id="submitButton"
+            class="btn primary"
+            type="submit"
+          >
+            Submit Manuscript
+          </button>
+
+          <button
+            id="clearButton"
+            class="btn secondary"
+            type="button"
+          >
+            Clear Form
+          </button>
+        </div>
+
+        <div
+          id="submissionResult"
+          class="submission-result"
+          hidden
+          role="status"
+          aria-live="polite"
+        ></div>
+
+      </form>
+
+    </main>
 
     <aside class="submission-side">
+
       <div class="card">
         <p class="eyebrow">EDITORIAL CONTACT</p>
         <h3>VOC Research World</h3>
-        <p>Research submissions, publication enquiries and collaboration proposals can be directed to either editorial address.</p>
-        <p><a class="email-link" href="mailto:vocresearchworld@gmail.com">vocresearchworld@gmail.com</a></p>
-        <p><a class="email-link" href="mailto:aolaniyan59@gmail.com">aolaniyan59@gmail.com</a></p>
+
+        <p>
+          For general publication enquiries, contact:
+        </p>
+
+        <p>
+          <a href="mailto:vocresearchworld@gmail.com">
+            vocresearchworld@gmail.com
+          </a>
+        </p>
+
+        <p>
+          <a href="mailto:aolaniyan59@gmail.com">
+            aolaniyan59@gmail.com
+          </a>
+        </p>
       </div>
+
       <div class="card">
-        <p class="eyebrow">EDITORIAL WORKFLOW</p>
-        <ol class="submission-steps">
-          <li><b>Submission</b><span>Manuscript and metadata are sent to the editorial inbox.</span></li>
-          <li><b>Initial screening</b><span>Scope, completeness and basic submission requirements are checked.</span></li>
-          <li><b>Review</b><span>Appropriate review and revision processes can be arranged as the publication system develops.</span></li>
-          <li><b>Publication</b><span>Accepted work can be structured into the VOC publication architecture.</span></li>
+        <p class="eyebrow">SUBMISSION PROCESS</p>
+
+        <ol>
+          <li>Sign in to your author account.</li>
+          <li>Complete the manuscript information.</li>
+          <li>Upload the manuscript.</li>
+          <li>Submit it for editorial consideration.</li>
+          <li>Track its status in your author dashboard.</li>
         </ol>
       </div>
-      <div class="submission-note"><strong>Important:</strong> This version uses the submitter's email/share application rather than a server-side manuscript database. Do not submit highly sensitive or confidential material until a dedicated secure manuscript backend is connected.</div>
+
+      <div class="card">
+        <p class="eyebrow">AUTHOR DASHBOARD</p>
+
+        <p>
+          After submitting your research, visit your dashboard
+          to review your submission history.
+        </p>
+
+        <a class="btn secondary" href="dashboard.html">
+          My Submissions
+        </a>
+      </div>
+
     </aside>
+
   </div>
 </section>
+
 <div id="footer"></div>
+
 <script src="app.js"></script>
-<script>
-(function(){
-  const form=document.getElementById('submissionForm');
-  const result=document.getElementById('submissionResult');
-  const fileInput=document.getElementById('manuscript');
-  const clearBtn=document.getElementById('clearSubmission');
-  const TO='vocresearchworld@gmail.com';
-  const CC='aolaniyan59@gmail.com';
-  const MAX=10*1024*1024;
 
-  function ref(){
-    const d=new Date();
-    const date=d.toISOString().slice(0,10).replace(/-/g,'');
-    const rand=Math.random().toString(36).slice(2,7).toUpperCase();
-    return 'VOC-'+date+'-'+rand;
-  }
-  function val(id){return document.getElementById(id).value.trim();}
-  function show(html,ok){
-    result.hidden=false;
-    result.className='submission-result '+(ok?'success':'error');
-    result.innerHTML=html;
-    result.scrollIntoView({behavior:'smooth',block:'center'});
-  }
-  function emailBody(data,id){
-    return [
-      'VOC RESEARCH WORLD — RESEARCH SUBMISSION',
-      '',
-      'Submission reference: '+id,
-      'Submitted by: '+data.fullName,
-      'Email: '+data.email,
-      'Institution / affiliation: '+(data.institution||'Not provided'),
-      'Research area: '+data.area,
-      'Submission type: '+data.type,
-      'Keywords: '+(data.keywords||'Not provided'),
-      '',
-      'MANUSCRIPT TITLE',
-      data.title,
-      '',
-      'ABSTRACT / RESEARCH SUMMARY',
-      data.abstract,
-      '',
-      'MANUSCRIPT FILE',
-      data.fileName,
-      '',
-      'Please review the attached manuscript before sending this email.'
-    ].join('\\n');
-  }
-  function openMail(data,id){
-    const subject='VOC Research World Submission — '+id+' — '+data.title;
-    const body=emailBody(data,id);
-    window.location.href='mailto:'+encodeURIComponent(TO)+'?cc='+encodeURIComponent(CC)+'&subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
-  }
-  async function shareFile(data,id,file){
-    if(!navigator.share || !navigator.canShare || !navigator.canShare({files:[file]})) return false;
-    try{
-      await navigator.share({title:'VOC Research World Submission '+id,text:'To: '+TO+'\nCC: '+CC+'\n\n'+emailBody(data,id),files:[file]});
-      return true;
-    }catch(e){
-      if(e && e.name==='AbortError') return 'cancelled';
-      return false;
-    }
-  }
+<script type="module">
+import { supabase } from "./supabase-config.js";
 
-  form.addEventListener('submit',async function(e){
-    e.preventDefault();
-    result.hidden=true;
-    const required=['fullName','email','title','area','type','abstract'];
-    for(const id of required){ if(!val(id)){ document.getElementById(id).focus(); show('<b>Please complete all required fields.</b><p>Fields marked with * are required before a submission can be prepared.</p>',false); return; } }
-    const email=val('email');
-    if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)){document.getElementById('email').focus();show('<b>Please enter a valid email address.</b>',false);return;}
-    const file=fileInput.files[0];
-    if(!file){fileInput.focus();show('<b>Please select the manuscript file.</b><p>Choose a PDF, DOC, DOCX or TXT file before sending.</p>',false);return;}
-    if(file.size>MAX){show('<b>The selected manuscript is larger than 10 MB.</b><p>Please reduce the file size or use the email fallback and attach the manuscript directly in your email application.</p>',false);return;}
-    const id=ref();
-    const data={fullName:val('fullName'),email,title:val('title'),institution:val('institution'),area:val('area'),type:val('type'),keywords:val('keywords'),abstract:val('abstract'),fileName:file.name};
-    const shared=await shareFile(data,id,file);
-    if(shared===true){show('<b>Submission package prepared.</b><p>Use your email/share application to send the message to <a class="email-link" href="mailto:'+TO+'">'+TO+'</a> with a copy to <a class="email-link" href="mailto:'+CC+'">'+CC+'</a>.</p><p><b>Reference:</b> '+id+'</p>',true);return;}
-    if(shared==='cancelled'){show('<b>Submission cancelled.</b><p>No manuscript was sent. Your form remains available so you can try again.</p>',false);return;}
-    show('<b>Your email draft is being opened.</b><p>Reference: <b>'+id+'</b>. If your email application opens, check the recipient, subject and manuscript attachment, then press Send. If the manuscript is not attached automatically, attach <b>'+window.VOC.esc(file.name)+'</b> before sending.</p>',true);
-    openMail(data,id);
+const form = document.querySelector("#submissionForm");
+const fullNameInput = document.querySelector("#fullName");
+const emailInput = document.querySelector("#email");
+const institutionInput = document.querySelector("#institution");
+const areaSelect = document.querySelector("#area");
+const fileInput = document.querySelector("#manuscript");
+const submitButton = document.querySelector("#submitButton");
+const clearButton = document.querySelector("#clearButton");
+const accountStatus = document.querySelector("#accountStatus");
+const resultBox = document.querySelector("#submissionResult");
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+let currentSession = null;
+let categories = [];
+
+function showResult(message, success = false) {
+  resultBox.replaceChildren();
+
+  const paragraph = document.createElement("p");
+  paragraph.textContent = message;
+
+  resultBox.appendChild(paragraph);
+  resultBox.hidden = false;
+  resultBox.className =
+    "submission-result " + (success ? "success" : "error");
+
+  resultBox.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
   });
-  clearBtn.addEventListener('click',function(){form.reset();result.hidden=true;});
-})();
+}
+
+function hideResult() {
+  resultBox.hidden = true;
+  resultBox.textContent = "";
+}
+
+function setAccountMessage(message, error = false) {
+  accountStatus.textContent = message;
+  accountStatus.style.background = error ? "#fff0f0" : "#eef5ff";
+  accountStatus.style.color = error ? "#8b1b1b" : "#173b65";
+}
+
+function makeReference() {
+  const date = new Date().toISOString()
+    .slice(0, 10)
+    .replaceAll("-", "");
+
+  const random = crypto.randomUUID()
+    .replaceAll("-", "")
+    .slice(0, 8)
+    .toUpperCase();
+
+  return "VOC-" + date + "-" + random;
+}
+
+function safeFileName(fileName) {
+  const cleaned = fileName
+    .normalize("NFKD")
+    .replace(/[^a-zA-Z0-9._-]/g, "_")
+    .replace(/_+/g, "_")
+    .slice(-150);
+
+  return cleaned || "manuscript";
+}
+
+function validFile(file) {
+  if (!file) {
+    return "Please select your manuscript file.";
+  }
+
+  if (file.size === 0) {
+    return "The selected file is empty. Please choose another file.";
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    return "Your manuscript exceeds the 10 MB file-size limit.";
+  }
+
+  const allowedExtensions = /\.(pdf|doc|docx|txt)$/i;
+
+  if (!allowedExtensions.test(file.name)) {
+    return "Unsupported file type. Upload a PDF, DOC, DOCX or TXT file.";
+  }
+
+  return null;
+}
+
+/* Load the signed-in account and research categories. */
+async function initializePage() {
+  try {
+    const {
+      data: { session },
+      error
+    } = await supabase.auth.getSession();
+
+    if (error) throw error;
+
+    currentSession = session;
+
+    if (!session) {
+      setAccountMessage(
+        "You must sign in before submitting research. Opening account access..."
+      );
+
+      form.querySelectorAll("input, select, textarea, button")
+        .forEach(element => {
+          if (element.id !== "clearButton") {
+            element.disabled = true;
+          }
+        });
+
+      setTimeout(() => {
+        window.location.href = "auth.html";
+      }, 1200);
+
+      return;
+    }
+
+    const metadata = session.user.user_metadata || {};
+
+    fullNameInput.value = metadata.full_name || "";
+    emailInput.value = session.user.email || "";
+    emailInput.readOnly = true;
+
+    setAccountMessage(
+      "Signed in as " + (session.user.email || "author")
+    );
+
+    const { data, error: categoryError } = await supabase
+      .from("categories")
+      .select("id,name,slug")
+      .order("name");
+
+    if (categoryError) throw categoryError;
+
+    categories = data || [];
+
+    areaSelect.replaceChildren();
+
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Select a research area";
+    areaSelect.appendChild(placeholder);
+
+    categories.forEach(category => {
+      const option = document.createElement("option");
+      option.value = category.id;
+      option.textContent = category.name;
+      areaSelect.appendChild(option);
+    });
+
+    if (categories.length === 0) {
+      setAccountMessage(
+        "No research categories are configured. Please contact the site administrator.",
+        true
+      );
+    }
+
+  } catch (error) {
+    console.error("Initialization error:", error);
+
+    setAccountMessage(
+      "Unable to initialize the submission form: " +
+      (error.message || "Unexpected error."),
+      true
+    );
+  }
+}
+
+/* Upload the manuscript and save its submission record. */
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+  hideResult();
+
+  if (!currentSession) {
+    showResult(
+      "Please sign in to your author account before submitting."
+    );
+    return;
+  }
+
+  if (!form.reportValidity()) return;
+
+  const file = fileInput.files[0];
+  const fileError = validFile(file);
+
+  if (fileError) {
+    showResult(fileError);
+    return;
+  }
+
+  const title = document.querySelector("#title").value.trim();
+  const abstract = document.querySelector("#abstract").value.trim();
+  const submissionType = document.querySelector("#type").value;
+  const categoryId = areaSelect.value;
+  const keywords = document.querySelector("#keywords").value.trim();
+  const authorName = fullNameInput.value.trim();
+  const institution = institutionInput.value.trim();
+
+  if (!title || !abstract || !authorName || !categoryId) {
+    showResult(
+      "Please complete all required fields before submitting."
+    );
+    return;
+  }
+
+  submitButton.disabled = true;
+  clearButton.disabled = true;
+  submitButton.textContent = "Uploading manuscript...";
+
+  let uploadedPath = null;
+
+  try {
+    /*
+      Refresh the session before using its user ID.
+    */
+    const {
+      data: { session },
+      error: sessionError
+    } = await supabase.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    if (!session) {
+      throw new Error(
+        "Your login session has expired. Please log in again."
+      );
+    }
+
+    currentSession = session;
+
+    const reference = makeReference();
+
+    /*
+      The first folder is the authenticated user's UUID.
+      This matches the intended private-bucket ownership policy.
+    */
+    const filePath =
+      session.user.id + "/" +
+      reference + "/" +
+      safeFileName(file.name);
+
+    submitButton.textContent = "Uploading manuscript...";
+
+    const { data: uploadedFile, error: uploadError } =
+      await supabase.storage
+        .from("manuscripts")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false
+        });
+
+    if (uploadError) throw uploadError;
+
+    uploadedPath = uploadedFile.path;
+
+    submitButton.textContent = "Saving submission...";
+
+    /*
+      Store the private storage path, not a public URL.
+      The database requires submitted_by to equal auth.uid().
+    */
+    const { data: savedSubmission, error: insertError } =
+      await supabase
+        .from("submissions")
+        .insert({
+          title: title,
+          abstract: abstract,
+          manuscript_url: uploadedPath,
+          category_id: categoryId,
+          submitted_by: session.user.id,
+          status: "submitted",
+          submitted_at: new Date().toISOString(),
+          submission_type: submissionType,
+          author_name: authorName,
+          author_email: session.user.email,
+          institution: institution || null,
+          keywords: keywords || null,
+          submission_reference: reference
+        })
+        .select("id,submission_reference")
+        .single();
+
+    if (insertError) {
+      /*
+        Try to remove the uploaded file if the database
+        record could not be created.
+      */
+      const { error: cleanupError } = await supabase.storage
+        .from("manuscripts")
+        .remove([uploadedPath]);
+
+      if (cleanupError) {
+        console.error("File cleanup error:", cleanupError);
+      }
+
+      uploadedPath = null;
+      throw insertError;
+    }
+
+    form.reset();
+
+    /*
+      Keep the author's email tied to the signed-in account.
+    */
+    emailInput.value = currentSession.user.email || "";
+    emailInput.readOnly = true;
+
+    fullNameInput.value =
+      currentSession.user.user_metadata?.full_name || "";
+
+    showResult(
+      "Your manuscript has been submitted successfully. " +
+      "Submission reference: " +
+      (savedSubmission.submission_reference || reference) +
+      ". You can now check its status in your author dashboard.",
+      true
+    );
+
+    const dashboardLink = document.createElement("a");
+    dashboardLink.href = "dashboard.html";
+    dashboardLink.className = "btn primary";
+    dashboardLink.textContent = "View My Submissions";
+
+    resultBox.appendChild(document.createElement("br"));
+    resultBox.appendChild(document.createElement("br"));
+    resultBox.appendChild(dashboardLink);
+
+  } catch (error) {
+    console.error("Submission error:", error);
+
+    let message = error.message ||
+      "An unexpected error prevented your submission.";
+
+    if (
+      error.message &&
+      /row-level security|permission denied|not allowed/i.test(error.message)
+    ) {
+      message =
+        "Supabase denied this operation. Please check the storage and " +
+        "submission security policies. Technical details: " +
+        error.message;
+    }
+
+    showResult("Submission failed: " + message);
+  } finally {
+    submitButton.disabled = false;
+    clearButton.disabled = false;
+    submitButton.textContent = "Submit Manuscript";
+  }
+});
+
+/* Clear the form without signing the author out. */
+clearButton.addEventListener("click", () => {
+  form.reset();
+  hideResult();
+
+  if (currentSession) {
+    emailInput.value = currentSession.user.email || "";
+    emailInput.readOnly = true;
+
+    fullNameInput.value =
+      currentSession.user.user_metadata?.full_name || "";
+  }
+});
+
+/* Start initialization. */
+initializePage();
+
 </script>
+
 </body>
 </html>
