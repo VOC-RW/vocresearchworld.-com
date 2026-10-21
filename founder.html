@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Founder & Creator | VOC Research World</title>
+
+  <meta name="description"
+        content="Meet the founder and creator of VOC Research World, a growing scientific knowledge and research platform dedicated to science, innovation, and global impact.">
+
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --blue: #1769aa;
+      --green: #198754;
+      --white: #ffffff;
+      --light: #f3f6fa;
+      --text: #27364b;
+      --muted: #64748b;
+      --border: #e1e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--light);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .site-header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 18px 5%;
+    }
+
+    .nav {
+      max-width: 1150px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .brand {
+      color: var(--white);
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    .brand small {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: #a9d8c0;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--white);
+      font-size: 13px;
+    }
+
+    .nav-links a:hover {
+      color: #9de0bb;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0b1f3a, #164d7a);
+      color: var(--white);
+      padding: 75px 5%;
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 55px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      color: #9de0bb;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: clamp(34px, 5vw, 53px);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      color: #e0eaf4;
+      margin-bottom: 25px;
+      max-width: 650px;
+    }
+
+    .button {
+      display: inline-block;
+      background: var(--green);
+      color: var(--white);
+      padding: 12px 22px;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .button:hover {
+      background: #116c40;
+    }
+
+    .portrait-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .portrait {
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      border-radius: 9px;
+      background: #dce5ee;
+      display: block;
+      margin: auto auto 15px;
+    }
+
+    .portrait-card strong {
+      display: block;
+      font-size: 20px;
+    }
+
+    .portrait-card span {
+      color: #c8d9e9;
+      font-size: 13px;
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: auto;
+      padding: 55px 22px;
+    }
+
+    .section-title {
+      color: var(--navy);
+      font-size: 29px;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .section-intro {
+      color: var(--muted);
+      max-width: 780px;
+      margin-bottom: 28px;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 25px;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 26px;
+      box-shadow: 0 5px 20px rgba(11, 31, 58, 0.04);
+    }
+
+    .card h3 {
+      color: var(--navy);
+      margin-bottom: 12px;
+      font-size: 19px;
+    }
+
+    .card p {
+      margin-bottom: 12px;
+    }
+
+    .card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .interest-list {
+      list-style: none;
+    }
+
+    .interest-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .interest-list li:last-child {
+      border-bottom: none;
+    }
+
+    .interest-list li::before {
+      content: "✓";
+      color: var(--green);
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .vision-section {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .value-card {
+      padding: 24px;
+      background: var(--light);
+      border-left: 4px solid var(--green);
+      border-radius: 6px;
+    }
+
+    .value-card h3 {
+      color: var(--navy);
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .value-card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .quote {
+      margin-top: 30px;
+      padding: 25px;
+      background: #e8f3ed;
+      border-radius: 8px;
+      border-left: 5px solid var(--green);
+      color: var(--navy);
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .contact-section {
+      background: var(--navy);
+      color: var(--white);
+      text-align: center;
+      padding: 55px 22px;
+    }
+
+    .contact-section h2 {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .contact-section p {
+      color: #d7e2ee;
+      max-width: 650px;
+      margin: 0 auto 20px;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .contact-links a {
+      display: inline-block;
+      border: 1px solid #91aac4;
+      color: var(--white);
+      padding: 9px 15px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .contact-links a:hover {
+      background: var(--blue);
+    }
+
+    footer {
+      background: #071529;
+      color: #b9c8d8;
+      text-align: center;
+      padding: 22px;
+      font-size: 12px;
+    }
+
+    @media (max-width: 760px) {
+      .hero-inner,
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 50px 6%;
+      }
+
+      .portrait-card {
+        max-width: 380px;
+        margin: auto;
+      }
+
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .container {
+        padding: 40px 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="site-header">
+    <div class="nav">
+      <a class="brand" href="index.html">
+        VOC RESEARCH WORLD
+        <small>SCIENCE · INNOVATION · GLOBAL IMPACT</small>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="research.html">Research</a>
+        <a href="publications.html">Publications</a>
+        <a href="instrumentation.html">Instrumentation</a>
+        <a href="data-ai.html">Data &amp; AI</a>
+        <a href="about.html">About</a>
+        <a href="founder.html">Founder</a>
+        <a href="submit.html">Submit Research</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <div class="hero-inner">
+
+        <div>
+          <div class="eyebrow">Founder &amp; Creator</div>
+
+          <h1>Building a Future Where Science Creates Impact</h1>
+
+          <p>
+            I am Olaniyan Ismail Adekunle, the founder and creator of
+            VOC Research World. My vision is to contribute to a world
+            where scientific knowledge, research, technology, and
+            innovation can connect people and create meaningful impact.
+          </p>
+
+          <p>
+            I am passionate about learning, exploring scientific ideas,
+            and developing a platform that encourages knowledge sharing,
+            research communication, and scientific discovery.
+          </p>
+
+          <a class="button" href="#about-founder">
+            Discover My Journey
+          </a>
+        </div>
+
+        <div class="portrait-card">
+          <!-- Replace this image path with your actual portrait later. -->
+          <img
+            class="portrait"
+            src="assets/founder-portrait.jpg"
+            alt="Portrait of Olaniyan Ismail Adekunle"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          >
+
+          <div style="display:none; padding:50px 10px; color:#e0eaf4;">
+            <strong>Founder Portrait</strong>
+            <p>Add your photograph to display it here.</p>
+          </div>
+
+          <strong>Olaniyan Ismail Adekunle</strong>
+          <span>Founder &amp; Creator, VOC Research World</span>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="container" id="about-founder">
+      <h2 class="section-title">About the Founder</h2>
+
+      <p class="section-intro">
+        A developing scientific professional with a vision for research,
+        innovation, continuous learning, and global knowledge sharing.
+      </p>
+
+      <div class="about-grid">
+
+        <article class="card">
+          <h3>My Academic and Scientific Journey</h3>
+
+          <p>
+            My academic direction is rooted in Science Laboratory
+            Technology, with a particular interest in biochemistry and
+            the scientific principles behind biological processes,
+            analytical measurements, and laboratory investigations.
+          </p>
+
+          <p>
+            I am also interested in understanding how laboratory
+            instrumentation, quality assurance, natural products,
+            industrial science, and modern data technologies can
+            contribute to scientific advancement.
+          </p>
+
+          <p>
+            I believe that meaningful scientific growth requires more
+            than theoretical knowledge. It requires practical learning,
+            critical thinking, accurate interpretation of evidence,
+            ethical conduct, and a willingness to keep improving.
+          </p>
+        </article>
+
+        <aside class="card">
+          <h3>Areas of Interest</h3>
+
+          <ul class="interest-list">
+            <li>Biochemistry and biological sciences</li>
+            <li>Analytical science and laboratory methods</li>
+            <li>Laboratory instrumentation</li>
+            <li>Quality assurance and scientific integrity</li>
+            <li>Natural products research</li>
+            <li>Industrial and applied science</li>
+            <li>Data science and artificial intelligence</li>
+            <li>Scientific communication and research publishing</li>
+          </ul>
+        </aside>
+
+      </div>
+    </section>
+
+    <section class="vision-section">
+      <div class="container">
+
+        <h2 class="section-title">The Vision Behind VOC Research World</h2>
+
+        <p class="section-intro">
+          VOC Research World is being developed as a scientific
+          knowledge and research platform designed to connect ideas,
+          encourage learning, and make scientific work more accessible.
+        </p>
+
+        <div class="values-grid">
+
+          <article class="value-card">
+            <h3>Scientific Knowledge</h3>
+            <p>
+              Encourage the exploration and communication of scientific
+              concepts across disciplines, helping learners and
+              researchers engage with reliable knowledge.
+            </p>
+          </article>
+
+          <article class="value-card">
+            <h3>Research and Innovation</h3>
+            <p>
+              Create room for research discovery, scientific discussion,
+              collaboration, and the development of ideas that may
+              contribute to practical solutions.
+            </p>
+          </article>
+
+          <article class="value-card">
+            <h3>Global Impact</h3>
+            <p>
+              Build a platform with an outward-looking vision, where
+              scientific ideas and research can reach wider audiences
+              and support learning beyond geographical boundaries.
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+    <section class="container">
+      <h2 class="section-title">A Visionary Mindset, A Learning Attitude</h2>
+
+      <p>
+        I consider myself visionary and open to learning. I believe
+        that having a vision is important, but being willing to learn,
+        adapt, accept constructive feedback, and improve is equally
+        important.
+      </p>
+
+      <p style="margin-top:15px;">
+        Science continues to evolve, and no individual knows everything.
+        My approach is to remain curious, ask questions, explore new
+        disciplines, and build knowledge through study and practical
+        experience.
+      </p>
+
+      <div class="quote">
+        “A meaningful vision grows stronger when it is guided by
+        knowledge, strengthened by learning, and demonstrated through
+        consistent action.”
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <h2>Connect and Collaborate</h2>
+
+      <p>
+        VOC Research World welcomes opportunities for scientific
+        discussion, knowledge sharing, collaboration, and constructive
+        engagement with people who value science and innovation.
+      </p>
+
+      <div class="contact-links">
+        <a href="mailto:vocresearchworld@gmail.com">
+          Research Platform Email
+        </a>
+
+        <a href="mailto:aolaniyan59@gmail.com">
+          Contact the Founder
+        </a>
+
+        <a href="https://github.com/VOC-RW"
+           target="_blank"
+           rel="noopener noreferrer">
+          GitHub Profile
+        </a>
+
+        <a href="submit.html">
+          Submit Research
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> VOC Research World.</p>
+    <p>Science · Innovation · Global Impact</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+  </script>
+
+</body>
+</html>
