@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Admin Dashboard | VOC Research World</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+.admin-wrap {
+  max-width: 1180px;
+  margin: 40px auto;
+  padding: 0 18px;
+}
+
+.admin-card {
+  background: #fff;
+  border: 1px solid #dfe5ec;
+  border-radius: 16px;
+  padding: 22px;
+  margin: 20px 0;
+  overflow-x: auto;
+}
+
+.admin-message {
+  padding: 14px;
+  border-radius: 10px;
+  background: #f2f6fb;
+  overflow-wrap: anywhere;
+}
+
+.admin-message.error {
+  background: #fff0f0;
+  color: #8b1b1b;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.stat {
+  background: #fff;
+  border: 1px solid #dfe5ec;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.stat strong {
+  display: block;
+  font-size: 30px;
+}
+
+.stat span {
+  color: #637683;
+  font-size: 13px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  min-width: 850px;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 12px 10px;
+  border-bottom: 1px solid #e5eaf0;
+}
+
+.admin-table select,
+.admin-table button {
+  padding: 9px;
+  border-radius: 8px;
+  border: 1px solid #dbe5ea;
+  font: inherit;
+}
+
+.admin-table button {
+  background: #1687c9;
+  color: white;
+  border: none;
+  font-weight: bold;
+}
+
+.admin-table button:disabled {
+  opacity: .5;
+}
+
+.reference {
+  font-size: 12px;
+  color: #637683;
+  overflow-wrap: anywhere;
+}
+
+@media(max-width:650px) {
+  .admin-wrap {
+    margin: 24px auto;
+    padding: 0 12px;
+  }
+
+  .admin-card {
+    padding: 15px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<main class="admin-wrap">
+
+  <p class="eyebrow">EDITORIAL OPERATIONS</p>
+
+  <h1>Admin Dashboard</h1>
+
+  <p>
+    Manage research submissions and oversee the
+    editorial workflow of VOC Research World.
+  </p>
+
+  <section class="admin-card">
+
+    <div
+      id="adminMessage"
+      class="admin-message"
+      role="status"
+      aria-live="polite"
+    >
+      Verifying administrator access...
+    </div>
+
+    <p>
+      <a class="btn primary" href="dashboard.html">
+        Author Dashboard
+      </a>
+
+      <a class="btn secondary" href="index.html">
+        Public Website
+      </a>
+
+      <button
+        class="btn secondary"
+        id="logout"
+        type="button"
+      >
+        Log Out
+      </button>
+    </p>
+
+  </section>
+
+  <section class="stats" id="stats" hidden>
+
+    <div class="stat">
+      <strong id="total">0</strong>
+      <span>Total Submissions</span>
+    </div>
+
+    <div class="stat">
+      <strong id="submitted">0</strong>
+      <span>Awaiting Review</span>
+    </div>
+
+    <div class="stat">
+      <strong id="underReview">0</strong>
+      <span>Under Review</span>
+    </div>
+
+    <div class="stat">
+      <strong id="published">0</strong>
+      <span>Published</span>
+    </div>
+
+  </section>
+
+  <section class="admin-card">
+
+    <h2>Research Submissions</h2>
+
+    <p>
+      View manuscripts submitted by researchers and
+      manage their editorial statuses.
+    </p>
+
+    <div id="submissionList">
+      <p>Waiting for administrator verification...</p>
+    </div>
+
+  </section>
+
+</main>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+
+<script type="module">
+
+import { supabase } from "./supabase-config.js";
+
+const message = document.querySelector("#adminMessage");
+const submissionList = document.querySelector("#submissionList");
+
+const allowedStatuses = [
+  "submitted",
+  "under_review",
+  "revision_required",
+  "accepted",
+  "rejected",
+  "published"
+];
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+}
+
+function showMessage(text, isError = false) {
+  message.textContent = text;
+
+  message.className =
+    "admin-message" + (isError ? " error" : "");
+}
+
+function formatDate(value) {
+  if (!value) return "—";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
+
+  return date.toLocaleDateString();
+}
+
+/* Verify the signed-in user's role. */
+async function initializeDashboard() {
+
+  try {
+
+    const {
+      data: { session },
+      error: sessionError
+    } = await supabase.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    if (!session) {
+
+      showMessage(
+        "You must sign in first. Redirecting to login..."
+      );
+
+      setTimeout(() => {
+        window.location.href = "auth.html";
+      }, 1200);
+
+      return;
+    }
+
+    const {
+      data: profile,
+      error: profileError
+    } = await supabase
+      .from("profiles")
+      .select("role, full_name")
+      .eq("id", session.user.id)
+      .single();
+
+    if (profileError) throw profileError;
+
+    if (profile.role !== "admin") {
+
+      showMessage(
+        "Access denied. Administrator privileges are required.",
+        true
+      );
+
+      document.querySelector("#stats").hidden = true;
+
+      submissionList.textContent =
+        "Your account is not authorized to manage submissions.";
+
+      return;
+    }
+
+    showMessage(
+      "Administrator access verified. Welcome, " +
+      (profile.full_name || session.user.email) + "."
+    );
+
+    document.querySelector("#stats").hidden = false;
+
+    await loadSubmissions();
+
+  } catch (error) {
+
+    console.error("Admin verification error:", error);
+
+    showMessage(
+      "Unable to verify administrator access: " +
+      (error.message || "Unknown error"),
+      true
+    );
+
+    submissionList.textContent =
+      "Please check your account and database permissions.";
+  }
+}
+
+/* Load all submissions permitted by Supabase RLS. */
+async function loadSubmissions() {
+
+  submissionList.innerHTML =
+    "<p>Loading research submissions...</p>";
+
+  const {
+    data,
+    error
+  } = await supabase
+    .from("submissions")
+    .select(`
+      id,
+      title,
+      abstract,
+      status,
+      submission_reference,
+      submission_type,
+      author_name,
+      author_email,
+      institution,
+      keywords,
+      submitted_at,
+      created_at,
+      reviewer_notes
+    `)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  const rows = data || [];
+
+  document.querySelector("#total").textContent =
+    rows.length;
+
+  document.querySelector("#submitted").textContent =
+    rows.filter(row => row.status === "submitted").length;
+
+  document.querySelector("#underReview").textContent =
+    rows.filter(row => row.status === "under_review").length;
+
+  document.querySelector("#published").textContent =
+    rows.filter(row => row.status === "published").length;
+
+  if (rows.length === 0) {
+
+    submissionList.innerHTML =
+      "<p>No research submissions have been received yet.</p>";
+
+    return;
+  }
+
+  const tableRows = rows.map(row => {
+
+    const status = allowedStatuses.includes(row.status)
+      ? row.status
+      : "submitted";
+
+    const reference =
+      row.submission_reference || row.id;
+
+    return `
+      <tr>
+
+        <td>
+          <strong>${escapeHTML(reference)}</strong>
+          <div class="reference">
+            ${escapeHTML(formatDate(
+              row.submitted_at || row.created_at
+            ))}
+          </div>
+        </td>
+
+        <td>
+          <strong>${escapeHTML(row.title || "Untitled")}</strong>
+
+          <div>${escapeHTML(row.author_name || "Author not provided")}</div>
+
+          <div class="reference">
+            ${escapeHTML(row.author_email || "")}
+          </div>
+
+          <div class="reference">
+            ${escapeHTML(row.institution || "")}
+          </div>
+        </td>
+
+        <td>
+          <details>
+            <summary>View manuscript details</summary>
+
+            <p>
+              <strong>Abstract:</strong><br>
+              ${escapeHTML(row.abstract || "No abstract provided")}
+            </p>
+
+            <p>
+              <strong>Keywords:</strong><br>
+              ${escapeHTML(row.keywords || "—")}
+            </p>
+
+            <p>
+              <strong>Submission type:</strong><br>
+              ${escapeHTML(row.submission_type || "—")}
+            </p>
+
+            <p>
+              <strong>Editorial note:</strong><br>
+              ${escapeHTML(row.reviewer_notes || "No note yet")}
+            </p>
+          </details>
+        </td>
+
+        <td>
+          <span class="pill">
+            ${escapeHTML(status.replaceAll("_", " "))}
+          </span>
+        </td>
+
+        <td>
+          <label for="status-${escapeHTML(row.id)}">
+            New status
+          </label>
+
+          <select
+            id="status-${escapeHTML(row.id)}"
+            data-status="${escapeHTML(row.id)}"
+          >
+            ${allowedStatuses.map(option => `
+              <option
+                value="${option}"
+                ${option === status ? "selected" : ""}
+              >
+                ${option.replaceAll("_", " ")}
+              </option>
+            `).join("")}
+          </select>
+
+          <button
+            type="button"
+            data-save="${escapeHTML(row.id)}"
+          >
+            Save
+          </button>
+
+          <div
+            class="reference"
+            id="result-${escapeHTML(row.id)}"
+            aria-live="polite"
+          ></div>
+        </td>
+
+      </tr>
+    `;
+  }).join("");
+
+  submissionList.innerHTML = `
+    <div class="table-scroll">
+
+      <table class="admin-table">
+
+        <thead>
+          <tr>
+            <th>Reference</th>
+            <th>Manuscript / Author</th>
+            <th>Details</th>
+            <th>Current Status</th>
+            <th>Editorial Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${tableRows}
+        </tbody>
+
+      </table>
+
+    </div>
+  `;
+
+  submissionList
+    .querySelectorAll("button[data-save]")
+    .forEach(button => {
+
+      button.addEventListener("click", () => {
+        updateStatus(button.dataset.save, button);
+      });
+
+    });
+}
+
+/* Save a status change through Supabase. */
+async function updateStatus(id, button) {
+
+  const select = submissionList.querySelector(
+    `[data-status="${CSS.escape(id)}"]`
+  );
+
+  const result = document.querySelector(""+
+    "#result-" + CSS.escape(id)
+  );
+
+  const newStatus = select.value;
+
+  if (!allowedStatuses.includes(newStatus)) {
+    result.textContent = "Invalid status.";
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Saving...";
+  result.textContent = "";
+
+  try {
+
+    const {
+      data: { user },
+      error: userError
+    } = await supabase.auth.getUser();
+
+    if (userError) throw userError;
+
+    if (!user) {
+      throw new Error("Your session has expired. Please log in again.");
+    }
+
+    /*
+      Supabase RLS must independently authorize this update.
+      The page's role check is not the security boundary.
+    */
+    const { error } = await supabase
+      .from("submissions")
+      .update({
+        status: newStatus,
+        reviewed_at: new Date().toISOString()
+      })
+      .eq("id", id);
+
+    if (error) throw error;
+
+    result.textContent = "Status updated successfully.";
+
+    await loadSubmissions();
+
+  } catch (error) {
+
+    console.error("Status update error:", error);
+
+    result.textContent =
+      "Update failed: " + (error.message || "Permission denied.");
+
+  } finally {
+
+    button.disabled = false;
+    button.textContent = "Save";
+
+  }
+}
+
+/* Log out safely. */
+document.querySelector("#logout").addEventListener(
+  "click",
+  async () => {
+
+    const button = document.querySelector("#logout");
+
+    button.disabled = true;
+
+    try {
+
+      const { error } = await supabase.auth.signOut();
+
+      if (error) throw error;
+
+      window.location.href = "auth.html";
+
+    } catch (error) {
+
+      showMessage(
+        "Unable to log out: " + error.message,
+        true
+      );
+
+      button.disabled = false;
+
+    }
+  }
+);
+
+initializeDashboard();
+
+</script>
+
+</body>
+</html>
