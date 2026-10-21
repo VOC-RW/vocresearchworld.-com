@@ -1,31 +1,937 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Admin Dashboard | VOC Research World</title><link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Dashboard | VOC Research World</title>
+<link rel="stylesheet" href="style.css">
+
 <style>
-:root{--navy:#071b33;--blue:#1769aa;--line:#dbe3ec;--muted:#617184}*{box-sizing:border-box}body{margin:0;background:#f3f6fa;color:#172b40;font-family:Arial,Helvetica,sans-serif}.admin-nav{background:var(--navy);color:white;padding:14px max(18px,calc((100% - 1180px)/2));display:flex;justify-content:space-between;align-items:center;gap:16px;position:sticky;top:0;z-index:5;box-shadow:0 3px 12px #00152b30}.brand{color:white;text-decoration:none;font-weight:800;letter-spacing:.4px}.brand small{display:block;color:#8fd0f6;font-size:10px;letter-spacing:1.5px;margin-top:4px}.navlinks{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.navlinks a,.navlinks button{color:white;background:transparent;border:0;text-decoration:none;font-weight:700;cursor:pointer;font-size:13px}main{max-width:1180px;margin:28px auto;padding:0 18px}.intro{display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap}h1{margin:0 0 8px;font-size:clamp(25px,4vw,36px)}h2{font-size:21px;margin:0 0 15px}p{line-height:1.55}.muted{color:var(--muted)}.notice{padding:13px 15px;border-radius:9px;margin:16px 0;background:#e7f3ff;border:1px solid #b6d9f6;overflow-wrap:anywhere}.notice.error{background:#fff0ef;border-color:#f1b9b4;color:#8d241b}.notice.success{background:#eaf8ef;border-color:#b5e2c4;color:#165c32}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0}.stat,.panel{background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px;box-shadow:0 4px 14px #18344c08}.stat span{display:block;color:var(--muted);font-size:13px}.stat strong{display:block;font-size:27px;margin-top:8px}.panel{margin:18px 0}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}button,.button{border:0;border-radius:8px;padding:10px 14px;background:var(--blue);color:white;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}button.secondary{background:#e8edf3;color:#20364b}button:disabled{opacity:.55;cursor:wait}input,select,textarea{width:100%;padding:11px 12px;border:1px solid #c9d4df;border-radius:8px;font:inherit;background:white;color:#172b40}label{display:block;font-size:13px;font-weight:700;margin:10px 0 6px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.formgrid .wide{grid-column:1/-1}.tablewrap{width:100%;overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:760px}th,td{text-align:left;padding:12px;border-bottom:1px solid #e4eaf0;vertical-align:top;font-size:14px}th{background:#f7f9fb;color:#43576b;font-size:12px;text-transform:uppercase;letter-spacing:.4px}td .title{font-weight:700;max-width:300px;overflow-wrap:anywhere}.pill{display:inline-block;background:#e8eef7;color:#294968;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}.empty{padding:22px;text-align:center;color:var(--muted)}.footer{padding:25px 18px;text-align:center;color:var(--muted);font-size:13px}@media(max-width:760px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-nav{align-items:flex-start}.navlinks{justify-content:flex-end}.formgrid{grid-template-columns:1fr}.formgrid .wide{grid-column:auto}main{margin-top:20px}.stat,.panel{padding:14px}}
-</style></head>
+:root{
+  --navy:#071b33;
+  --blue:#1769aa;
+  --line:#dbe3ec;
+  --muted:#617184
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:#f3f6fa;color:#172b40;
+  font-family:Arial,Helvetica,sans-serif
+}
+.admin-nav{
+  background:var(--navy);color:white;
+  padding:14px max(18px,calc((100% - 1180px)/2));
+  display:flex;justify-content:space-between;
+  align-items:center;gap:16px;position:sticky;top:0;
+  z-index:5;box-shadow:0 3px 12px #00152b30
+}
+.brand{color:white;text-decoration:none;font-weight:800;letter-spacing:.4px}
+.brand small{
+  display:block;color:#8fd0f6;font-size:10px;
+  letter-spacing:1.5px;margin-top:4px
+}
+.navlinks{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.navlinks a,.navlinks button{
+  color:white;background:transparent;border:0;
+  text-decoration:none;font-weight:700;cursor:pointer;font-size:13px
+}
+main{max-width:1180px;margin:28px auto;padding:0 18px}
+.intro{
+  display:flex;justify-content:space-between;gap:18px;
+  align-items:center;flex-wrap:wrap
+}
+h1{margin:0 0 8px;font-size:clamp(25px,4vw,36px)}
+h2{font-size:21px;margin:0 0 15px}
+p{line-height:1.55}
+.muted{color:var(--muted)}
+.notice{
+  padding:13px 15px;border-radius:9px;margin:16px 0;
+  background:#e7f3ff;border:1px solid #b6d9f6;
+  overflow-wrap:anywhere
+}
+.notice.error{background:#fff0ef;border-color:#f1b9b4;color:#8d241b}
+.notice.success{background:#eaf8ef;border-color:#b5e2c4;color:#165c32}
+.cards{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;margin:20px 0
+}
+.stat,.panel{
+  background:#fff;border:1px solid var(--line);
+  border-radius:13px;padding:18px;box-shadow:0 4px 14px #18344c08
+}
+.stat span{display:block;color:var(--muted);font-size:13px}
+.stat strong{display:block;font-size:27px;margin-top:8px}
+.panel{margin:18px 0}
+.panel-head{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:12px;flex-wrap:wrap
+}
+button,.button{
+  border:0;border-radius:8px;padding:10px 14px;
+  background:var(--blue);color:white;font-weight:700;
+  cursor:pointer;text-decoration:none;display:inline-block
+}
+button.secondary{background:#e8edf3;color:#20364b}
+button:disabled{opacity:.55;cursor:wait}
+input,select,textarea{
+  width:100%;padding:11px 12px;border:1px solid #c9d4df;
+  border-radius:8px;font:inherit;background:white;color:#172b40
+}
+label{display:block;font-size:13px;font-weight:700;margin:10px 0 6px}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.formgrid .wide{grid-column:1/-1}
+.tablewrap{width:100%;overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:760px}
+th,td{
+  text-align:left;padding:12px;border-bottom:1px solid #e4eaf0;
+  vertical-align:top;font-size:14px
+}
+th{
+  background:#f7f9fb;color:#43576b;font-size:12px;
+  text-transform:uppercase;letter-spacing:.4px
+}
+td .title{font-weight:700;max-width:300px;overflow-wrap:anywhere}
+.pill{
+  display:inline-block;background:#e8eef7;color:#294968;
+  padding:4px 8px;border-radius:20px;font-size:11px;
+  font-weight:700;white-space:nowrap
+}
+.empty{padding:22px;text-align:center;color:var(--muted)}
+.footer{padding:25px 18px;text-align:center;color:var(--muted);font-size:13px}
+
+@media(max-width:760px){
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .admin-nav{align-items:flex-start}
+  .navlinks{justify-content:flex-end}
+  .formgrid{grid-template-columns:1fr}
+  .formgrid .wide{grid-column:auto}
+  main{margin-top:20px}
+  .stat,.panel{padding:14px}
+}
+</style>
+</head>
+
 <body>
-<header class="admin-nav"><a class="brand" href="index.html">VOC RESEARCH WORLD<small>SCIENCE · INNOVATION · GLOBAL IMPACT</small></a><nav class="navlinks" aria-label="Admin navigation"><a href="index.html">Public site</a><a href="dashboard.html">Author area</a><a href="reviewer.html">Reviewer area</a><button id="signOutBtn" type="button">Sign out</button></nav></header>
+
+<header class="admin-nav">
+  <a class="brand" href="index.html">
+    VOC RESEARCH WORLD
+    <small>SCIENCE · INNOVATION · GLOBAL IMPACT</small>
+  </a>
+
+  <nav class="navlinks" aria-label="Admin navigation">
+    <a href="index.html">Public site</a>
+    <a href="dashboard.html">Author area</a>
+    <a href="reviewer.html">Reviewer area</a>
+    <button id="signOutBtn" type="button">Sign out</button>
+  </nav>
+</header>
+
 <main>
-<section class="intro"><div><h1>Administration dashboard</h1><p class="muted">Manage manuscript submissions, editorial decisions and peer-review assignments.</p></div><button id="refreshBtn" class="secondary" type="button">Refresh data</button></section>
-<div id="globalMessage" class="notice" role="status">Checking your administrator access…</div>
-<section class="cards"><div class="stat"><span>Total submissions</span><strong id="totalCount">—</strong></div><div class="stat"><span>Awaiting review</span><strong id="pendingCount">—</strong></div><div class="stat"><span>Accepted</span><strong id="acceptedCount">—</strong></div><div class="stat"><span>Published</span><strong id="publishedCount">—</strong></div></section>
-<section class="panel"><div class="panel-head"><h2>Manuscript submissions</h2><button id="reloadSubmissions" class="secondary" type="button">Reload submissions</button></div><p class="muted">Change a submission's editorial status and leave a note for the author. The manuscript link opens in a new tab when available.</p><div id="submissionMessage" class="notice" hidden></div><div class="tablewrap"><table><thead><tr><th>Manuscript</th><th>Author</th><th>Status</th><th>Editorial note</th><th>Save</th></tr></thead><tbody id="submissionsBody"><tr><td colspan="5" class="empty">Loading submissions…</td></tr></tbody></table></div></section>
-<section class="panel"><h2>Assign a manuscript to a reviewer</h2><p class="muted">Choose a submission and a registered profile whose role is reviewer.</p><div id="assignmentMessage" class="notice" hidden></div><form id="assignForm"><div class="formgrid"><div><label for="submissionSelect">Manuscript</label><select id="submissionSelect" required><option value="">Loading manuscripts…</option></select></div><div><label for="reviewerSelect">Reviewer</label><select id="reviewerSelect" required><option value="">Loading reviewers…</option></select></div><div><label for="dueDate">Review due date (optional)</label><input id="dueDate" type="date"></div><div class="wide"><button id="assignBtn" type="submit">Assign reviewer</button></div></div></form></section>
-<section class="panel"><div class="panel-head"><h2>Current reviewer assignments</h2><button id="reloadAssignments" class="secondary" type="button">Reload assignments</button></div><div id="assignmentListMessage" class="notice" hidden></div><div class="tablewrap"><table><thead><tr><th>Manuscript</th><th>Reviewer</th><th>Assignment status</th><th>Due date</th><th>Assigned</th></tr></thead><tbody id="assignmentsBody"><tr><td colspan="5" class="empty">Loading assignments…</td></tr></tbody></table></div></section>
-</main><footer class="footer">VOC Research World · Editorial Administration</footer>
+
+<section class="intro">
+  <div>
+    <h1>Administration dashboard</h1>
+    <p class="muted">
+      Manage manuscript submissions, editorial decisions and peer-review assignments.
+    </p>
+  </div>
+  <button id="refreshBtn" class="secondary" type="button">Refresh data</button>
+</section>
+
+<div id="globalMessage" class="notice" role="status">
+  Checking your administrator access…
+</div>
+
+<section class="cards">
+  <div class="stat">
+    <span>Total submissions</span>
+    <strong id="totalCount">—</strong>
+  </div>
+  <div class="stat">
+    <span>Awaiting review</span>
+    <strong id="pendingCount">—</strong>
+  </div>
+  <div class="stat">
+    <span>Accepted</span>
+    <strong id="acceptedCount">—</strong>
+  </div>
+  <div class="stat">
+    <span>Published</span>
+    <strong id="publishedCount">—</strong>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2>Manuscript submissions</h2>
+    <button id="reloadSubmissions" class="secondary" type="button">
+      Reload submissions
+    </button>
+  </div>
+
+  <p class="muted">
+    Change a submission's editorial status and leave a note for the author.
+    Selecting Published creates or updates its publication record.
+  </p>
+
+  <div id="submissionMessage" class="notice" hidden></div>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Manuscript</th>
+          <th>Author</th>
+          <th>Status</th>
+          <th>Editorial note</th>
+          <th>Save</th>
+        </tr>
+      </thead>
+      <tbody id="submissionsBody">
+        <tr><td colspan="5" class="empty">Loading submissions…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Assign a manuscript to a reviewer</h2>
+  <p class="muted">
+    Choose a submission and a registered profile whose role is reviewer.
+  </p>
+
+  <div id="assignmentMessage" class="notice" hidden></div>
+
+  <form id="assignForm">
+    <div class="formgrid">
+      <div>
+        <label for="submissionSelect">Manuscript</label>
+        <select id="submissionSelect" required>
+          <option value="">Loading manuscripts…</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="reviewerSelect">Reviewer</label>
+        <select id="reviewerSelect" required>
+          <option value="">Loading reviewers…</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="dueDate">Review due date (optional)</label>
+        <input id="dueDate" type="date">
+      </div>
+
+      <div class="wide">
+        <button id="assignBtn" type="submit">Assign reviewer</button>
+      </div>
+    </div>
+  </form>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2>Current reviewer assignments</h2>
+    <button id="reloadAssignments" class="secondary" type="button">
+      Reload assignments
+    </button>
+  </div>
+
+  <div id="assignmentListMessage" class="notice" hidden></div>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Manuscript</th>
+          <th>Reviewer</th>
+          <th>Assignment status</th>
+          <th>Due date</th>
+          <th>Assigned</th>
+        </tr>
+      </thead>
+      <tbody id="assignmentsBody">
+        <tr><td colspan="5" class="empty">Loading assignments…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  VOC Research World · Editorial Administration
+</footer>
+
 <script type="module">
 import { supabase } from "./supabase-config.js";
-const $=id=>document.getElementById(id);const STATUSES=["draft","submitted","under_review","revision_required","accepted","rejected","published"];let currentUser=null;let submissions=[];
-function msg(id,text,type="info"){const e=$(id);e.textContent=text;e.hidden=false;e.className="notice"+(type==="error"?" error":type==="success"?" success":"")}function clear(id){$(id).hidden=true}function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}function loading(id,n,t){$(id).innerHTML='<tr><td colspan="'+n+'" class="empty">'+esc(t)+'</td></tr>'}
-async function checkAdmin(){const {data:{session},error:se}=await supabase.auth.getSession();if(se)throw se;if(!session){msg("globalMessage","You are not signed in. Redirecting to sign in…","error");setTimeout(()=>location.href="auth.html?next=admin.html",900);return false}currentUser=session.user;const {data:p,error}=await supabase.from("profiles").select("id,full_name,email,role").eq("id",session.user.id).maybeSingle();if(error)throw new Error("Could not verify profile role: "+error.message);if(!p||p.role!=="admin"){msg("globalMessage","Access denied: this account's profile role is not admin. Sign in with the administrator account.","error");return false}msg("globalMessage","Administrator access verified.","success");return true}
-async function loadSubmissions(){loading("submissionsBody",5,"Loading submissions…");clear("submissionMessage");const {data,error}=await supabase.from("submissions").select("id,title,abstract,manuscript_url,status,reviewer_notes,submitted_at,created_at,submission_reference,author_name,author_email,institution,submitted_by").order("created_at",{ascending:false});if(error){loading("submissionsBody",5,"Unable to load submissions.");msg("submissionMessage","Submissions query failed: "+error.message+" (code "+(error.code||"unknown")+")","error");throw error}submissions=data||[];if(!submissions.length)loading("submissionsBody",5,"No submissions found.");else $("submissionsBody").innerHTML=submissions.map(s=>{const author=s.author_name||s.author_email||s.institution||("Profile ID: "+(s.submitted_by||"not recorded"));const dt=s.submitted_at||s.created_at;const manuscript=s.manuscript_url?'<p><a target="_blank" rel="noopener noreferrer" href="'+esc(s.manuscript_url)+'">Open manuscript</a></p>':"";return '<tr><td><div class="title">'+esc(s.title||"Untitled submission")+'</div><p class="muted">'+esc(s.submission_reference||"")+'</p><small class="muted">'+esc(dt?new Date(dt).toLocaleString():"")+'</small>'+manuscript+'</td><td>'+esc(author)+'</td><td><select aria-label="Submission status" id="status-'+s.id+'">'+STATUSES.map(st=>'<option value="'+st+'"'+(s.status===st?" selected":"")+'>'+esc(st.replaceAll("_"," "))+'</option>').join("")+'</select></td><td><textarea id="note-'+s.id+'" rows="3" placeholder="Optional note to author">'+esc(s.reviewer_notes||"")+'</textarea></td><td><button type="button" data-save="'+s.id+'">Save</button></td></tr>'}).join("");$("submissionsBody").querySelectorAll("[data-save]").forEach(b=>b.addEventListener("click",()=>saveSubmission(b.dataset.save,b)));$("totalCount").textContent=submissions.length;$("pendingCount").textContent=submissions.filter(s=>["submitted","under_review","revision_required"].includes(s.status)).length;$("acceptedCount").textContent=submissions.filter(s=>s.status==="accepted").length;$("publishedCount").textContent=submissions.filter(s=>s.status==="published").length;$("submissionSelect").innerHTML='<option value="">Select a manuscript…</option>'+submissions.map(s=>'<option value="'+s.id+'">'+esc(s.title||"Untitled submission")+' — '+esc(s.submission_reference||s.status||"")+'</option>').join("")}
-async function saveSubmission(id,button){button.disabled=true;button.textContent="Saving…";try{const {error}=await supabase.from("submissions").update({status:$("status-"+id).value,reviewer_notes:$("note-"+id).value.trim()||null,reviewed_at:new Date().toISOString(),updated_at:new Date().toISOString()}).eq("id",id);if(error)throw error;msg("submissionMessage","Submission updated successfully.","success");await loadSubmissions()}catch(e){msg("submissionMessage","Could not save: "+(e.message||String(e))+". Check the submissions UPDATE policy in Supabase.","error")}finally{button.disabled=false;button.textContent="Save"}}
-async function loadReviewers(){const select=$("reviewerSelect");select.innerHTML='<option value="">Loading reviewers…</option>';const {data,error}=await supabase.from("profiles").select("id,full_name,email").eq("role","reviewer").order("full_name");if(error){select.innerHTML='<option value="">Could not load reviewers</option>';msg("assignmentMessage","Reviewer query failed: "+error.message+". Check the profiles SELECT policy for admins.","error");throw error}select.innerHTML='<option value="">Select a reviewer…</option>'+(data||[]).map(r=>'<option value="'+r.id+'">'+esc(r.full_name||r.email||"Unnamed reviewer")+(r.email&&r.full_name?" ("+esc(r.email)+")":"")+'</option>').join("");if(!data?.length)msg("assignmentMessage","No profiles currently have the reviewer role. Confirm that a reviewer profile exists.")}
-async function assignReviewer(e){e.preventDefault();clear("assignmentMessage");const submission_id=$("submissionSelect").value,reviewer_id=$("reviewerSelect").value,due_date=$("dueDate").value||null;if(!submission_id||!reviewer_id){msg("assignmentMessage","Choose both a manuscript and a reviewer.","error");return}const b=$("assignBtn");b.disabled=true;b.textContent="Assigning…";try{const {error}=await supabase.from("reviewer_assignments").upsert({submission_id,reviewer_id,assigned_by:currentUser.id,due_date,status:"assigned",updated_at:new Date().toISOString()},{onConflict:"submission_id,reviewer_id"});if(error)throw error;msg("assignmentMessage","Reviewer assigned successfully.","success");$("assignForm").reset();await loadAssignments()}catch(err){msg("assignmentMessage","Assignment failed: "+(err.message||String(err))+". Check reviewer_assignments INSERT/UPDATE policies and the reviewer profile.","error")}finally{b.disabled=false;b.textContent="Assign reviewer"}}
-async function loadAssignments(){loading("assignmentsBody",5,"Loading assignments…");clear("assignmentListMessage");const {data,error}=await supabase.from("reviewer_assignments").select("id,submission_id,reviewer_id,status,due_date,assigned_at").order("assigned_at",{ascending:false});if(error){loading("assignmentsBody",5,"Unable to load assignments.");msg("assignmentListMessage","Assignments query failed: "+error.message+". Check reviewer_assignments SELECT policy for admins.","error");return}const rows=data||[];if(!rows.length){loading("assignmentsBody",5,"No reviewer assignments yet.");return}const subMap=new Map(submissions.map(s=>[s.id,s]));const ids=[...new Set(rows.map(a=>a.reviewer_id).filter(Boolean))];let pMap=new Map();if(ids.length){const {data:ps,error:pe}=await supabase.from("profiles").select("id,full_name,email").in("id",ids);if(!pe)pMap=new Map((ps||[]).map(p=>[p.id,p]))}$("assignmentsBody").innerHTML=rows.map(a=>'<tr><td>'+esc(subMap.get(a.submission_id)?.title||("Submission "+a.submission_id))+'</td><td>'+esc(pMap.get(a.reviewer_id)?.full_name||pMap.get(a.reviewer_id)?.email||"Reviewer")+'</td><td><span class="pill">'+esc(a.status)+'</span></td><td>'+esc(a.due_date||"—")+'</td><td>'+esc(a.assigned_at?new Date(a.assigned_at).toLocaleDateString():"—")+'</td></tr>').join("")}
-async function refresh(){ $("refreshBtn").disabled=true;try{if(!await checkAdmin())return;const outcomes=await Promise.allSettled([loadSubmissions(),loadReviewers(),loadAssignments()]);if(outcomes.some(x=>x.status==="rejected"))msg("globalMessage","Admin access verified, but a section failed to load. Read the error shown in that section.","error");else msg("globalMessage","Administrator access verified. Dashboard refreshed.","success")}catch(e){msg("globalMessage","Dashboard initialization failed: "+(e.message||String(e)),"error")}finally{$("refreshBtn").disabled=false}}
-$("signOutBtn").addEventListener("click",async()=>{const {error}=await supabase.auth.signOut();if(error)msg("globalMessage","Sign out failed: "+error.message,"error");else location.href="auth.html"});$("refreshBtn").addEventListener("click",refresh);$("reloadSubmissions").addEventListener("click",()=>loadSubmissions().catch(e=>msg("submissionMessage",e.message,"error")));$("reloadAssignments").addEventListener("click",loadAssignments);$("assignForm").addEventListener("submit",assignReviewer);supabase.auth.onAuthStateChange(event=>{if(event==="SIGNED_OUT")location.href="auth.html"});refresh();
-</script></body></html>
+
+const $ = id => document.getElementById(id);
+
+const STATUSES = [
+  "draft",
+  "submitted",
+  "under_review",
+  "revision_required",
+  "accepted",
+  "rejected",
+  "published"
+];
+
+let currentUser = null;
+let submissions = [];
+
+function msg(id, text, type = "info") {
+  const element = $(id);
+  element.textContent = text;
+  element.hidden = false;
+  element.className =
+    "notice" +
+    (type === "error" ? " error" :
+     type === "success" ? " success" : "");
+}
+
+function clear(id) {
+  $(id).hidden = true;
+}
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[character]);
+}
+
+function loading(id, columns, text) {
+  $(id).innerHTML =
+    '<tr><td colspan="' + columns + '" class="empty">' +
+    esc(text) +
+    '</td></tr>';
+}
+
+/* Verify the signed-in user's administrator role. */
+async function checkAdmin() {
+  const {
+    data: { session },
+    error: sessionError
+  } = await supabase.auth.getSession();
+
+  if (sessionError) throw sessionError;
+
+  if (!session) {
+    msg(
+      "globalMessage",
+      "You are not signed in. Redirecting to sign in…",
+      "error"
+    );
+
+    setTimeout(() => {
+      location.href = "auth.html?next=admin.html";
+    }, 900);
+
+    return false;
+  }
+
+  currentUser = session.user;
+
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("id,full_name,email,role")
+    .eq("id", session.user.id)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error("Could not verify profile role: " + error.message);
+  }
+
+  if (!profile || profile.role !== "admin") {
+    msg(
+      "globalMessage",
+      "Access denied: this account's profile role is not admin.",
+      "error"
+    );
+    return false;
+  }
+
+  msg("globalMessage", "Administrator access verified.", "success");
+  return true;
+}
+
+/* Generate a readable, unique publication slug. */
+function makeSlug(title, submissionId) {
+  const base = String(title || "research-article")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 100) || "research-article";
+
+  return base + "-" +
+    String(submissionId).replace(/-/g, "").slice(0, 8);
+}
+
+/*
+ * Create or update the publication record.
+ * submission_id is used to find an existing publication,
+ * preventing repeated clicks from creating duplicates.
+ */
+async function publishSubmission(submission) {
+  const { data: existing, error: lookupError } = await supabase
+    .from("publications")
+    .select("id,slug")
+    .eq("submission_id", submission.id)
+    .maybeSingle();
+
+  if (lookupError) {
+    throw new Error(
+      "Could not check for an existing publication: " +
+      lookupError.message
+    );
+  }
+
+  const now = new Date().toISOString();
+
+  const publicationRecord = {
+    title: submission.title,
+    slug: existing?.slug || makeSlug(submission.title, submission.id),
+    abstract: submission.abstract || null,
+    category_id: submission.category_id || null,
+    submission_id: submission.id,
+    publication_date: now.slice(0, 10),
+    pdf_url: submission.manuscript_url || null,
+    featured: false,
+    status: "published"
+  };
+
+  let publicationId;
+
+  if (existing) {
+    const { data, error } = await supabase
+      .from("publications")
+      .update(publicationRecord)
+      .eq("id", existing.id)
+      .select("id")
+      .single();
+
+    if (error) {
+      throw new Error(
+        "Could not update the publication record: " + error.message
+      );
+    }
+
+    publicationId = data.id;
+  } else {
+    const { data, error } = await supabase
+      .from("publications")
+      .insert(publicationRecord)
+      .select("id")
+      .single();
+
+    if (error) {
+      throw new Error(
+        "Could not create the publication record: " + error.message
+      );
+    }
+
+    publicationId = data.id;
+  }
+
+  /*
+   * Link the submitting profile to the publication.
+   * Do not create an author link if no submitting profile is recorded.
+   */
+  if (submission.submitted_by) {
+    const { data: existingAuthor, error: authorLookupError } =
+      await supabase
+        .from("publication_authors")
+        .select("publication_id")
+        .eq("publication_id", publicationId)
+        .eq("profile_id", submission.submitted_by)
+        .maybeSingle();
+
+    if (authorLookupError) {
+      throw new Error(
+        "Publication saved, but checking its author link failed: " +
+        authorLookupError.message
+      );
+    }
+
+    if (!existingAuthor) {
+      const { error: authorInsertError } = await supabase
+        .from("publication_authors")
+        .insert({
+          publication_id: publicationId,
+          profile_id: submission.submitted_by,
+          author_order: 1,
+          is_corresponding_author: true
+        });
+
+      if (authorInsertError) {
+        throw new Error(
+          "Publication saved, but linking the author failed: " +
+          authorInsertError.message
+        );
+      }
+    }
+  }
+
+  return publicationId;
+}
+
+/* Load all manuscript submissions. */
+async function loadSubmissions() {
+  loading("submissionsBody", 5, "Loading submissions…");
+  clear("submissionMessage");
+
+  const { data, error } = await supabase
+    .from("submissions")
+    .select(
+      "id,title,abstract,category_id,manuscript_url,status," +
+      "reviewer_note,submitted_at,created_at,submission_reference," +
+      "author_name,author_email,institution,submitted_by"
+    )
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    loading("submissionsBody", 5, "Unable to load submissions.");
+
+    msg(
+      "submissionMessage",
+      "Submissions query failed: " + error.message +
+      " (code " + (error.code || "unknown") + ")",
+      "error"
+    );
+
+    throw error;
+  }
+
+  submissions = data || [];
+
+  if (!submissions.length) {
+    loading("submissionsBody", 5, "No submissions found.");
+  } else {
+    $("submissionsBody").innerHTML = submissions.map(submission => {
+      const author =
+        submission.author_name ||
+        submission.author_email ||
+        submission.institution ||
+        ("Profile ID: " + (submission.submitted_by || "not recorded"));
+
+      const submittedDate =
+        submission.submitted_at || submission.created_at;
+
+      const manuscriptLink = submission.manuscript_url
+        ? '<p><a target="_blank" rel="noopener noreferrer" href="' +
+          esc(submission.manuscript_url) +
+          '">Open manuscript</a></p>'
+        : "";
+
+      return `
+        <tr>
+          <td>
+            <div class="title">${esc(submission.title || "Untitled submission")}</div>
+            <p class="muted">${esc(submission.submission_reference || "")}</p>
+            <small class="muted">${
+              esc(submittedDate ? new Date(submittedDate).toLocaleString() : "")
+            }</small>
+            ${manuscriptLink}
+          </td>
+
+          <td>${esc(author)}</td>
+
+          <td>
+            <select aria-label="Submission status" id="status-${submission.id}">
+              ${STATUSES.map(status =>
+                '<option value="' + status + '"' +
+                (submission.status === status ? " selected" : "") +
+                '>' + esc(status.replaceAll("_", " ")) + '</option>'
+              ).join("")}
+            </select>
+          </td>
+
+          <td>
+            <textarea id="note-${submission.id}" rows="3"
+              placeholder="Optional note to author">${
+                esc(submission.reviewer_note || "")
+              }</textarea>
+          </td>
+
+          <td>
+            <button type="button" data-save="${submission.id}">Save</button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    $("submissionsBody")
+      .querySelectorAll("[data-save]")
+      .forEach(button => {
+        button.addEventListener("click", () => {
+          saveSubmission(button.dataset.save, button);
+        });
+      });
+  }
+
+  $("totalCount").textContent = submissions.length;
+
+  $("pendingCount").textContent = submissions.filter(submission =>
+    ["submitted", "under_review", "revision_required"]
+      .includes(submission.status)
+  ).length;
+
+  $("acceptedCount").textContent = submissions.filter(
+    submission => submission.status === "accepted"
+  ).length;
+
+  $("publishedCount").textContent = submissions.filter(
+    submission => submission.status === "published"
+  ).length;
+
+  $("submissionSelect").innerHTML =
+    '<option value="">Select a manuscript…</option>' +
+    submissions.map(submission =>
+      '<option value="' + submission.id + '">' +
+      esc(submission.title || "Untitled submission") +
+      ' — ' +
+      esc(submission.submission_reference || submission.status || "") +
+      '</option>'
+    ).join("");
+}
+
+/*
+ * Save the editorial decision.
+ * When the selected status is published, also publish the article.
+ */
+async function saveSubmission(id, button) {
+  button.disabled = true;
+  button.textContent = "Saving…";
+  clear("submissionMessage");
+
+  try {
+    const submission = submissions.find(item => item.id === id);
+
+    if (!submission) {
+      throw new Error(
+        "Submission not found. Reload the dashboard and try again."
+      );
+    }
+
+    const nextStatus = $("status-" + id).value;
+    const note = $("note-" + id).value.trim() || null;
+    const now = new Date().toISOString();
+
+    const { error: updateError } = await supabase
+      .from("submissions")
+      .update({
+        status: nextStatus,
+        reviewer_note: note,
+        reviewed_at: now,
+        updated_at: now
+      })
+      .eq("id", id);
+
+    if (updateError) {
+      throw new Error(
+        "Could not update the submission: " + updateError.message
+      );
+    }
+
+    /*
+     * Publish only after the submission status update succeeds.
+     */
+    if (nextStatus === "published") {
+      await publishSubmission({
+        ...submission,
+        status: nextStatus
+      });
+
+      msg(
+        "submissionMessage",
+        "Published successfully. The publication record has been created or updated. Refresh the public Publications page to check its visibility.",
+        "success"
+      );
+    } else {
+      msg(
+        "submissionMessage",
+        "Submission updated successfully.",
+        "success"
+      );
+    }
+
+    await loadSubmissions();
+
+  } catch (error) {
+    msg(
+      "submissionMessage",
+      "Action failed: " +
+      (error.message || String(error)) +
+      ". Check the database columns and Supabase permissions.",
+      "error"
+    );
+  } finally {
+    button.disabled = false;
+    button.textContent = "Save";
+  }
+}
+
+/* Load registered reviewers. */
+async function loadReviewers() {
+  const select = $("reviewerSelect");
+  select.innerHTML = '<option value="">Loading reviewers…</option>';
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id,full_name,email")
+    .eq("role", "reviewer")
+    .order("full_name");
+
+  if (error) {
+    select.innerHTML =
+      '<option value="">Could not load reviewers</option>';
+
+    msg(
+      "assignmentMessage",
+      "Reviewer query failed: " + error.message +
+      ". Check the profiles SELECT policy for administrators.",
+      "error"
+    );
+
+    throw error;
+  }
+
+  select.innerHTML =
+    '<option value="">Select a reviewer…</option>' +
+    (data || []).map(reviewer =>
+      '<option value="' + reviewer.id + '">' +
+      esc(reviewer.full_name || reviewer.email || "Unnamed reviewer") +
+      (reviewer.email && reviewer.full_name
+        ? " (" + esc(reviewer.email) + ")"
+        : "") +
+      '</option>'
+    ).join("");
+
+  if (!data?.length) {
+    msg(
+      "assignmentMessage",
+      "No profiles currently have the reviewer role.",
+      "info"
+    );
+  }
+}
+
+/* Assign a manuscript to a reviewer. */
+async function assignReviewer(event) {
+  event.preventDefault();
+  clear("assignmentMessage");
+
+  const submission_id = $("submissionSelect").value;
+  const reviewer_id = $("reviewerSelect").value;
+  const due_date = $("dueDate").value || null;
+
+  if (!submission_id || !reviewer_id) {
+    msg(
+      "assignmentMessage",
+      "Choose both a manuscript and a reviewer.",
+      "error"
+    );
+    return;
+  }
+
+  const button = $("assignBtn");
+  button.disabled = true;
+  button.textContent = "Assigning…";
+
+  try {
+    const { error } = await supabase
+      .from("reviewer_assignments")
+      .upsert({
+        submission_id,
+        reviewer_id,
+        assigned_by: currentUser.id,
+        due_date,
+        status: "assigned",
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: "submission_id,reviewer_id"
+      });
+
+    if (error) throw error;
+
+    msg(
+      "assignmentMessage",
+      "Reviewer assigned successfully.",
+      "success"
+    );
+
+    $("assignForm").reset();
+    await loadAssignments();
+
+  } catch (error) {
+    msg(
+      "assignmentMessage",
+      "Assignment failed: " +
+      (error.message || String(error)) +
+      ". Check reviewer_assignments policies and the reviewer profile.",
+      "error"
+    );
+  } finally {
+    button.disabled = false;
+    button.textContent = "Assign reviewer";
+  }
+}
+
+/* Load existing reviewer assignments. */
+async function loadAssignments() {
+  loading("assignmentsBody", 5, "Loading assignments…");
+  clear("assignmentListMessage");
+
+  const { data, error } = await supabase
+    .from("reviewer_assignments")
+    .select(
+      "id,submission_id,reviewer_id,status,due_date,assigned_at"
+    )
+    .order("assigned_at", { ascending: false });
+
+  if (error) {
+    loading("assignmentsBody", 5, "Unable to load assignments.");
+
+    msg(
+      "assignmentListMessage",
+      "Assignments query failed: " + error.message +
+      ". Check the reviewer_assignments SELECT policy.",
+      "error"
+    );
+
+    return;
+  }
+
+  const rows = data || [];
+
+  if (!rows.length) {
+    loading("assignmentsBody", 5, "No reviewer assignments yet.");
+    return;
+  }
+
+  const submissionMap = new Map(
+    submissions.map(submission => [submission.id, submission])
+  );
+
+  const reviewerIds = [
+    ...new Set(rows.map(row => row.reviewer_id).filter(Boolean))
+  ];
+
+  let profileMap = new Map();
+
+  if (reviewerIds.length) {
+    const { data: profiles, error: profileError } = await supabase
+      .from("profiles")
+      .select("id,full_name,email")
+      .in("id", reviewerIds);
+
+    if (!profileError) {
+      profileMap = new Map(
+        (profiles || []).map(profile => [profile.id, profile])
+      );
+    }
+  }
+
+  $("assignmentsBody").innerHTML = rows.map(assignment => {
+    const submission = submissionMap.get(assignment.submission_id);
+    const reviewer = profileMap.get(assignment.reviewer_id);
+
+    return `
+      <tr>
+        <td>${esc(submission?.title || "Submission " + assignment.submission_id)}</td>
+        <td>${esc(reviewer?.full_name || reviewer?.email || "Reviewer")}</td>
+        <td><span class="pill">${esc(assignment.status)}</span></td>
+        <td>${esc(assignment.due_date || "—")}</td>
+        <td>${
+          esc(
+            assignment.assigned_at
+              ? new Date(assignment.assigned_at).toLocaleDateString()
+              : "—"
+          )
+        }</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+/* Refresh all dashboard sections. */
+async function refresh() {
+  $("refreshBtn").disabled = true;
+
+  try {
+    if (!await checkAdmin()) return;
+
+    const results = await Promise.allSettled([
+      loadSubmissions(),
+      loadReviewers(),
+      loadAssignments()
+    ]);
+
+    if (results.some(result => result.status === "rejected")) {
+      msg(
+        "globalMessage",
+        "Administrator access verified, but one or more sections failed to load. Read the error shown in the relevant section.",
+        "error"
+      );
+    } else {
+      msg(
+        "globalMessage",
+        "Administrator access verified. Dashboard refreshed.",
+        "success"
+      );
+    }
+
+  } catch (error) {
+    msg(
+      "globalMessage",
+      "Dashboard initialization failed: " +
+      (error.message || String(error)),
+      "error"
+    );
+  } finally {
+    $("refreshBtn").disabled = false;
+  }
+}
+
+/* Event listeners. */
+$("signOutBtn").addEventListener("click", async () => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    msg("globalMessage", "Sign out failed: " + error.message, "error");
+  } else {
+    location.href = "auth.html";
+  }
+});
+
+$("refreshBtn").addEventListener("click", refresh);
+
+$("reloadSubmissions").addEventListener("click", () => {
+  loadSubmissions().catch(error => {
+    msg("submissionMessage", error.message, "error");
+  });
+});
+
+$("reloadAssignments").addEventListener("click", loadAssignments);
+$("assignForm").addEventListener("submit", assignReviewer);
+
+supabase.auth.onAuthStateChange(event => {
+  if (event === "SIGNED_OUT") {
+    location.href = "auth.html";
+  }
+});
+
+refresh();
+</script>
+
+</body>
+</html>
