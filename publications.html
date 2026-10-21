@@ -353,6 +353,7 @@ const results = document.getElementById('publicationResults');
         ' published ' +
         (data.length === 1 ? 'article' : 'articles');
     }
+    loadPublicationStatistics();
 
     loadPublications().catch(error => {
       console.error('Unexpected publication page error:', error);
