@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reviewer Dashboard | VOC Research World</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+:root {
+  --navy: #102747;
+  --blue: #1769aa;
+  --green: #19764a;
+  --border: #dce4ed;
+  --muted: #607086;
+}
+
+.reviewer-wrap {
+  max-width: 1150px;
+  margin: 40px auto;
+  padding: 0 18px 50px;
+}
+
+.reviewer-hero {
+  padding: 28px;
+  border-radius: 16px;
+  color: white;
+  background: linear-gradient(125deg, #102747, #1769aa);
+  margin-bottom: 24px;
+}
+
+.reviewer-hero h1 {
+  margin: 8px 0;
+  color: white;
+}
+
+.reviewer-hero p {
+  margin-bottom: 0;
+  line-height: 1.7;
+}
+
+.reviewer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.reviewer-stat,
+.reviewer-card,
+.assignment-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 5px 18px #1027470a;
+}
+
+.reviewer-stat span {
+  display: block;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.reviewer-stat strong {
+  display: block;
+  font-size: 28px;
+  color: var(--navy);
+  margin-top: 8px;
+}
+
+.reviewer-card {
+  margin-bottom: 24px;
+}
+
+.reviewer-card h2 {
+  margin-top: 0;
+  color: var(--navy);
+}
+
+.assignment-card {
+  margin: 18px 0;
+}
+
+.assignment-card h3 {
+  color: var(--navy);
+  margin-top: 0;
+  overflow-wrap: anywhere;
+}
+
+.assignment-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #edf3fa;
+  color: #214e7b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge.completed {
+  background: #e5f6ec;
+  color: #176b36;
+}
+
+.badge.pending {
+  background: #fff4d9;
+  color: #805b00;
+}
+
+.field {
+  margin: 16px 0;
+}
+
+.field label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+
+.field select,
+.field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font: inherit;
+  background: white;
+}
+
+.field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.review-form {
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+  padding-top: 18px;
+}
+
+.status-box {
+  padding: 14px;
+  margin: 16px 0;
+  border-radius: 9px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.status-box.error {
+  color: #8b1b1b;
+  background: #fff0f0;
+}
+
+.status-box.success {
+  color: #176b36;
+  background: #effaf2;
+}
+
+.status-box.info {
+  color: #214e7b;
+  background: #edf5ff;
+}
+
+.status-box[hidden] {
+  display: none;
+}
+
+.muted {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.abstract-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.8;
+}
+
+.logout-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (max-width: 720px) {
+  .reviewer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reviewer-hero {
+    padding: 22px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div id="header"></div>
+
+<main class="reviewer-wrap">
+
+  <section class="reviewer-hero">
+    <p class="eyebrow">VOC RESEARCH WORLD · EDITORIAL SERVICES</p>
+    <h1>Reviewer Dashboard</h1>
+    <p>
+      Review assigned research manuscripts, provide constructive feedback,
+      and submit recommendations to the editorial team.
+    </p>
+  </section>
+
+  <section class="reviewer-card">
+    <div class="logout-row">
+      <div>
+        <h2>Reviewer account</h2>
+        <p id="reviewerEmail" class="muted">Checking your account...</p>
+      </div>
+
+      <button type="button" class="btn secondary" id="refreshBtn">
+        Refresh assignments
+      </button>
+    </div>
+
+    <div id="pageStatus" class="status-box info" aria-live="polite">
+      Checking your session and reviewer permissions...
+    </div>
+  </section>
+
+  <section class="reviewer-grid">
+    <div class="reviewer-stat">
+      <span>Total assignments</span>
+      <strong id="totalCount">—</strong>
+    </div>
+
+    <div class="reviewer-stat">
+      <span>Awaiting review</span>
+      <strong id="pendingCount">—</strong>
+    </div>
+
+    <div class="reviewer-stat">
+      <span>Reviews submitted</span>
+      <strong id="completedCount">—</strong>
+    </div>
+  </section>
+
+  <section class="reviewer-card">
+    <h2>My assigned manuscripts</h2>
+    <p class="muted">
+      Only manuscripts assigned to your reviewer account should appear here.
+      Submit your recommendation and feedback for each assignment.
+    </p>
+
+    <div id="assignmentsList">
+      <p class="muted">Loading assignments...</p>
+    </div>
+  </section>
+
+  <section class="reviewer-card">
+    <h2>Reviewer responsibilities</h2>
+    <ul class="muted">
+      <li>Assess the scientific quality and relevance of each manuscript.</li>
+      <li>Provide specific, constructive feedback to the author.</li>
+      <li>Keep confidential editorial comments separate from author feedback.</li>
+      <li>Disclose potential conflicts of interest to the editor.</li>
+      <li>Submit recommendations without treating them as final editorial decisions.</li>
+    </ul>
+  </section>
+
+  <div class="logout-row">
+    <a href="dashboard.html">Return to author dashboard</a>
+    <button type="button" class="btn secondary" id="logoutBtn">
+      Log out
+    </button>
+  </div>
+
+</main>
+
+<div id="footer"></div>
+
+<script src="app.js"></script>
+
+<script type="module">
+import { supabase } from "./supabase-config.js";
+
+const $ = (selector) => document.querySelector(selector);
+
+const pageStatus = $("#pageStatus");
+const assignmentsList = $("#assignmentsList");
+
+let currentUser = null;
+let assignments = [];
+let loading = false;
+
+function showStatus(message, type = "info") {
+  pageStatus.hidden = false;
+  pageStatus.className = "status-box " + type;
+  pageStatus.textContent = message;
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function formatDate(value) {
+  if (!value) return "Not specified";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return "Not specified";
+
+  return date.toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
+  });
+}
+
+function recommendationLabel(value) {
+  const labels = {
+    accept: "Accept",
+    minor_revision: "Minor revision",
+    major_revision: "Major revision",
+    reject: "Reject"
+  };
+
+  return labels[value] || value || "Not submitted";
+}
+
+async function checkReviewerSession() {
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error || !data.user) {
+    location.href = "auth.html";
+    return false;
+  }
+
+  currentUser = data.user;
+  $("#reviewerEmail").textContent = currentUser.email || "Signed-in reviewer";
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("id, full_name, role")
+    .eq("id", currentUser.id)
+    .maybeSingle();
+
+  if (profileError) {
+    showStatus(
+      "We could not verify your account role. Please refresh the page. Details: " +
+      profileError.message,
+      "error"
+    );
+    return false;
+  }
+
+  if (!profile || profile.role !== "reviewer") {
+    showStatus(
+      "Access denied. This page requires a reviewer account. Your current role is: " +
+      (profile?.role || "not found") +
+      ". Contact the administrator if this is incorrect.",
+      "error"
+    );
+    assignmentsList.innerHTML = "";
+    return false;
+  }
+
+  $("#reviewerEmail").textContent =
+    (profile.full_name || currentUser.email) + " · Reviewer";
+
+  return true;
+}
+
+async function loadAssignments() {
+  if (loading) return;
+  loading = true;
+
+  $("#refreshBtn").disabled = true;
+  assignmentsList.innerHTML = "<p class='muted'>Loading your assignments...</p>";
+
+  try {
+    const allowed = await checkReviewerSession();
+
+    if (!allowed) return;
+
+    const { data, error } = await supabase
+      .from("reviewer_assignments")
+      .select(`
+        id,
+        submission_id,
+        reviewer_id,
+        status,
+        due_date,
+        assigned_at,
+        submissions (
+          id,
+          title,
+          abstract,
+          submission_reference,
+          submission_type,
+          keywords
+        ),
+        peer_reviews (
+          id,
+          recommendation,
+          comments_to_author,
+          confidential_comments,
+          submitted_at
+        )
+      `)
+      .eq("reviewer_id", currentUser.id)
+      .order("assigned_at", { ascending: false });
+
+    if (error) throw error;
+
+    assignments = data || [];
+
+    const completed = assignments.filter(item =>
+      Array.isArray(item.peer_reviews) && item.peer_reviews.length > 0
+    ).length;
+
+    $("#totalCount").textContent = assignments.length;
+    $("#completedCount").textContent = completed;
+    $("#pendingCount").textContent = assignments.length - completed;
+
+    showStatus(
+      "Your reviewer account is verified. " +
+      assignments.length + " assignment(s) found.",
+      "success"
+    );
+
+    renderAssignments();
+
+  } catch (error) {
+    assignmentsList.innerHTML = "";
+    showStatus(
+      "Unable to load assignments. Please refresh the page. Details: " +
+      (error.message || "Unknown error"),
+      "error"
+    );
+  } finally {
+    loading = false;
+    $("#refreshBtn").disabled = false;
+  }
+}
+
+function renderAssignments() {
+  if (!assignments.length) {
+    assignmentsList.innerHTML = `
+      <div class="status-box info">
+        No manuscripts have been assigned to your account yet.
+        Ask the editor or administrator to assign a manuscript to you.
+      </div>
+    `;
+    return;
+  }
+
+  assignmentsList.innerHTML = assignments.map((item, index) => {
+    const submission = item.submissions;
+    const review = Array.isArray(item.peer_reviews)
+      ? item.peer_reviews[0]
+      : null;
+
+    if (!submission) {
+      return `
+        <article class="assignment-card">
+          <h3>Assignment ${index + 1}</h3>
+          <p class="muted">
+            The manuscript details could not be loaded.
+            Ask the editorial administrator to check this assignment.
+          </p>
+        </article>
+      `;
+    }
+
+    return `
+      <article class="assignment-card">
+        <h3>${escapeHTML(submission.title || "Untitled manuscript")}</h3>
+
+        <div class="assignment-meta">
+          <span class="badge">
+            ${escapeHTML(item.status || "assigned")}
+          </span>
+
+          <span class="badge ${review ? "completed" : "pending"}">
+            ${review ? "Review submitted" : "Awaiting review"}
+          </span>
+        </div>
+
+        <p class="muted">
+          <strong>Reference:</strong>
+          ${escapeHTML(submission.submission_reference || "Not assigned")}
+          <br>
+          <strong>Assigned:</strong>
+          ${escapeHTML(formatDate(item.assigned_at))}
+          <br>
+          <strong>Review deadline:</strong>
+          ${escapeHTML(formatDate(item.due_date))}
+        </p>
+
+        <h4>Abstract</h4>
+        <div class="abstract-text">${
+          escapeHTML(submission.abstract || "No abstract was provided.")
+        }</div>
+
+        <p>
+          <strong>Submission type:</strong>
+          ${escapeHTML(submission.submission_type || "Not specified")}
+        </p>
+
+        <p>
+          <strong>Keywords:</strong>
+          ${escapeHTML(submission.keywords || "Not provided")}
+        </p>
+
+        ${
+          review
+          ? `
+            <div class="status-box success">
+              <strong>Recommendation:</strong>
+              ${escapeHTML(recommendationLabel(review.recommendation))}
+              <br>
+              <strong>Submitted:</strong>
+              ${escapeHTML(formatDate(review.submitted_at))}
+            </div>
+
+            <p class="muted">
+              Your review has been submitted. Contact the editorial team
+              if you need to amend it.
+            </p>
+          `
+          : renderReviewForm(item.id)
+        }
+      </article>
+    `;
+  }).join("");
+
+  assignmentsList.querySelectorAll(".review-form").forEach(form => {
+    form.addEventListener("submit", submitReview);
+  });
+}
+
+function renderReviewForm(assignmentId) {
+  return `
+    <form class="review-form" data-assignment-id="${escapeHTML(assignmentId)}">
+
+      <h4>Submit your assessment</h4>
+
+      <div class="field">
+        <label for="recommendation-${escapeHTML(assignmentId)}">
+          Recommendation
+        </label>
+
+        <select
+          id="recommendation-${escapeHTML(assignmentId)}"
+          name="recommendation"
+          required
+        >
+          <option value="">Choose a recommendation</option>
+          <option value="accept">Accept</option>
+          <option value="minor_revision">Minor revision</option>
+          <option value="major_revision">Major revision</option>
+          <option value="reject">Reject</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="author-comments-${escapeHTML(assignmentId)}">
+          Comments for the author
+        </label>
+
+        <textarea
+          id="author-comments-${escapeHTML(assignmentId)}"
+          name="comments_to_author"
+          required
+          minlength="10"
+          maxlength="12000"
+          placeholder="Explain the manuscript's strengths, weaknesses, and suggested improvements."
+        ></textarea>
+      </div>
+
+      <div class="field">
+        <label for="confidential-${escapeHTML(assignmentId)}">
+          Confidential comments for the editor
+        </label>
+
+        <textarea
+          id="confidential-${escapeHTML(assignmentId)}"
+          name="confidential_comments"
+          maxlength="12000"
+          placeholder="Optional. These comments are intended for editorial management, not the author."
+        ></textarea>
+      </div>
+
+      <p class="muted">
+        Your recommendation is advisory. The editor makes the final decision.
+        Check your feedback before submitting because the initial version
+        of this dashboard does not provide an edit button.
+      </p>
+
+      <button class="btn primary" type="submit">
+        Submit review
+      </button>
+
+      <div class="review-result status-box" hidden aria-live="polite"></div>
+    </form>
+  `;
+}
+
+async function submitReview(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const button = form.querySelector('button[type="submit"]');
+  const result = form.querySelector(".review-result");
+  const assignmentId = form.dataset.assignmentId;
+
+  button.disabled = true;
+  result.hidden = true;
+
+  try {
+    const allowed = await checkReviewerSession();
+
+    if (!allowed) throw new Error("Reviewer permission could not be verified.");
+
+    const assignment = assignments.find(item => item.id === assignmentId);
+
+    if (!assignment || assignment.reviewer_id !== currentUser.id) {
+      throw new Error("This assignment does not belong to your account.");
+    }
+
+    const formData = new FormData(form);
+
+    const recommendation = formData.get("recommendation");
+    const commentsToAuthor = String(
+      formData.get("comments_to_author") || ""
+    ).trim();
+
+    const confidentialComments = String(
+      formData.get("confidential_comments") || ""
+    ).trim();
+
+    if (!recommendation || commentsToAuthor.length < 10) {
+      throw new Error(
+        "Choose a recommendation and provide at least 10 characters of feedback."
+      );
+    }
+
+    const { error } = await supabase
+      .from("peer_reviews")
+      .insert({
+        assignment_id: assignmentId,
+        recommendation,
+        comments_to_author: commentsToAuthor,
+        confidential_comments: confidentialComments || null
+      });
+
+    if (error) throw error;
+
+    result.hidden = false;
+    result.className = "review-result status-box success";
+    result.textContent =
+      "Review submitted successfully. Your recommendation has been recorded. " +
+      "The editorial team will make the final decision.";
+
+    form.querySelectorAll("input, select, textarea, button").forEach(element => {
+      element.disabled = true;
+    });
+
+    await loadAssignments();
+
+  } catch (error) {
+    result.hidden = false;
+    result.className = "review-result status-box error";
+    result.textContent =
+      "The review could not be submitted: " +
+      (error.message || "Unknown error");
+    button.disabled = false;
+  }
+}
+
+$("#refreshBtn").addEventListener("click", loadAssignments);
+
+$("#logoutBtn").addEventListener("click", async () => {
+  $("#logoutBtn").disabled = true;
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    showStatus("Unable to log out: " + error.message, "error");
+    $("#logoutBtn").disabled = false;
+    return;
+  }
+
+  location.href = "auth.html";
+});
+
+loadAssignments();
+</script>
+</body>
+</html>
