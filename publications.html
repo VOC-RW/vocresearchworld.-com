@@ -16,9 +16,30 @@
   </section>  <section class="content">
     <div class="wrap">
       <div id="publicationStatus" role="status" class="small">
-        Loading published research…
-      </div>
-      <div class="cards three" id="publicationGrid"></div>
+  Loading published research…
+</div>
+
+<div style="display:flex;gap:12px;flex-wrap:wrap;margin:18px 0;">
+  <input
+    id="publicationSearch"
+    type="search"
+    placeholder="Search title, author, keyword, or DOI…"
+    aria-label="Search publications"
+    style="flex:1;min-width:220px;padding:12px;border:1px solid #ccd3dc;border-radius:8px;"
+  >
+
+  <select
+    id="publicationCategory"
+    aria-label="Filter by research category"
+    style="min-width:200px;padding:12px;border:1px solid #ccd3dc;border-radius:8px;"
+  >
+    <option value="">All research categories</option>
+  </select>
+</div>
+
+<div id="publicationResults" class="small" aria-live="polite"></div>
+
+<div class="cards three" id="publicationGrid"></div>
     </div>
   </section>  <div id="footer"></div>  <script src="app.js"></script>  <script type="module">
     import { supabase } from './supabase-config.js';
