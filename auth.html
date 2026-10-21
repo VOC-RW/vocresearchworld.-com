@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Account Access | VOC Research World</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.auth-wrap{max-width:560px;margin:48px auto;padding:0 18px}.auth-card{background:#fff;border:1px solid #dfe5ec;border-radius:16px;padding:28px;box-shadow:0 10px 35px #0b254015}.auth-tabs{display:flex;gap:10px;margin:20px 0}.auth-tabs button{flex:1}.auth-status{padding:14px;border-radius:10px;margin-top:16px;white-space:pre-wrap}.auth-status.error{background:#fff0f0;color:#8b1b1b}.auth-status.success{background:#effaf2;color:#176b36}.auth-status[hidden]{display:none}.auth-card .field{margin:14px 0}.auth-card input{width:100%;box-sizing:border-box}
+</style>
+</head>
+<body>
+<div id="header"></div>
+<main class="auth-wrap">
+  <div class="auth-card">
+    <p class="eyebrow">AUTHOR PORTAL</p>
+    <h1>Access your research account</h1>
+    <p>Register to submit manuscripts and track their editorial status.</p>
+    <div class="auth-tabs">
+      <button type="button" class="btn primary" id="showLogin">Log in</button>
+      <button type="button" class="btn secondary" id="showSignup">Create account</button>
+    </div>
+    <form id="authForm">
+      <div class="field" id="nameField" hidden><label for="fullName">Full name</label><input id="fullName" autocomplete="name"></div>
+      <div class="field"><label for="email">Email address</label><input id="email" type="email" autocomplete="email" required></div>
+      <div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required><small class="small">Use at least 8 characters.</small></div>
+      <button class="btn primary" id="submitBtn" type="submit">Log in</button>
+      <button class="btn secondary" id="resetBtn" type="button" style="margin-left:8px">Reset password</button>
+    </form>
+    <div id="authStatus" class="auth-status" hidden aria-live="polite"></div>
+    <p style="margin-top:18px"><a href="submit.html">Return to research submission</a></p>
+  </div>
+</main>
+<div id="footer"></div>
+<script src="app.js"></script>
+<script type="module">
+import { supabase } from "./supabase-config.js";
+const form=document.querySelector("#authForm"), statusBox=document.querySelector("#authStatus");
+const nameField=document.querySelector("#nameField"), nameInput=document.querySelector("#fullName");
+const password=document.querySelector("#password"), submitBtn=document.querySelector("#submitBtn");
+let mode="login";
+function showStatus(message,ok=false){statusBox.hidden=false;statusBox.className="auth-status "+(ok?"success":"error");statusBox.textContent=message;}
+function setMode(next){
+  mode=next; nameField.hidden=mode!=="signup"; nameInput.required=mode==="signup";
+  submitBtn.textContent=mode==="login"?"Log in":"Create account";
+  document.querySelector("#showLogin").className="btn "+(mode==="login"?"primary":"secondary");
+  document.querySelector("#showSignup").className="btn "+(mode==="signup"?"primary":"secondary");
+  password.autocomplete=mode==="login"?"current-password":"new-password"; statusBox.hidden=true;
+}
+document.querySelector("#showLogin").addEventListener("click",()=>setMode("login"));
+document.querySelector("#showSignup").addEventListener("click",()=>setMode("signup"));
+form.addEventListener("submit",async e=>{
+  e.preventDefault(); submitBtn.disabled=true; statusBox.hidden=true;
+  const email=document.querySelector("#email").value.trim();
+  try{
+    if(mode==="signup"){
+      const {data,error}=await supabase.auth.signUp({
+        email,password:password.value,
+        options:{data:{full_name:nameInput.value.trim()},emailRedirectTo:location.origin+location.pathname.replace(/[^/]*$/,"")+"dashboard.html"}
+      });
+      if(error) throw error;
+      showStatus(data.session
+        ?"Account created. You are signed in; open your dashboard."
+        :"Registration received. Check your email for the confirmation link, then log in.",true);
+      if(data.session) setTimeout(()=>location.href="dashboard.html",1200);
+    }else{
+      const {error}=await supabase.auth.signInWithPassword({email,password:password.value});
+      if(error) throw error;
+      location.href="dashboard.html";
+    }
+  }catch(err){showStatus(err.message||"Unable to complete account request.");}
+  finally{submitBtn.disabled=false;}
+});
+document.querySelector("#resetBtn").addEventListener("click",async()=>{
+  const email=document.querySelector("#email").value.trim();
+  if(!email){showStatus("Enter your email address first.");return;}
+  try{
+    const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:location.href});
+    if(error) throw error; showStatus("If an account exists for that address, a password-reset email will be sent.",true);
+  }catch(err){showStatus(err.message||"Unable to request a password reset.");}
+});
+supabase.auth.onAuthStateChange((_event,session)=>{ if(session && mode==="login") { /* login submit handles navigation */ } });
+</script>
+</body>
+</html>
