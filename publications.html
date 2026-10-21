@@ -223,6 +223,64 @@ if (publication.pdf_url) {
       );
 
       grid.innerHTML = cards.join('');
+      const searchInput = document.getElementById('publicationSearch');
+const categorySelect = document.getElementById('publicationCategory');
+const results = document.getElementById('publicationResults');
+
+  const publicationCards = Array.from(
+    grid.querySelectorAll('.card')
+  );
+
+  // Populate the category dropdown from published articles.
+  const categories = [
+    ...new Set(
+      publicationCards
+        .map(card => card.querySelector('label')?.textContent
+          ?.replace('· PUBLISHED', '')
+          .trim())
+        .filter(Boolean)
+    )
+  ].sort();
+
+  categories.forEach(category => {
+    const option = document.createElement('option');
+    option.value = category;
+    option.textContent = category;
+    categorySelect.appendChild(option);
+  });
+
+  function filterPublications() {
+    const query = searchInput.value.trim().toLowerCase();
+    const selectedCategory = categorySelect.value;
+    let visibleCount = 0;
+
+    publicationCards.forEach(card => {
+      const text = card.textContent.toLowerCase();
+      const category = card.querySelector('label')
+        ?.textContent.replace('· PUBLISHED', '').trim();
+
+      const matchesSearch = text.includes(query);
+      const matchesCategory =
+        !selectedCategory || category === selectedCategory;
+
+      const visible = matchesSearch && matchesCategory;
+
+      card.hidden = !visible;
+
+      if (visible) visibleCount++;
+    });
+
+    results.textContent = visibleCount
+      ? `Showing ${visibleCount} published ${
+          visibleCount === 1 ? 'article' : 'articles'
+        }.`
+      : 'No publications match your search. Try another keyword or category.';
+  }
+
+  searchInput.addEventListener('input', filterPublications);
+  categorySelect.addEventListener('change', filterPublications);
+
+  filterPublications();
 
       status.textContent =
         data.length +
