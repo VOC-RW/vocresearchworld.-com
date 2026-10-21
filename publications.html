@@ -293,8 +293,23 @@ if (publication.pdf_url) {
           `;
         })
       );
+    
 
       grid.innerHTML = cards.join('');
+      // Display featured publications separately.
+const featuredSection = document.getElementById('featuredResearchSection');
+const featuredGrid = document.getElementById('featuredResearchGrid');
+
+const featuredCards = cards.filter(
+  (card, index) => data[index].featured === true
+);
+
+if (featuredCards.length > 0) {
+  featuredGrid.innerHTML = featuredCards.join('');
+  featuredSection.style.display = 'block';
+} else {
+  featuredSection.style.display = 'none';
+}
       const searchInput = document.getElementById('publicationSearch');
 const categorySelect = document.getElementById('publicationCategory');
 const results = document.getElementById('publicationResults');
