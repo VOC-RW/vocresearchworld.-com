@@ -736,6 +736,38 @@ async function loadDashboard() {
     showStatus(
       "Signed in as " + session.user.email
     );
+    // Load the signed-in user's role from Supabase.
+const { data: profile, error: profileError } = await supabase
+.from("profiles")
+.select("role")
+.eq("id", session.user.id)
+.maybeSingle();
+
+if (profileError) {
+console.error("Could not load account role:", profileError);
+} else if (profile) {
+const workspace = document.getElementById("editorialWorkspace");
+const workspaceLinks = document.getElementById("workspaceLinks");
+
+const links = [];
+
+if (profile.role === "admin") {
+links.push(
+'<a class="btn primary" href="admin.html">Open Admin Dashboard</a>'
+);
+}
+
+if (profile.role === "reviewer") {
+links.push(
+'<a class="btn primary" href="reviewer.html">Open Reviewer Dashboard</a>'
+);
+}
+
+if (links.length > 0) {
+workspaceLinks.innerHTML = links.join("");
+workspace.hidden = false;
+}
+  }
 
     /*
       Load notifications and submissions independently.
