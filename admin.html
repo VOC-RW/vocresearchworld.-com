@@ -160,6 +160,11 @@ td .title{font-weight:700;max-width:300px;overflow-wrap:anywhere}
     <span>Published</span>
     <strong id="publishedCount">—</strong>
   </div>
+
+  <div class="stat">
+    <span>Website visits</span>
+    <strong id="websiteVisitCount">—</strong>
+  </div>
 </section>
 
 <section class="panel">
@@ -918,7 +923,21 @@ async function loadAssignments() {
     `;
   }).join("");
 }
+/* Load the total number of recorded website visits. */
+async function loadWebsiteVisits() {
+  const counter = document.getElementById("websiteVisitCount");
+  counter.textContent = "Loading...";
 
+  const { data, error } = await supabase.rpc("get_site_visit_count");
+
+  if (error) {
+    counter.textContent = "Unavailable";
+    console.error("Website visit counter failed:", error);
+    return;
+  }
+
+  counter.textContent = Number(data || 0).toLocaleString();
+  }
 /* Refresh all dashboard sections. */
 async function refresh() {
   $("refreshBtn").disabled = true;
@@ -926,10 +945,11 @@ async function refresh() {
   try {
     if (!await checkAdmin()) return;
 
-    const results = await Promise.allSettled([
+        const results = await Promise.allSettled([
       loadSubmissions(),
       loadReviewers(),
-      loadAssignments()
+      loadAssignments(),
+      loadWebsiteVisits()
     ]);
 
     if (results.some(result => result.status === "rejected")) {
