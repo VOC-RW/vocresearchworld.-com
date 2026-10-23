@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Read Research | VOC Research World</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .reader-wrap {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 18px;
+    }
+
+    .reader-paper {
+      background: #fff;
+      border: 1px solid #dfe5ec;
+      border-radius: 14px;
+      padding: clamp(20px, 5vw, 48px);
+      margin: 24px 0;
+    }
+
+    .reader-title {
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .reader-meta {
+      color: #617184;
+      font-size: .95rem;
+      line-height: 1.8;
+    }
+
+    .reader-abstract {
+      padding: 18px;
+      background: #f3f6fa;
+      border-radius: 10px;
+      line-height: 1.8;
+      white-space: pre-wrap;
+    }
+
+    .reader-content {
+      line-height: 1.9;
+      font-size: 1.05rem;
+      overflow-wrap: anywhere;
+    }
+
+    .reader-content h2 {
+      margin-top: 30px;
+    }
+
+    .reader-pdf {
+      width: 100%;
+      height: 75vh;
+      min-height: 500px;
+      border: 1px solid #dfe5ec;
+      border-radius: 8px;
+    }
+
+    .reader-message {
+      padding: 14px;
+      background: #f3f6fa;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header"></div>
+
+  <main class="reader-wrap">
+    <p class="eyebrow">VOC RESEARCH WORLD · PUBLICATIONS</p>
+
+    <a href="publications.html">← Back to Publications</a>
+
+    <div id="readerStatus" class="reader-message" role="status">
+      Loading published research...
+    </div>
+
+    <article id="readerPaper" class="reader-paper" hidden>
+      <p id="readerCategory" class="eyebrow"></p>
+
+      <h1 id="readerTitle" class="reader-title"></h1>
+
+      <div id="readerMeta" class="reader-meta"></div>
+
+      <h2>Abstract</h2>
+      <div id="readerAbstract" class="reader-abstract"></div>
+
+      <section id="fullTextSection" hidden>
+        <h2>Full Text</h2>
+        <div id="readerContent" class="reader-content"></div>
+      </section>
+
+      <section id="pdfSection" hidden>
+        <h2>Full Manuscript</h2>
+        <p>
+          The manuscript is displayed below. You can also open it
+          separately if your browser does not display PDFs.
+        </p>
+
+        <p>
+          <a id="openPdf" class="btn primary"
+             target="_blank" rel="noopener noreferrer">
+            Open manuscript in a new tab
+          </a>
+        </p>
+
+        <iframe
+          id="readerPdf"
+          class="reader-pdf"
+          title="Published research manuscript">
+        </iframe>
+      </section>
+
+      <p class="reader-meta">
+        Readers: <strong id="readerCount">0</strong>
+      </p>
+    </article>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="app.js"></script>
+
+  <script type="module">
+    import { supabase } from "./supabase-config.js";
+
+    const $ = id => document.getElementById(id);
+
+    const escapeHtml = value =>
+      String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[c]));
+
+    async function initializeReader() {
+      const params = new URLSearchParams(location.search);
+      const id = params.get("id");
+
+      if (!id) {
+        $("readerStatus").textContent =
+          "No publication ID was provided. Return to Publications and choose an article.";
+        return;
+      }
+
+      const { data: publication, error } = await supabase
+        .from("publications")
+        .select(`
+          id,
+          title,
+          abstract,
+          content,
+          pdf_url,
+          publication_date,
+          doi,
+          views,
+          status,
+          categories(name)
+        `)
+        .eq("id", id)
+        .eq("status", "published")
+        .maybeSingle();
+
+      if (error) {
+        console.error(error);
+        $("readerStatus").textContent =
+          "The publication could not be loaded. Please try again later.";
+        return;
+      }
+
+      if (!publication) {
+        $("readerStatus").textContent =
+          "This publication could not be found or is not publicly available.";
+        return;
+      }
+
+      $("readerTitle").textContent = publication.title || "Research Article";
+      $("readerCategory").textContent =
+        publication.categories?.name || "Research Article";
+
+      $("readerAbstract").textContent =
+        publication.abstract || "No abstract has been provided.";
+
+      $("readerMeta").textContent =
+        (publication.publication_date || "Publication date unavailable") +
+        (publication.doi ? " · DOI: " + publication.doi : "");
+
+      document.title =
+        (publication.title || "Read Research") + " | VOC Research World";
+
+      const content = publication.content?.trim();
+
+      if (content) {
+        /*
+         * Display stored article text as text, not executable HTML.
+         * Line breaks and paragraphs are preserved.
+         */
+        $("readerContent").textContent = content;
+        $("readerContent").style.whiteSpace = "pre-wrap";
+        $("fullTextSection").hidden = false;
+      }
+
+      /*
+       * Count a reader once per browser session for this article.
+       * The database function accepts only published publications.
+       */
+      try {
+        let sessionKey = sessionStorage.getItem("voc_reader_session");
+
+        if (!sessionKey) {
+          sessionKey = crypto.randomUUID();
+          sessionStorage.setItem("voc_reader_session", sessionKey);
+        }
+
+        const { error: visitError } = await supabase.rpc(
+          "track_site_visit",
+          {
+            p_session_key: sessionKey,
+            p_page_path: location.pathname + "?publication=" + publication.id,
+            p_publication_id: publication.id
+          }
+        );
+
+        if (visitError) {
+          console.error("Reader count update failed:", visitError);
+        }
+      } catch (error) {
+        console.error("Reader tracking failed:", error);
+      }
+
+      /*
+       * Generate a temporary access link for the private manuscript.
+       * Never make the manuscripts storage bucket public.
+       */
+      let pdfPath = publication.pdf_url || "";
+      let pdfUrl = "";
+
+      if (pdfPath) {
+        try {
+          if (/^https?:\/\//i.test(pdfPath)) {
+            const url = new URL(pdfPath);
+            const marker = "/storage/v1/object/";
+
+            if (url.pathname.includes(marker)) {
+              const remaining =
+                url.pathname.split(marker)[1];
+
+              pdfPath = decodeURIComponent(
+                remaining
+                  .replace(/^sign\//, "")
+                  .replace(/^public\//, "")
+              );
+
+              if (pdfPath.startsWith("manuscripts/")) {
+                pdfPath = pdfPath.slice("manuscripts/".length);
+              }
+            } else {
+              pdfUrl = pdfPath;
+              pdfPath = "";
+            }
+          }
+
+          if (pdfPath) {
+            const { data, error: pdfError } =
+              await supabase.storage
+                .from("manuscripts")
+                .createSignedUrl(pdfPath, 3600);
+
+            if (pdfError) {
+              console.error("PDF access error:", pdfError);
+            } else {
+              pdfUrl = data?.signedUrl || "";
+            }
+          }
+        } catch (error) {
+          console.error("Could not prepare manuscript:", error);
+        }
+      }
+
+      if (pdfUrl) {
+        $("readerPdf").src = pdfUrl;
+        $("openPdf").href = pdfUrl;
+        $("pdfSection").hidden = false;
+      }
+
+      if (!content && !pdfUrl) {
+        const notice = document.createElement("p");
+        notice.className = "reader-message";
+        notice.textContent =
+          "The publication record exists, but its full text or manuscript file is not available yet.";
+        $("readerPaper").appendChild(notice);
+      }
+
+      /*
+       * Read the current view total after attempting to record this session.
+       */
+      const { data: updated, error: countError } = await supabase
+        .from("publications")
+        .select("views")
+        .eq("id", publication.id)
+        .maybeSingle();
+
+      $("readerCount").textContent =
+        !countError ? (updated?.views ?? publication.views ?? 0) : (publication.views ?? 0);
+
+      $("readerPaper").hidden = false;
+      $("readerStatus").hidden = true;
+    }
+
+    initializeReader().catch(error => {
+      console.error(error);
+      $("readerStatus").textContent =
+        "An unexpected error occurred while opening this publication.";
+    });
+  </script>
+</body>
+</html>
