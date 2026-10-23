@@ -462,7 +462,18 @@
         let busy = false;
 
         const params = new URLSearchParams(window.location.search);
-        const submissionId = params.get("id");
+const submissionId = params.get("id") || params.get("submission_id");
+
+if (!submissionId) {
+  document.body.innerHTML = `
+    <main style="max-width:700px;margin:60px auto;padding:20px;font-family:Arial,sans-serif">
+      <h2>Submission ID Missing</h2>
+      <p>Return to your author dashboard and click Edit draft or Revise beside your manuscript.</p>
+      <a href="dashboard.html">Return to Author Dashboard</a>
+    </main>
+  `;
+  throw new Error("Submission ID missing from the page URL.");
+        }
 
         function showNotice(message, error = false) {
             notice.textContent = message;
