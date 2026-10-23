@@ -660,3 +660,153 @@ animation-duration: 0.01ms !important;
 transition-duration: 0.01ms !important;
 }
 }
+
+/* VOC RESEARCH WORLD — INTERFACE POLISH */
+
+/* Consistent button styling */
+.btn,
+button,
+input[type="submit"] {
+transition:
+background-color 0.2s ease,
+border-color 0.2s ease,
+box-shadow 0.2s ease,
+transform 0.2s ease;
+}
+
+.btn {
+border: 1px solid transparent;
+cursor: pointer;
+}
+
+.btn.primary,
+button.primary,
+input[type="submit"] {
+background-color: var(--blue);
+color: #fff;
+}
+
+.btn.primary:hover,
+button.primary:hover,
+input[type="submit"]:hover {
+background-color: #106fa8;
+box-shadow: 0 7px 20px rgba(22, 135, 201, 0.2);
+}
+
+.btn.ghost:hover {
+background: rgba(96, 210, 214, 0.1);
+border-color: var(--cyan);
+}
+
+/* Refined research and content cards */
+.cards article,
+.research,
+.cta,
+.workflow > div {
+transition:
+border-color 0.2s ease,
+box-shadow 0.2s ease,
+transform 0.2s ease;
+}
+
+.cards article:hover {
+border-color: #b8dce9;
+box-shadow: 0 12px 32px rgba(6, 24, 39, 0.07);
+}
+
+.research:hover {
+border-color: var(--blue);
+}
+
+/* Consistent form fields */
+.field input,
+.field textarea,
+.field select,
+.search,
+.filter button {
+font: inherit;
+border: 1px solid var(--line);
+border-radius: 10px;
+transition:
+border-color 0.2s ease,
+box-shadow 0.2s ease;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.search:focus {
+border-color: var(--blue);
+outline: none;
+box-shadow: 0 0 0 3px rgba(22, 135, 201, 0.12);
+}
+
+.field textarea {
+min-height: 140px;
+resize: vertical;
+}
+
+/* Improve navigation readability */
+.links a {
+border-radius: 8px;
+transition:
+color 0.2s ease,
+background-color 0.2s ease;
+}
+
+.links a:hover,
+.links a.active {
+background: #edf7fb;
+}
+
+/* Better section headings and reading comfort */
+.content h2 {
+line-height: 1.2;
+letter-spacing: -0.025em;
+}
+
+.content h3 {
+line-height: 1.35;
+}
+
+.article {
+overflow-wrap: anywhere;
+}
+
+.abstract {
+line-height: 1.8;
+}
+
+/* Mobile spacing */
+@media (max-width: 600px) {
+.section {
+padding: 62px 0;
+}
+
+.hero-grid {
+min-height: auto;
+padding: 58px 0;
+grid-template-columns: 1fr;
+}
+
+.science {
+height: 300px;
+}
+
+.head {
+align-items: flex-start;
+flex-direction: column;
+gap: 12px;
+}
+
+.metrics {
+flex-wrap: wrap;
+gap: 18px;
+}
+
+.cta {
+padding: 24px;
+align-items: flex-start;
+flex-direction: column;
+}
+}
