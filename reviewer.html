@@ -310,6 +310,15 @@ let currentUser = null;
 let currentRole = null;
 let assignments = [];
 let loading = false;
+  function getExistingReview(item) {
+  const reviews = item?.peer_reviews;
+
+  if (Array.isArray(reviews)) {
+    return reviews[0] || null;
+  }
+
+  return reviews || null;
+  }
 
 function showStatus(message, type = "info") {
   pageStatus.hidden = false;
@@ -460,10 +469,9 @@ if (error) throw error;
 
     assignments = data || [];
 
-    const completed = assignments.filter(item =>
-      Array.isArray(item.peer_reviews) && item.peer_reviews.length > 0
-    ).length;
-
+    const completed = assignments.filter(
+  item => getExistingReview(item)
+).length;
     $("#totalCount").textContent = assignments.length;
     $("#completedCount").textContent = completed;
     $("#pendingCount").textContent = assignments.length - completed;
@@ -502,10 +510,7 @@ function renderAssignments() {
 
   assignmentsList.innerHTML = assignments.map((item, index) => {
     const submission = item.submissions;
-    const review = Array.isArray(item.peer_reviews)
-      ? item.peer_reviews[0]
-      : null;
-
+    const review = getExistingReview(item);
     if (!submission) {
       return `
         <article class="assignment-card">
