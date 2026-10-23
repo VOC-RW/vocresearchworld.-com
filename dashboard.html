@@ -27,7 +27,7 @@
 .submission-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 650px;
+  min-width: 800px;
 }
 
 .submission-table th,
@@ -45,6 +45,32 @@
   padding: 5px 10px;
   font-size: .85rem;
   text-transform: capitalize;
+}
+
+.pill.status-draft {
+  background: #f0f0f0;
+}
+
+.pill.status-revision_required {
+  background: #fff0d6;
+  color: #784600;
+}
+
+.pill.status-submitted,
+.pill.status-under_review {
+  background: #eaf2ff;
+  color: #174c87;
+}
+
+.pill.status-accepted,
+.pill.status-published {
+  background: #e5f7ec;
+  color: #17643a;
+}
+
+.pill.status-rejected {
+  background: #fff0f0;
+  color: #8b1b1b;
 }
 
 .dash-status {
@@ -69,7 +95,32 @@
   padding: 20px 0;
 }
 
-/* NOTIFICATION STYLES */
+.submission-action {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 7px;
+  background: #071b33;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: .9rem;
+}
+
+.submission-action:hover {
+  background: #123b64;
+}
+
+.submission-action:focus-visible {
+  outline: 3px solid #1687c9;
+  outline-offset: 3px;
+}
+
+.action-unavailable {
+  color: #64748b;
+  font-size: .9rem;
+}
+
+/* NOTIFICATIONS */
 
 .notification-item {
   padding: 15px;
@@ -133,6 +184,12 @@
   border-radius: 8px;
 }
 
+#workspaceLinks {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 600px) {
   .dash-wrap {
     margin: 25px auto;
@@ -191,18 +248,33 @@
     </p>
 
   </section>
-  <!-- EDITORIAL WORKSPACE ACCESS --><section class="dash-card" id="editorialWorkspace" hidden>  <h2>Editorial Workspace</h2>  <p>
-    Access the administrative and peer-review tools
-    available to your account.
-  </p>  <div id="workspaceLinks"
-       style="display:flex;gap:12px;flex-wrap:wrap;">  </div></section>
 
-  <!-- AUTHOR NOTIFICATIONS -->
+  <!-- EDITORIAL WORKSPACE -->
+
+  <section
+    class="dash-card"
+    id="editorialWorkspace"
+    hidden
+  >
+
+    <h2>Editorial Workspace</h2>
+
+    <p>
+      Access the administrative and peer-review tools
+      available to your account.
+    </p>
+
+    <div id="workspaceLinks"></div>
+
+  </section>
+
+  <!-- NOTIFICATIONS -->
 
   <section class="dash-card" id="notifications">
 
     <h2>
       Notifications
+
       <span
         id="unreadCount"
         class="notification-count"
@@ -232,10 +304,17 @@
 
     <h2>Submission history</h2>
 
+    <p>
+      You can edit drafts and manuscripts for which
+      the editor has requested revisions.
+    </p>
+
     <div id="tableWrap">
+
       <p class="dash-loading">
         Loading submissions...
       </p>
+
     </div>
 
   </section>
@@ -268,8 +347,6 @@ const unreadCount =
    GENERAL HELPERS
 ========================= */
 
-/* Safely display database text as HTML. */
-
 function escapeHtml(value) {
   return String(value ?? "").replace(/[&<>"']/g, character => ({
     "&": "&amp;",
@@ -280,16 +357,12 @@ function escapeHtml(value) {
   })[character]);
 }
 
-/* Display account messages. */
-
 function showStatus(message, isError = false) {
   statusBox.textContent = message;
 
   statusBox.className =
     "dash-status" + (isError ? " error" : "");
 }
-
-/* Format dates safely. */
 
 function formatDate(value) {
   if (!value) return "—";
@@ -303,8 +376,6 @@ function formatDate(value) {
   return date.toLocaleDateString();
 }
 
-/* Format a date and time. */
-
 function formatDateTime(value) {
   if (!value) return "Date unavailable";
 
@@ -317,11 +388,46 @@ function formatDateTime(value) {
   return date.toLocaleString();
 }
 
-/* Format submission statuses. */
-
 function formatStatus(value) {
   return String(value || "submitted")
     .replaceAll("_", " ");
+}
+
+/*
+  Only drafts and manuscripts marked revision_required
+  receive an editing link.
+
+  The edit page must independently validate ownership,
+  authentication and the permitted submission status.
+*/
+
+function canAuthorEdit(status) {
+  return status === "draft" ||
+         status === "revision_required";
+}
+
+function renderSubmissionAction(row) {
+  if (!canAuthorEdit(row.status)) {
+    return `
+      <span class="action-unavailable">
+        Not editable
+      </span>
+    `;
+  }
+
+  const id = encodeURIComponent(row.id);
+
+  return `
+    <a
+      class="submission-action"
+      href="edit-submission.html?id=${id}"
+      aria-label="Edit or revise ${escapeHtml(row.title || "submission")}"
+    >
+      ${row.status === "revision_required"
+        ? "Revise"
+        : "Edit draft"}
+    </a>
+  `;
 }
 
 /* =========================
@@ -338,16 +444,7 @@ async function loadNotifications() {
   unreadCount.hidden = true;
 
   try {
-
-    /*
-      Row Level Security ensures that the author
-      can retrieve only their own notifications.
-    */
-
-    const {
-      data,
-      error
-    } = await supabase
+    const { data, error } = await supabase
       .from("notifications")
       .select(`
         id,
@@ -362,13 +459,9 @@ async function loadNotifications() {
       })
       .limit(50);
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     const notifications = data || [];
-
-    /* Count unread notifications. */
 
     const unread = notifications.filter(
       item => !item.read_at
@@ -377,10 +470,7 @@ async function loadNotifications() {
     unreadCount.textContent = String(unread);
     unreadCount.hidden = unread === 0;
 
-    /* Handle an empty notification list. */
-
     if (notifications.length === 0) {
-
       notificationList.innerHTML = `
         <div class="dash-empty">
           <p>You have no notifications yet.</p>
@@ -395,10 +485,7 @@ async function loadNotifications() {
       return;
     }
 
-    /* Display the notifications. */
-
     notificationList.innerHTML = notifications.map(item => {
-
       const isUnread = !item.read_at;
 
       return `
@@ -435,35 +522,25 @@ async function loadNotifications() {
 
         </article>
       `;
-
     }).join("");
-
-    /* Connect the Mark as read buttons. */
 
     notificationList
       .querySelectorAll("[data-mark-read]")
       .forEach(button => {
-
         button.addEventListener("click", async () => {
-
           await markNotificationAsRead(
             button.dataset.markRead,
             button
           );
-
         });
-
       });
 
   } catch (error) {
-
     console.error("Notification loading error:", error);
 
     notificationList.innerHTML = `
       <div class="notification-error">
-        <p>
-          Notifications could not be loaded.
-        </p>
+        <p>Notifications could not be loaded.</p>
 
         <p>
           ${escapeHtml(error.message || "Please try again.")}
@@ -481,7 +558,6 @@ async function loadNotifications() {
     document
       .querySelector("#retryNotifications")
       .addEventListener("click", loadNotifications);
-
   }
 }
 
@@ -490,24 +566,18 @@ async function loadNotifications() {
 ========================= */
 
 async function markNotificationAsRead(id, button) {
-
-  if (!id || !button) {
-    return;
-  }
+  if (!id || !button) return;
 
   button.disabled = true;
   button.textContent = "Saving...";
 
   try {
-
     const {
       data: { user },
       error: userError
     } = await supabase.auth.getUser();
 
-    if (userError) {
-      throw userError;
-    }
+    if (userError) throw userError;
 
     if (!user) {
       throw new Error(
@@ -515,15 +585,7 @@ async function markNotificationAsRead(id, button) {
       );
     }
 
-    /*
-      The database policy permits users to update
-      only their own notifications and only the
-      read_at column.
-    */
-
-    const {
-      error
-    } = await supabase
+    const { error } = await supabase
       .from("notifications")
       .update({
         read_at: new Date().toISOString()
@@ -531,14 +593,11 @@ async function markNotificationAsRead(id, button) {
       .eq("id", id)
       .is("read_at", null);
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     await loadNotifications();
 
   } catch (error) {
-
     console.error("Mark-as-read error:", error);
 
     button.disabled = false;
@@ -548,9 +607,7 @@ async function markNotificationAsRead(id, button) {
       "Unable to mark the notification as read. " +
       (error.message || "Please try again.")
     );
-
   }
-
 }
 
 /* =========================
@@ -558,7 +615,6 @@ async function markNotificationAsRead(id, button) {
 ========================= */
 
 async function loadSubmissions(userId) {
-
   tableWrap.innerHTML = `
     <p class="dash-loading">
       Loading submissions...
@@ -566,11 +622,7 @@ async function loadSubmissions(userId) {
   `;
 
   try {
-
-    const {
-      data,
-      error
-    } = await supabase
+    const { data, error } = await supabase
       .from("submissions")
       .select(`
         id,
@@ -586,12 +638,9 @@ async function loadSubmissions(userId) {
         ascending: false
       });
 
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     if (!data || data.length === 0) {
-
       tableWrap.innerHTML = `
         <div class="dash-empty">
 
@@ -608,17 +657,26 @@ async function loadSubmissions(userId) {
       `;
 
       return;
-
     }
 
     const rows = data.map(row => {
-
       const reference =
         row.submission_reference ||
         (row.id ? row.id.slice(0, 8) : "—");
 
+      /*
+        Drafts may not have a submitted_at timestamp.
+        Show a dash rather than implying they were submitted.
+      */
+
       const submissionDate =
-        row.submitted_at || row.created_at;
+        row.status === "draft"
+          ? "—"
+          : formatDate(row.submitted_at || row.created_at);
+
+      const statusClass =
+        "status-" + String(row.status || "submitted")
+          .replace(/[^a-zA-Z0-9_-]/g, "");
 
       return `
         <tr>
@@ -636,18 +694,21 @@ async function loadSubmissions(userId) {
           </td>
 
           <td>
-            <span class="pill">
+            <span class="pill ${escapeHtml(statusClass)}">
               ${escapeHtml(formatStatus(row.status))}
             </span>
           </td>
 
           <td>
-            ${escapeHtml(formatDate(submissionDate))}
+            ${escapeHtml(submissionDate)}
+          </td>
+
+          <td>
+            ${renderSubmissionAction(row)}
           </td>
 
         </tr>
       `;
-
     }).join("");
 
     tableWrap.innerHTML = `
@@ -660,6 +721,7 @@ async function loadSubmissions(userId) {
             <th>Type</th>
             <th>Status</th>
             <th>Submitted</th>
+            <th>Action</th>
           </tr>
         </thead>
 
@@ -671,11 +733,11 @@ async function loadSubmissions(userId) {
     `;
 
   } catch (error) {
-
     console.error("Submission loading error:", error);
 
     tableWrap.innerHTML = `
       <div class="notification-error">
+
         <p>
           Unable to load your submission history.
         </p>
@@ -687,6 +749,7 @@ async function loadSubmissions(userId) {
         <button type="button" id="retrySubmissions">
           Try again
         </button>
+
       </div>
     `;
 
@@ -695,9 +758,65 @@ async function loadSubmissions(userId) {
       .addEventListener("click", () => {
         loadSubmissions(userId);
       });
-
   }
+}
 
+/* =========================
+   EDITORIAL WORKSPACE
+========================= */
+
+async function loadEditorialWorkspace(userId) {
+  const workspace =
+    document.getElementById("editorialWorkspace");
+
+  const workspaceLinks =
+    document.getElementById("workspaceLinks");
+
+  try {
+    const { data: profile, error } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", userId)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    const links = [];
+
+    if (profile?.role === "admin") {
+      links.push(`
+        <a class="btn primary" href="admin.html">
+          Open Admin Dashboard
+        </a>
+      `);
+    }
+
+    if (profile?.role === "reviewer") {
+      links.push(`
+        <a class="btn primary" href="reviewer.html">
+          Open Reviewer Dashboard
+        </a>
+      `);
+    }
+
+    if (profile?.role === "editor") {
+      /*
+        Add the editor dashboard link here when its
+        actual filename and permissions are confirmed.
+      */
+    }
+
+    if (links.length > 0) {
+      workspaceLinks.innerHTML = links.join("");
+      workspace.hidden = false;
+    }
+
+  } catch (error) {
+    console.error(
+      "Could not load account role:",
+      error
+    );
+  }
 }
 
 /* =========================
@@ -705,20 +824,15 @@ async function loadSubmissions(userId) {
 ========================= */
 
 async function loadDashboard() {
-
   try {
-
     const {
       data: { session },
       error: sessionError
     } = await supabase.auth.getSession();
 
-    if (sessionError) {
-      throw sessionError;
-    }
+    if (sessionError) throw sessionError;
 
     if (!session) {
-
       showStatus(
         "You are not logged in. Redirecting to account access..."
       );
@@ -736,43 +850,12 @@ async function loadDashboard() {
     showStatus(
       "Signed in as " + session.user.email
     );
-    // Load the signed-in user's role from Supabase.
-const { data: profile, error: profileError } = await supabase
-.from("profiles")
-.select("role")
-.eq("id", session.user.id)
-.maybeSingle();
 
-if (profileError) {
-console.error("Could not load account role:", profileError);
-} else if (profile) {
-const workspace = document.getElementById("editorialWorkspace");
-const workspaceLinks = document.getElementById("workspaceLinks");
-
-const links = [];
-
-if (profile.role === "admin") {
-links.push(
-'<a class="btn primary" href="admin.html">Open Admin Dashboard</a>'
-);
-}
-
-if (profile.role === "reviewer") {
-links.push(
-'<a class="btn primary" href="reviewer.html">Open Reviewer Dashboard</a>'
-);
-}
-
-if (links.length > 0) {
-workspaceLinks.innerHTML = links.join("");
-workspace.hidden = false;
-}
-  }
+    await loadEditorialWorkspace(session.user.id);
 
     /*
       Load notifications and submissions independently.
-      A notification error should not prevent the
-      submission history from loading.
+      A notification error should not block submission history.
     */
 
     await Promise.all([
@@ -781,7 +864,6 @@ workspace.hidden = false;
     ]);
 
   } catch (error) {
-
     console.error("Dashboard loading error:", error);
 
     showStatus(
@@ -801,9 +883,7 @@ workspace.hidden = false;
         Your submission history could not be loaded.
       </p>
     `;
-
   }
-
 }
 
 /* =========================
@@ -811,24 +891,17 @@ workspace.hidden = false;
 ========================= */
 
 signOutButton.addEventListener("click", async () => {
-
   signOutButton.disabled = true;
   signOutButton.textContent = "Logging out...";
 
   try {
+    const { error } = await supabase.auth.signOut();
 
-    const {
-      error
-    } = await supabase.auth.signOut();
-
-    if (error) {
-      throw error;
-    }
+    if (error) throw error;
 
     window.location.href = "auth.html";
 
   } catch (error) {
-
     console.error("Logout error:", error);
 
     showStatus(
@@ -839,9 +912,7 @@ signOutButton.addEventListener("click", async () => {
 
     signOutButton.disabled = false;
     signOutButton.textContent = "Log out";
-
   }
-
 });
 
 /* Start the dashboard. */
