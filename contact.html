@@ -1,1 +1,131 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact | VOC Research World</title><link rel="stylesheet" href="style.css"></head><body><div id="header"></div><section class="page"><div class="wrap"><p class="eyebrow">CONNECT WITH VOC</p><h1>Start a scientific conversation.</h1><p>For research collaboration, publication enquiries, student research and general enquiries.</p></div></section><section class="content"><div class="wrap split"><div><h2>Research grows through communication.</h2><p>Use this interface as the foundation for future collaboration and publication channels.</p><p><b>VOC Research World:</b> <a class="email-link" href="mailto:vocresearchworld@gmail.com">vocresearchworld@gmail.com</a></p><p><b>Direct contact:</b> <a class="email-link" href="mailto:aolaniyan59@gmail.com">aolaniyan59@gmail.com</a></p><p class="small">For research collaboration, publication enquiries, student research and general enquiries, please use either address.</p></div><form onsubmit="event.preventDefault();alert('Demo only — connect this form to email or a backend.');"><div class="field"><label>Name</label><input required></div><div class="field"><label>Email</label><input type="email" required></div><div class="field"><label>Subject</label><input required></div><div class="field"><label>Message</label><textarea required></textarea></div><button class="btn primary">Send Message</button></form></div></section><div id="footer"></div><script src="app.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact | VOC Research World</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="header"></div>
+
+  <section class="page">
+    <div class="wrap">
+      <p class="eyebrow">CONNECT WITH VOC</p>
+      <h1>Start a Scientific Conversation.</h1>
+      <p>
+        Contact us about research collaboration, publications,
+        student research, or general enquiries.
+      </p>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="wrap split">
+
+      <div>
+        <h2>We Welcome Your Message</h2>
+
+        <p>
+          Have a question, research proposal, or collaboration idea?
+          Send us a message using the form.
+        </p>
+
+        <p>
+          <strong>VOC Research World:</strong><br>
+          <a href="mailto:vocresearchworld@gmail.com">
+            vocresearchworld@gmail.com
+          </a>
+        </p>
+
+        <p>
+          <strong>Direct Contact:</strong><br>
+          <a href="mailto:aolaniyan59@gmail.com">
+            aolaniyan59@gmail.com
+          </a>
+        </p>
+
+        <p class="small">
+          You can also contact us directly by selecting either email address.
+        </p>
+      </div>
+
+      <form action="https://formsubmit.co/vocresearchworld@gmail.com"
+            method="POST">
+
+        <input type="hidden" name="_subject"
+               value="New Enquiry — VOC Research World">
+
+        <input type="hidden" name="_template" value="table">
+
+        <input type="hidden" name="_next"
+               value="https://voc-rw.github.io/vocresearchworld.-com/contact.html?sent=1">
+
+        <input type="text" name="_honey"
+               style="display:none" tabindex="-1" autocomplete="off">
+
+        <div class="field">
+          <label for="name">Full Name</label>
+          <input id="name" name="name" type="text"
+                 autocomplete="name" required>
+        </div>
+
+        <div class="field">
+          <label for="email">Email Address</label>
+          <input id="email" name="email" type="email"
+                 autocomplete="email" required>
+        </div>
+
+        <div class="field">
+          <label for="subject">Subject</label>
+          <input id="subject" name="subject"
+                 type="text" required>
+        </div>
+
+        <div class="field">
+          <label for="message">Your Message</label>
+          <textarea id="message" name="message"
+                    rows="6" required></textarea>
+        </div>
+
+        <button class="btn primary" type="submit">
+          Send Message
+        </button>
+
+        <p class="small">
+          Please do not include passwords, payment details,
+          or other sensitive information.
+        </p>
+      </form>
+
+    </div>
+  </section>
+
+  <div id="footer"></div>
+
+  <script src="app.js"></script>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get("sent") === "1") {
+      const form = document.querySelector("form");
+      const notice = document.createElement("p");
+
+      notice.setAttribute("role", "status");
+      notice.textContent =
+        "Thank you. Your message has been submitted successfully.";
+
+      form.parentNode.insertBefore(notice, form);
+
+      history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+      );
+    }
+  </script>
+
+</body>
+  </html>
