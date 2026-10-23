@@ -353,7 +353,6 @@ function recommendationLabel(value) {
 }
 
 async function checkReviewerSession() {
-async function checkReviewerSession() {
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {
