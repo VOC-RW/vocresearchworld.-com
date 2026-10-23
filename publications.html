@@ -1,385 +1,401 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Publications | VOC Research World</title>
   <link rel="stylesheet" href="style.css">
-</head><body>
-  <div id="header"></div>  <section class="page">
+
+  <style>
+    .publication-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .publication-stat {
+      text-align: center;
+      padding: 22px;
+      background: white;
+      border: 1px solid #dfe5ec;
+      border-radius: 12px;
+    }
+
+    .publication-stat strong {
+      display: block;
+      font-size: 30px;
+      margin: 8px 0;
+    }
+
+    .publication-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .publication-card h3 {
+      overflow-wrap: anywhere;
+    }
+
+    .publication-card .read-link {
+      margin-top: auto;
+      display: inline-block;
+      padding: 11px 16px;
+      border-radius: 7px;
+      background: #1769aa;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .publication-card .read-link:hover {
+      background: #0b4e83;
+    }
+
+    .publication-tools {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    .publication-tools input,
+    .publication-tools select {
+      padding: 12px;
+      border: 1px solid #ccd3dc;
+      border-radius: 8px;
+      min-width: 200px;
+      background: white;
+      font: inherit;
+    }
+
+    .publication-tools input {
+      flex: 1;
+    }
+
+    .publication-meta {
+      color: #617184;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .publication-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header"></div>
+
+  <section class="page">
     <div class="wrap">
       <p class="eyebrow">PUBLICATION LIBRARY</p>
       <h1>Published scientific research.</h1>
-      <p>Explore research approved for publication by VOC Research World.</p>
+      <p>
+        Discover scientific articles published by VOC Research World.
+        Open an article to read its full text or available manuscript.
+      </p>
     </div>
-  </section>  <section class="content">
+  </section>
+
+  <section class="content">
     <div class="wrap">
-      <div class="cards three" style="margin-bottom:24px;">
-  <article class="card" style="text-align:center;">
-    <p class="small">PUBLISHED ARTICLES</p>
-    <h2 id="totalPublications">—</h2>
-    <p>Published scientific papers</p>
-  </article>  <article class="card" style="text-align:center;">
-    <p class="small">RESEARCH CATEGORIES</p>
-    <h2 id="totalCategories">—</h2>
-    <p>Research areas represented</p>
-  </article>  <article class="card" style="text-align:center;">
-    <p class="small">FEATURED RESEARCH</p>
-    <h2 id="totalFeatured">—</h2>
-    <p>Featured published papers</p>
-  </article>
+
+      <div class="publication-stats">
+        <article class="publication-stat">
+          <p class="small">PUBLISHED ARTICLES</p>
+          <strong id="totalPublications">—</strong>
+          <p>Published scientific papers</p>
+        </article>
+
+        <article class="publication-stat">
+          <p class="small">RESEARCH CATEGORIES</p>
+          <strong id="totalCategories">—</strong>
+          <p>Research areas represented</p>
+        </article>
+
+        <article class="publication-stat">
+          <p class="small">TOTAL ARTICLE READS</p>
+          <strong id="totalReads">—</strong>
+          <p>Recorded publication readership</p>
+        </article>
       </div>
-      <section id="featuredResearchSection" aria-labelledby="featuredResearchHeading" style="margin:28px 0;display:none;">
-  <p class="eyebrow">EDITOR'S SELECTION</p>
-  <h2 id="featuredResearchHeading">Featured Research</h2>
-  <p>Explore selected research highlighted by VOC Research World.</p>
-  <div class="cards three" id="featuredResearchGrid"></div>
-      </section>
-      <div id="publicationStatus" role="status" class="small">
-  Loading published research…
-</div>
 
-<div style="display:flex;gap:12px;flex-wrap:wrap;margin:18px 0;">
-  <input
-    id="publicationSearch"
-    type="search"
-    placeholder="Search title, author, keyword, or DOI…"
-    aria-label="Search publications"
-    style="flex:1;min-width:220px;padding:12px;border:1px solid #ccd3dc;border-radius:8px;"
-  >
+      <div id="publicationStatus" class="small" role="status">
+        Loading published research...
+      </div>
 
-  <select
-    id="publicationCategory"
-    aria-label="Filter by research category"
-    style="min-width:200px;padding:12px;border:1px solid #ccd3dc;border-radius:8px;"
-  >
-    <option value="">All research categories</option>
-  </select>
-</div>
+      <div class="publication-tools">
+        <input
+          id="publicationSearch"
+          type="search"
+          placeholder="Search title, author, keyword or DOI..."
+          aria-label="Search publications">
 
-<div id="publicationResults" class="small" aria-live="polite"></div>
+        <select
+          id="publicationCategory"
+          aria-label="Filter publications by category">
+          <option value="">All research categories</option>
+        </select>
+      </div>
 
-<div class="cards three" id="publicationGrid"></div>
+      <div id="publicationResults"
+           class="small"
+           aria-live="polite"></div>
+
+      <div class="cards three" id="publicationGrid"></div>
+
     </div>
-  </section>  <div id="footer"></div>  <script src="app.js"></script>  <script type="module">
-    import { supabase } from './supabase-config.js';
+  </section>
 
-    const grid = document.getElementById('publicationGrid');
-    const status = document.getElementById('publicationStatus');
-    async function loadPublicationStatistics() {
-const totalElement = document.getElementById('totalPublications');
-const categoriesElement = document.getElementById('totalCategories');
-const featuredElement = document.getElementById('totalFeatured');
+  <div id="footer"></div>
 
-  try {
-    // Count all published articles.
-    const { count: total, error: totalError } = await supabase
-      .from('publications')
-      .select('id', { count: 'exact', head: true })
-      .eq('status', 'published');
+  <script src="app.js"></script>
 
-    if (totalError) throw totalError;
+  <script type="module">
+    import { supabase } from "./supabase-config.js";
 
-    totalElement.textContent = total ?? 0;
+    const $ = id => document.getElementById(id);
 
-    // Retrieve categories represented by published articles.
-    const { data: articles, error: articlesError } = await supabase
-      .from('publications')
-      .select('category_id')
-      .eq('status', 'published');
+    const grid = $("publicationGrid");
+    const status = $("publicationStatus");
+    const search = $("publicationSearch");
+    const categoryFilter = $("publicationCategory");
 
-    if (articlesError) throw articlesError;
-
-    const uniqueCategories = new Set(
-      (articles || [])
-        .map(article => article.category_id)
-        .filter(Boolean)
-    );
-
-    categoriesElement.textContent = uniqueCategories.size;
-
-    // Count featured articles that are published.
-    const { count: featured, error: featuredError } = await supabase
-      .from('publications')
-      .select('id', { count: 'exact', head: true })
-      .eq('status', 'published')
-      .eq('featured', true);
-
-    if (featuredError) throw featuredError;
-
-    featuredElement.textContent = featured ?? 0;
-
-  } catch (error) {
-    console.error('Publication statistics error:', error);
-
-    totalElement.textContent = '—';
-    categoriesElement.textContent = '—';
-    featuredElement.textContent = '—';
-  }
-    }
-
-    const esc = value =>
-      String(value ?? '').replace(/[&<>'"]/g, character => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        "'": '&#39;',
-        '"': '&quot;'
+    const escapeHtml = value =>
+      String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
       }[character]));
 
+    async function recordPageVisit() {
+      try {
+        let sessionKey = sessionStorage.getItem("voc_reader_session");
+
+        if (!sessionKey) {
+          sessionKey = crypto.randomUUID();
+          sessionStorage.setItem("voc_reader_session", sessionKey);
+        }
+
+        const { error } = await supabase.rpc("track_site_visit", {
+          p_session_key: sessionKey,
+          p_page_path: location.pathname,
+          p_publication_id: null
+        });
+
+        if (error) {
+          console.error("Website visit tracking failed:", error);
+        }
+      } catch (error) {
+        console.error("Website visit tracking failed:", error);
+      }
+    }
+
     async function loadPublications() {
-      status.textContent = 'Loading published research…';
+      status.textContent = "Loading published research...";
 
       const { data, error } = await supabase
-        .from('publications')
-        .select(
-          'id,title,slug,abstract,publication_date,doi,pdf_url,featured,categories(name)'
-        )
-        .eq('status', 'published')
-        .order('publication_date', { ascending: false });
+        .from("publications")
+        .select(`
+          id,
+          title,
+          slug,
+          abstract,
+          publication_date,
+          doi,
+          featured,
+          views,
+          status,
+          categories(name)
+        `)
+        .eq("status", "published")
+        .order("publication_date", { ascending: false });
 
       if (error) {
-        console.error('Publication loading error:', error);
+        console.error("Publications query failed:", error);
         status.textContent =
-          'Published research could not be loaded. Please try again later.';
+          "Publications could not be loaded. Please try again later.";
         return;
       }
 
       if (!data || data.length === 0) {
-        status.textContent = 'No journal submissions have been published yet.';
+        $("totalPublications").textContent = "0";
+        $("totalCategories").textContent = "0";
+        $("totalReads").textContent = "0";
+
+        status.textContent =
+          "No published articles are currently available.";
         return;
       }
 
-      const publicationIds = data.map(publication => publication.id);
+      $("totalPublications").textContent = data.length;
 
-      const { data: authorRows, error: authorError } = await supabase
-        .from('publication_authors')
-        .select('publication_id,author_order,profiles(full_name,affiliation)')
-        .in('publication_id', publicationIds)
-        .order('author_order', { ascending: true });
+      const categories = new Set(
+        data
+          .map(article => article.category_id)
+          .filter(Boolean)
+      );
+
+      $("totalCategories").textContent = categories.size;
+
+      $("totalReads").textContent = data.reduce(
+        (total, article) => total + Number(article.views || 0),
+        0
+      );
+
+      const publicationIds = data.map(article => article.id);
+
+      const { data: authors, error: authorError } = await supabase
+        .from("publication_authors")
+        .select(`
+          publication_id,
+          author_order,
+          profiles(full_name)
+        `)
+        .in("publication_id", publicationIds)
+        .order("author_order", { ascending: true });
+
+      if (authorError) {
+        console.error("Author lookup failed:", authorError);
+      }
 
       const authorsByPublication = {};
 
-      if (!authorError && authorRows) {
-        authorRows.forEach(author => {
-          const name = author.profiles?.full_name;
+      (authors || []).forEach(author => {
+        const name = author.profiles?.full_name;
 
-          if (name) {
-            (authorsByPublication[author.publication_id] ??= []).push(name);
-          }
+        if (name) {
+          (authorsByPublication[author.publication_id] ||= [])
+            .push(name);
+        }
+      });
+
+      const cards = data.map(publication => {
+        const authorsText =
+          authorsByPublication[publication.id]?.join(", ") ||
+          "Author information pending";
+
+        const date = publication.publication_date
+          ? new Date(
+              publication.publication_date + "T00:00:00"
+            ).toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "long",
+              day: "numeric"
+            })
+          : "Publication date pending";
+
+        const abstract = publication.abstract || "";
+
+        return `
+          <article class="card publication-card">
+            <label>
+              ${escapeHtml(
+                publication.categories?.name || "Research Article"
+              )}
+              · PUBLISHED
+            </label>
+
+            <h3>${escapeHtml(publication.title)}</h3>
+
+            <p class="publication-meta">
+              ${escapeHtml(authorsText)}
+            </p>
+
+            <p class="publication-meta">
+              ${escapeHtml(date)}
+              ${
+                publication.doi
+                  ? " · DOI: " + escapeHtml(publication.doi)
+                  : ""
+              }
+            </p>
+
+            <p>
+              ${escapeHtml(
+                abstract.length > 240
+                  ? abstract.slice(0, 240) + "..."
+                  : abstract || "Abstract not available."
+              )}
+            </p>
+
+            <p class="publication-meta">
+              Readers: <strong>${Number(publication.views || 0)}</strong>
+            </p>
+
+            <a class="read-link"
+               href="read-publication.html?id=${encodeURIComponent(publication.id)}">
+              Read Full Article →
+            </a>
+          </article>
+        `;
+      });
+
+      grid.innerHTML = cards.join("");
+
+      const categoryNames = [
+        ...new Set(
+          data.map(article =>
+            article.categories?.name || "Research Article"
+          )
+        )
+      ].sort();
+
+      categoryNames.forEach(name => {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        categoryFilter.appendChild(option);
+      });
+
+      function filterPublications() {
+        const query = search.value.trim().toLowerCase();
+        const selectedCategory = categoryFilter.value;
+
+        let visible = 0;
+
+        grid.querySelectorAll(".publication-card").forEach(card => {
+          const text = card.textContent.toLowerCase();
+          const label = card.querySelector("label")
+            ?.textContent.replace("· PUBLISHED", "").trim();
+
+          const matchesText = text.includes(query);
+          const matchesCategory =
+            !selectedCategory || label === selectedCategory;
+
+          card.hidden = !(matchesText && matchesCategory);
+
+          if (!card.hidden) visible++;
         });
+
+        $("publicationResults").textContent =
+          `${visible} published article${visible === 1 ? "" : "s"} shown.`;
       }
 
-      const cards = await Promise.all(
-        data.map(async publication => {
-          const authors =
-            authorsByPublication[publication.id]?.join(', ') ||
-            'Author information pending';
+      search.addEventListener("input", filterPublications);
+      categoryFilter.addEventListener("change", filterPublications);
 
-          const date = publication.publication_date
-            ? new Date(
-                publication.publication_date + 'T00:00:00'
-              ).toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })
-            : 'Publication date pending';
-
-          let paperUrl = '';
-
-if (publication.pdf_url) {
-  try {
-    const storedValue = publication.pdf_url.trim();
-    let objectPath = '';
-
-    if (
-      storedValue.startsWith(
-        'https://wngsqgjkendxqmlgwvjy.supabase.co/storage/v1/object/'
-      )
-    ) {
-      const originalUrl = new URL(storedValue);
-      const marker = '/storage/v1/object/';
-      const markerPosition = originalUrl.pathname.indexOf(marker);
-
-      if (markerPosition >= 0) {
-        const remainingPath = originalUrl.pathname.slice(
-          markerPosition + marker.length
-        );
-
-        objectPath = decodeURIComponent(
-          remainingPath.replace(/^sign\//, '').replace(/^public\//, '')
-        );
-
-        if (objectPath.startsWith('manuscripts/')) {
-          objectPath = objectPath.slice('manuscripts/'.length);
-        }
-      }
-    } else if (
-      storedValue.startsWith('http://') ||
-      storedValue.startsWith('https://')
-    ) {
-      paperUrl = storedValue;
-    } else {
-      objectPath = storedValue;
-    }
-
-    if (objectPath) {
-      const { data: signedData, error: signedError } =
-        await supabase.storage
-          .from('manuscripts')
-          .createSignedUrl(objectPath, 3600);
-
-      if (signedError) {
-        console.error(
-          'Could not create manuscript access link:',
-          signedError
-        );
-      } else if (signedData?.signedUrl) {
-        paperUrl = signedData.signedUrl;
-      }
-    }
-  } catch (error) {
-    console.error('Could not prepare manuscript link:', error);
-  }
-        }
-
-          const abstractHtml = publication.abstract
-            ? `<details>
-                 <summary>Read abstract</summary>
-                 <p>${esc(publication.abstract)}</p>
-               </details>`
-            : '<p>Abstract not available.</p>';
-
-          const paperHtml = paperUrl
-            ? `<p>
-                 <a class="btn primary"
-                    href="${esc(paperUrl)}"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                   Read full paper
-                 </a>
-               </p>`
-            : `<p class="small">
-                 Full-text access is not available right now.
-                 Please try again later.
-               </p>`;
-
-          return `
-            <article class="card">
-              <label>
-                ${esc(publication.categories?.name || 'Research Article')}
-                · PUBLISHED
-              </label>
-
-              <h3>${esc(publication.title)}</h3>
-
-              <p class="small">${esc(authors)}</p>
-
-              <p class="small">
-                ${esc(date)}
-                ${
-                  publication.doi
-                    ? ' · DOI: ' + esc(publication.doi)
-                    : ''
-                }
-              </p>
-
-              ${abstractHtml}
-
-              ${paperHtml}
-            </article>
-          `;
-        })
-      );
-    
-
-      grid.innerHTML = cards.join('');
-      // Display featured publications separately.
-const featuredSection = document.getElementById('featuredResearchSection');
-const featuredGrid = document.getElementById('featuredResearchGrid');
-
-const featuredCards = cards.filter(
-  (card, index) => data[index].featured === true
-);
-
-if (featuredCards.length > 0) {
-  featuredGrid.innerHTML = featuredCards.join('');
-  featuredSection.style.display = 'block';
-} else {
-  featuredSection.style.display = 'none';
-}
-      const searchInput = document.getElementById('publicationSearch');
-const categorySelect = document.getElementById('publicationCategory');
-const results = document.getElementById('publicationResults');
-
-  const publicationCards = Array.from(
-    grid.querySelectorAll('.card')
-  );
-
-  // Populate the category dropdown from published articles.
-  const categories = [
-    ...new Set(
-      publicationCards
-        .map(card => card.querySelector('label')?.textContent
-          ?.replace('· PUBLISHED', '')
-          .trim())
-        .filter(Boolean)
-    )
-  ].sort();
-
-  categories.forEach(category => {
-    const option = document.createElement('option');
-    option.value = category;
-    option.textContent = category;
-    categorySelect.appendChild(option);
-  });
-
-  function filterPublications() {
-    const query = searchInput.value.trim().toLowerCase();
-    const selectedCategory = categorySelect.value;
-    let visibleCount = 0;
-
-    publicationCards.forEach(card => {
-      const text = card.textContent.toLowerCase();
-      const category = card.querySelector('label')
-        ?.textContent.replace('· PUBLISHED', '').trim();
-
-      const matchesSearch = text.includes(query);
-      const matchesCategory =
-        !selectedCategory || category === selectedCategory;
-
-      const visible = matchesSearch && matchesCategory;
-
-      card.hidden = !visible;
-
-      if (visible) visibleCount++;
-    });
-
-    results.textContent = visibleCount
-      ? `Showing ${visibleCount} published ${
-          visibleCount === 1 ? 'article' : 'articles'
-        }.`
-      : 'No publications match your search. Try another keyword or category.';
-  }
-
-  searchInput.addEventListener('input', filterPublications);
-  categorySelect.addEventListener('change', filterPublications);
-
-  filterPublications();
+      filterPublications();
 
       status.textContent =
-        data.length +
-        ' published ' +
-        (data.length === 1 ? 'article' : 'articles');
+        `${data.length} published article${data.length === 1 ? "" : "s"} available.`;
     }
-    loadPublicationStatistics();
+
+    await recordPageVisit();
 
     loadPublications().catch(error => {
-      console.error('Unexpected publication page error:', error);
+      console.error(error);
       status.textContent =
-        'An unexpected error occurred while loading publications.';
+        "An unexpected error occurred while loading publications.";
     });
-  </script></body>
+  </script>
+</body>
   </html>
