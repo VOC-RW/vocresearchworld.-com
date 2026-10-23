@@ -307,6 +307,7 @@ const pageStatus = $("#pageStatus");
 const assignmentsList = $("#assignmentsList");
 
 let currentUser = null;
+let currentRole = null;
 let assignments = [];
 let loading = false;
 
@@ -352,6 +353,7 @@ function recommendationLabel(value) {
 }
 
 async function checkReviewerSession() {
+async function checkReviewerSession() {
   const { data, error } = await supabase.auth.getUser();
 
   if (error || !data.user) {
@@ -360,7 +362,6 @@ async function checkReviewerSession() {
   }
 
   currentUser = data.user;
-  $("#reviewerEmail").textContent = currentUser.email || "Signed-in reviewer";
 
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
@@ -377,19 +378,31 @@ async function checkReviewerSession() {
     return false;
   }
 
-  if (!profile || profile.role !== "reviewer") {
+  if (
+    !profile ||
+    !["reviewer", "admin", "editor"].includes(profile.role)
+  ) {
+    currentRole = null;
+
     showStatus(
-      "Access denied. This page requires a reviewer account. Your current role is: " +
+      "Access denied. This page requires an authorised reviewer, administrator, or editor account. Your current role is: " +
       (profile?.role || "not found") +
       ". Contact the administrator if this is incorrect.",
       "error"
     );
+
     assignmentsList.innerHTML = "";
     return false;
   }
 
+  currentRole = profile.role;
+
+  const roleLabel =
+    currentRole.charAt(0).toUpperCase() + currentRole.slice(1);
+
   $("#reviewerEmail").textContent =
-    (profile.full_name || currentUser.email) + " · Reviewer";
+    (profile.full_name || currentUser.email || "Signed-in user") +
+    " · " + roleLabel;
 
   return true;
 }
@@ -406,35 +419,45 @@ async function loadAssignments() {
 
     if (!allowed) return;
 
-    const { data, error } = await supabase
-      .from("reviewer_assignments")
-      .select(`
-        id,
-        submission_id,
-        reviewer_id,
-        status,
-        due_date,
-        assigned_at,
-        submissions (
-          id,
-          title,
-          abstract,
-          submission_reference,
-          submission_type,
-          keywords
-        ),
-        peer_reviews (
-          id,
-          recommendation,
-          comments_to_author,
-          confidential_comments,
-          submitted_at
-        )
-      `)
-      .eq("reviewer_id", currentUser.id)
-      .order("assigned_at", { ascending: false });
+    let assignmentQuery = supabase
+  .from("reviewer_assignments")
+  .select(`
+    id,
+    submission_id,
+    reviewer_id,
+    status,
+    due_date,
+    assigned_at,
+    submissions (
+      id,
+      title,
+      abstract,
+      submission_reference,
+      submission_type,
+      keywords
+    ),
+    peer_reviews (
+      id,
+      recommendation,
+      comments_to_author,
+      confidential_comments,
+      submitted_at
+    )
+  `);
 
-    if (error) throw error;
+if (currentRole === "reviewer") {
+  assignmentQuery = assignmentQuery.eq(
+    "reviewer_id",
+    currentUser.id
+  );
+}
+
+const { data, error } = await assignmentQuery.order(
+  "assigned_at",
+  { ascending: false }
+);
+
+if (error) throw error;
 
     assignments = data || [];
 
@@ -646,11 +669,30 @@ async function submitReview(event) {
 
     if (!allowed) throw new Error("Reviewer permission could not be verified.");
 
-    const assignment = assignments.find(item => item.id === assignmentId);
+    const assignment = assignments.find(
+  item => item.id === assignmentId
+);
 
-    if (!assignment || assignment.reviewer_id !== currentUser.id) {
-      throw new Error("This assignment does not belong to your account.");
-    }
+if (!assignment) {
+  throw new Error(
+    "The assignment could not be found. Refresh the dashboard and try again."
+  );
+}
+
+if (
+  currentRole === "reviewer" &&
+  assignment.reviewer_id !== currentUser.id
+) {
+  throw new Error(
+    "You can submit reviews only for manuscripts assigned to your account."
+  );
+}
+
+if (!["reviewer", "admin", "editor"].includes(currentRole)) {
+  throw new Error(
+    "Your account is not authorised to submit a review."
+  );
+}
 
     const formData = new FormData(form);
 
