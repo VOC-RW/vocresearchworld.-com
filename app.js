@@ -105,9 +105,33 @@ m?.addEventListener("click", () => {
 
 // Highlight the current page in the navigation
 const p = location.pathname.split("/").pop() || "index.html";
+// Track visits to public pages across VOC Research World.
+(async function trackWebsiteVisit() {
+try {
+const { supabase } = await import("./supabase-config.js");
 
-document.querySelectorAll(".links a").forEach((a) => {
-  if (a.getAttribute("href") === p) {
-    a.classList.add("active");
-  }
+let sessionKey = sessionStorage.getItem("voc_reader_session");
+
+if (!sessionKey) {
+  sessionKey =
+    typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : Date.now() + "-" + Math.random().toString(36).slice(2);
+
+  sessionStorage.setItem("voc_reader_session", sessionKey);
+}
+
+const { error } = await supabase.rpc("track_site_visit", {
+  p_session_key: sessionKey,
+  p_page_path: location.pathname,
+  p_publication_id: null
 });
+
+if (error) {
+  console.error("Website visit tracking failed:", error);
+}
+
+} catch (error) {
+console.error("Website visit tracking failed:", error);
+}
+})();
