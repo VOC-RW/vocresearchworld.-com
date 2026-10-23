@@ -3,155 +3,560 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description"
+        content="Explore scientific publications in biochemistry, analytical science, laboratory technology, natural products, instrumentation, data and AI at VOC Research World.">
+
+  <meta name="theme-color" content="#071827">
+
   <title>Publications | VOC Research World</title>
+
+  <link rel="icon" href="logo.svg">
   <link rel="stylesheet" href="style.css">
 
   <style>
-    .publication-stats {
+    :root {
+      --journal-navy: #071827;
+      --journal-blue: #087fb5;
+      --journal-cyan: #60d2d6;
+      --journal-green: #55b77a;
+      --journal-ink: #152c3c;
+      --journal-muted: #667b89;
+      --journal-line: #dce6ec;
+      --journal-soft: #f3f7fa;
+    }
+
+    .journal-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 65px 0;
+      color: #fff;
+      background:
+        radial-gradient(circle at 85% 20%, rgba(96,210,214,.17), transparent 32%),
+        linear-gradient(125deg, #061522, #10374d);
+    }
+
+    .journal-hero::after {
+      position: absolute;
+      top: -100px;
+      right: -70px;
+      width: 340px;
+      height: 340px;
+      content: "";
+      border: 1px solid rgba(96,210,214,.23);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 35px rgba(96,210,214,.035),
+        0 0 0 75px rgba(96,210,214,.025);
+      pointer-events: none;
+    }
+
+    .journal-hero .eyebrow {
+      color: var(--journal-cyan);
+      font-size: .76rem;
+      font-weight: 850;
+      letter-spacing: .17em;
+    }
+
+    .journal-hero h1 {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 15px 0;
+      color: #fff;
+      font-size: clamp(2.3rem, 5vw, 3.7rem);
+      line-height: 1.1;
+      letter-spacing: -.04em;
+    }
+
+    .journal-hero p:not(.eyebrow) {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      color: #d0e0e8;
+      font-size: 1.02rem;
+      line-height: 1.85;
+    }
+
+    .journal-label {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 8px 12px;
+      border: 1px solid rgba(96,210,214,.35);
+      border-radius: 5px;
+      color: #d4f5f4;
+      font-size: .7rem;
+      font-weight: 800;
+      letter-spacing: .1em;
+    }
+
+    .journal-main {
+      padding: 48px 0 80px;
+      background: var(--journal-soft);
+    }
+
+    .journal-stats {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
+      gap: 18px;
+      margin-bottom: 35px;
     }
 
-    .publication-stat {
-      text-align: center;
-      padding: 22px;
-      background: white;
-      border: 1px solid #dfe5ec;
+    .journal-stat {
+      position: relative;
+      padding: 24px;
+      overflow: hidden;
+      border: 1px solid var(--journal-line);
       border-radius: 12px;
+      background: #fff;
     }
 
-    .publication-stat strong {
+    .journal-stat::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      content: "";
+      background: var(--journal-blue);
+    }
+
+    .journal-stat .stat-label {
+      margin: 0;
+      color: var(--journal-muted);
+      font-size: .72rem;
+      font-weight: 850;
+      letter-spacing: .1em;
+    }
+
+    .journal-stat strong {
       display: block;
-      font-size: 30px;
-      margin: 8px 0;
+      margin: 12px 0 7px;
+      color: var(--journal-ink);
+      font-size: 2.15rem;
+      line-height: 1.1;
     }
 
-    .publication-card {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .journal-stat small {
+      color: var(--journal-muted);
+      line-height: 1.6;
     }
 
-    .publication-card h3 {
-      overflow-wrap: anywhere;
+    .journal-toolbar {
+      margin-bottom: 27px;
+      padding: 23px;
+      border: 1px solid var(--journal-line);
+      border-radius: 12px;
+      background: #fff;
     }
 
-    .publication-card .read-link {
-      margin-top: auto;
-      display: inline-block;
-      padding: 11px 16px;
-      border-radius: 7px;
-      background: #1769aa;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      text-align: center;
+    .journal-toolbar h2 {
+      margin: 0 0 7px;
+      color: var(--journal-ink);
+      font-size: 1.2rem;
     }
 
-    .publication-card .read-link:hover {
-      background: #0b4e83;
+    .journal-toolbar > p {
+      margin: 0 0 18px;
+      color: var(--journal-muted);
+      font-size: .9rem;
+      line-height: 1.6;
     }
 
-    .publication-tools {
-      display: flex;
+    .journal-filters {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, .45fr);
       gap: 12px;
-      flex-wrap: wrap;
-      margin: 20px 0;
     }
 
-    .publication-tools input,
-    .publication-tools select {
-      padding: 12px;
-      border: 1px solid #ccd3dc;
-      border-radius: 8px;
-      min-width: 200px;
-      background: white;
+    .journal-filters input,
+    .journal-filters select {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 14px;
+      border: 1px solid #cbd9e1;
+      border-radius: 7px;
+      color: var(--journal-ink);
+      background: #fff;
       font: inherit;
     }
 
-    .publication-tools input {
-      flex: 1;
+    .journal-filters input:focus,
+    .journal-filters select:focus {
+      outline: 3px solid rgba(8,127,181,.15);
+      border-color: var(--journal-blue);
     }
 
-    .publication-meta {
-      color: #617184;
-      font-size: 13px;
+    .journal-results {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0 16px;
+      color: var(--journal-muted);
+      font-size: .87rem;
+    }
+
+    .journal-results strong {
+      color: var(--journal-ink);
+    }
+
+    .journal-results button {
+      padding: 8px 12px;
+      border: 1px solid var(--journal-line);
+      border-radius: 6px;
+      color: var(--journal-blue);
+      background: #fff;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .journal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .journal-card {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      padding: 25px;
+      border: 1px solid var(--journal-line);
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 3px 12px rgba(10,40,58,.025);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .journal-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(10,40,58,.07);
+    }
+
+    .journal-card[hidden] {
+      display: none !important;
+    }
+
+    .journal-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 17px;
+    }
+
+    .journal-category {
+      color: var(--journal-blue);
+      font-size: .69rem;
+      font-weight: 900;
+      letter-spacing: .1em;
+      line-height: 1.6;
+      text-transform: uppercase;
+    }
+
+    .journal-badge {
+      flex-shrink: 0;
+      padding: 5px 8px;
+      border-radius: 5px;
+      color: #23794f;
+      background: #e7f6ee;
+      font-size: .65rem;
+      font-weight: 850;
+      letter-spacing: .06em;
+    }
+
+    .journal-card h2 {
+      margin: 0 0 14px;
+      color: var(--journal-ink);
+      font-size: 1.24rem;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .journal-authors {
+      margin: 0 0 9px;
+      color: #344e60;
+      font-size: .88rem;
+      font-weight: 700;
       line-height: 1.7;
     }
 
-    @media (max-width: 600px) {
-      .publication-stats {
+    .journal-meta {
+      margin: 0 0 15px;
+      color: var(--journal-muted);
+      font-size: .79rem;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .journal-abstract-label {
+      margin: 0 0 6px;
+      color: var(--journal-ink);
+      font-size: .7rem;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+
+    .journal-abstract {
+      margin: 0 0 20px;
+      color: #5c707d;
+      font-size: .91rem;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
+    }
+
+    .journal-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 17px;
+      border-top: 1px solid #edf1f4;
+    }
+
+    .journal-reads {
+      color: var(--journal-muted);
+      font-size: .78rem;
+    }
+
+    .journal-reads strong {
+      color: var(--journal-ink);
+    }
+
+    .journal-read-link {
+      display: inline-flex;
+      min-height: 42px;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--journal-blue);
+      font-size: .83rem;
+      font-weight: 800;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .journal-read-link:hover {
+      background: #075d87;
+    }
+
+    .journal-message {
+      grid-column: 1 / -1;
+      padding: 35px 20px;
+      border: 1px dashed #c6d6df;
+      border-radius: 10px;
+      color: var(--journal-muted);
+      background: #fff;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    .journal-message strong {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--journal-ink);
+      font-size: 1.1rem;
+    }
+
+    .journal-contact {
+      margin-top: 38px;
+      padding: 28px;
+      border: 1px solid #d2e4ea;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .journal-contact h2 {
+      margin-top: 0;
+      color: var(--journal-ink);
+      font-size: 1.25rem;
+    }
+
+    .journal-contact p {
+      color: var(--journal-muted);
+      line-height: 1.8;
+    }
+
+    .journal-contact a {
+      color: var(--journal-blue);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    @media (max-width: 800px) {
+      .journal-grid {
         grid-template-columns: 1fr;
+      }
+
+      .journal-card {
+        padding: 22px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .journal-hero {
+        padding: 48px 0;
+      }
+
+      .journal-main {
+        padding: 30px 0 55px;
+      }
+
+      .journal-stats {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .journal-stat {
+        padding: 19px;
+      }
+
+      .journal-stat strong {
+        font-size: 1.8rem;
+      }
+
+      .journal-filters {
+        grid-template-columns: 1fr;
+      }
+
+      .journal-toolbar {
+        padding: 18px;
+      }
+
+      .journal-results {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .journal-card-footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .journal-read-link {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
       }
     }
   </style>
 </head>
 
 <body>
+
   <div id="header"></div>
 
-  <section class="page">
-    <div class="wrap">
-      <p class="eyebrow">PUBLICATION LIBRARY</p>
-      <h1>Published scientific research.</h1>
-      <p>
-        Discover scientific articles published by VOC Research World.
-        Open an article to read its full text or available manuscript.
-      </p>
-    </div>
-  </section>
+  <main>
 
-  <section class="content">
-    <div class="wrap">
+    <!-- Publication library header -->
+    <section class="journal-hero">
+      <div class="wrap">
+        <p class="eyebrow">VOC RESEARCH WORLD · PUBLICATION LIBRARY</p>
 
-      <div class="publication-stats">
-        <article class="publication-stat">
-          <p class="small">PUBLISHED ARTICLES</p>
-          <strong id="totalPublications">—</strong>
-          <p>Published scientific papers</p>
-        </article>
+        <h1>Scientific research. Shared knowledge. Global impact.</h1>
 
-        <article class="publication-stat">
-          <p class="small">RESEARCH CATEGORIES</p>
-          <strong id="totalCategories">—</strong>
-          <p>Research areas represented</p>
-        </article>
+        <p>
+          Explore published research across biochemistry, analytical science,
+          laboratory technology, quality assurance, natural products,
+          instrumentation, data and artificial intelligence.
+        </p>
 
-        <article class="publication-stat">
-          <p class="small">TOTAL ARTICLE READS</p>
-          <strong id="totalReads">—</strong>
-          <p>Recorded publication readership</p>
-        </article>
+        <span class="journal-label">
+          SCIENCE · INNOVATION · GLOBAL IMPACT
+        </span>
       </div>
+    </section>
 
-      <div id="publicationStatus" class="small" role="status">
-        Loading published research...
+    <section class="journal-main">
+      <div class="wrap">
+
+        <!-- Live publication statistics -->
+        <div class="journal-stats">
+
+          <article class="journal-stat">
+            <p class="stat-label">PUBLISHED ARTICLES</p>
+            <strong id="totalPublications">—</strong>
+            <small>Research papers available in the library</small>
+          </article>
+
+          <article class="journal-stat">
+            <p class="stat-label">RESEARCH CATEGORIES</p>
+            <strong id="totalCategories">—</strong>
+            <small>Distinct categories represented</small>
+          </article>
+
+          <article class="journal-stat">
+            <p class="stat-label">TOTAL ARTICLE READS</p>
+            <strong id="totalReads">—</strong>
+            <small>Recorded publication readership</small>
+          </article>
+
+        </div>
+
+        <!-- Search and category filter -->
+        <section class="journal-toolbar" aria-labelledby="searchHeading">
+          <h2 id="searchHeading">Find a publication</h2>
+
+          <p>
+            Search article titles, author names, abstracts, keywords,
+            or DOI numbers. You can also filter by research category.
+          </p>
+
+          <div class="journal-filters">
+
+            <input
+              id="publicationSearch"
+              type="search"
+              placeholder="Search scientific publications..."
+              aria-label="Search publications">
+
+            <select
+              id="publicationCategory"
+              aria-label="Filter by research category">
+              <option value="">All research categories</option>
+            </select>
+
+          </div>
+        </section>
+
+        <div class="journal-results">
+          <span id="publicationStatus" role="status" aria-live="polite">
+            Loading published research...
+          </span>
+
+          <button id="clearFilters" type="button" hidden>
+            Clear filters
+          </button>
+        </div>
+
+        <div class="journal-grid" id="publicationGrid"></div>
+
+        <section class="journal-contact">
+          <h2>Have a research question?</h2>
+          <p>
+            For publication enquiries, scientific collaboration,
+            or questions about an article, contact the VOC Research World team.
+          </p>
+          <a href="contact.html">Contact VOC Research World →</a>
+        </section>
+
       </div>
+    </section>
 
-      <div class="publication-tools">
-        <input
-          id="publicationSearch"
-          type="search"
-          placeholder="Search title, author, keyword or DOI..."
-          aria-label="Search publications">
-
-        <select
-          id="publicationCategory"
-          aria-label="Filter publications by category">
-          <option value="">All research categories</option>
-        </select>
-      </div>
-
-      <div id="publicationResults"
-           class="small"
-           aria-live="polite"></div>
-
-      <div class="cards three" id="publicationGrid"></div>
-
-    </div>
-  </section>
+  </main>
 
   <div id="footer"></div>
 
@@ -166,22 +571,45 @@
     const status = $("publicationStatus");
     const search = $("publicationSearch");
     const categoryFilter = $("publicationCategory");
+    const clearFilters = $("clearFilters");
 
-    const escapeHtml = value =>
-      String(value ?? "").replace(/[&<>"']/g, character => ({
+    let publicationCards = [];
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, character => ({
         "&": "&amp;",
         "<": "&lt;",
         ">": "&gt;",
         '"': "&quot;",
         "'": "&#39;"
       }[character]));
+    }
+
+    function formatDate(value) {
+      if (!value) return "Publication date pending";
+
+      const date = new Date(value + "T00:00:00");
+
+      if (Number.isNaN(date.getTime())) {
+        return "Publication date pending";
+      }
+
+      return date.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      });
+    }
 
     async function recordPageVisit() {
       try {
         let sessionKey = sessionStorage.getItem("voc_reader_session");
 
         if (!sessionKey) {
-          sessionKey = crypto.randomUUID();
+          sessionKey = typeof crypto.randomUUID === "function"
+            ? crypto.randomUUID()
+            : Date.now() + "-" + Math.random().toString(36).slice(2);
+
           sessionStorage.setItem("voc_reader_session", sessionKey);
         }
 
@@ -197,6 +625,107 @@
       } catch (error) {
         console.error("Website visit tracking failed:", error);
       }
+    }
+
+    function updateVisibleCards() {
+      const query = search.value.trim().toLowerCase();
+      const selectedCategory = categoryFilter.value;
+
+      let visible = 0;
+
+      publicationCards.forEach(({ element, searchText, category }) => {
+        const matchesSearch = !query || searchText.includes(query);
+        const matchesCategory =
+          !selectedCategory || category === selectedCategory;
+
+        const show = matchesSearch && matchesCategory;
+
+        element.hidden = !show;
+
+        if (show) visible++;
+      });
+
+      if (publicationCards.length === 0) {
+        clearFilters.hidden = true;
+        return;
+      }
+
+      status.textContent =
+        `${visible} of ${publicationCards.length} published article` +
+        `${publicationCards.length === 1 ? "" : "s"} shown.`;
+
+      clearFilters.hidden = !query && !selectedCategory;
+    }
+
+    function renderPublication(publication, authorsByPublication) {
+      const category =
+        publication.categories?.name || "Research Article";
+
+      const authors =
+        authorsByPublication[publication.id]?.join(", ") ||
+        "Author information pending";
+
+      const abstract = publication.abstract || "";
+      const date = formatDate(publication.publication_date);
+      const views = Number(publication.views || 0);
+
+      const card = document.createElement("article");
+      card.className = "journal-card";
+
+      card.innerHTML = `
+        <div class="journal-card-top">
+          <span class="journal-category">${escapeHtml(category)}</span>
+          <span class="journal-badge">PUBLISHED</span>
+        </div>
+
+        <h2>${escapeHtml(publication.title)}</h2>
+
+        <p class="journal-authors">${escapeHtml(authors)}</p>
+
+        <p class="journal-meta">
+          ${escapeHtml(date)}
+          ${
+            publication.doi
+              ? `<br>DOI: ${escapeHtml(publication.doi)}`
+              : ""
+          }
+        </p>
+
+        <p class="journal-abstract-label">ABSTRACT</p>
+
+        <p class="journal-abstract">
+          ${escapeHtml(
+            abstract.length > 280
+              ? abstract.slice(0, 280).trimEnd() + "..."
+              : abstract || "An abstract has not been provided for this article."
+          )}
+        </p>
+
+        <div class="journal-card-footer">
+          <span class="journal-reads">
+            Reads: <strong>${views.toLocaleString()}</strong>
+          </span>
+
+          <a class="journal-read-link"
+             href="read-publication.html?id=${encodeURIComponent(publication.id)}">
+            Read Full Article →
+          </a>
+        </div>
+      `;
+
+      const searchText = [
+        publication.title,
+        publication.abstract,
+        publication.doi,
+        category,
+        authors
+      ].join(" ").toLowerCase();
+
+      return {
+        element: card,
+        searchText,
+        category
+      };
     }
 
     async function loadPublications() {
@@ -222,37 +751,52 @@
 
       if (error) {
         console.error("Publications query failed:", error);
+
         status.textContent =
-          "Publications could not be loaded. Please try again later.";
+          "Published research could not be loaded. Please try again later.";
+
+        grid.innerHTML = `
+          <div class="journal-message">
+            <strong>Unable to load publications</strong>
+            Please refresh this page. If the problem continues, contact
+            the website team.
+          </div>
+        `;
+
         return;
       }
 
-      if (!data || data.length === 0) {
-        $("totalPublications").textContent = "0";
-        $("totalCategories").textContent = "0";
-        $("totalReads").textContent = "0";
+      const publications = data || [];
 
-        status.textContent =
-          "No published articles are currently available.";
-        return;
-      }
+      $("totalPublications").textContent =
+        publications.length.toLocaleString();
 
-      $("totalPublications").textContent = data.length;
-
-      const categories = new Set(
-        data
-          .map(article => article.category_id)
-          .filter(Boolean)
-      );
-
-      $("totalCategories").textContent = categories.size;
-
-      $("totalReads").textContent = data.reduce(
-        (total, article) => total + Number(article.views || 0),
+      $("totalReads").textContent = publications.reduce(
+        (total, publication) =>
+          total + Number(publication.views || 0),
         0
-      );
+      ).toLocaleString();
 
-      const publicationIds = data.map(article => article.id);
+      $("totalCategories").textContent = new Set(
+        publications
+          .map(publication => publication.category_id)
+          .filter(Boolean)
+      ).size.toLocaleString();
+
+      if (publications.length === 0) {
+        status.textContent = "No published articles are currently available.";
+
+        grid.innerHTML = `
+          <div class="journal-message">
+            <strong>The publication library is being updated.</strong>
+            Published research will appear here when it becomes available.
+          </div>
+        `;
+
+        return;
+      }
+
+      const publicationIds = publications.map(publication => publication.id);
 
       const { data: authors, error: authorError } = await supabase
         .from("publication_authors")
@@ -271,84 +815,24 @@
       const authorsByPublication = {};
 
       (authors || []).forEach(author => {
-        const name = author.profiles?.full_name;
+        const authorName = author.profiles?.full_name;
 
-        if (name) {
-          (authorsByPublication[author.publication_id] ||= [])
-            .push(name);
+        if (!authorName) return;
+
+        if (!authorsByPublication[author.publication_id]) {
+          authorsByPublication[author.publication_id] = [];
         }
+
+        authorsByPublication[author.publication_id].push(authorName);
       });
-
-      const cards = data.map(publication => {
-        const authorsText =
-          authorsByPublication[publication.id]?.join(", ") ||
-          "Author information pending";
-
-        const date = publication.publication_date
-          ? new Date(
-              publication.publication_date + "T00:00:00"
-            ).toLocaleDateString(undefined, {
-              year: "numeric",
-              month: "long",
-              day: "numeric"
-            })
-          : "Publication date pending";
-
-        const abstract = publication.abstract || "";
-
-        return `
-          <article class="card publication-card">
-            <label>
-              ${escapeHtml(
-                publication.categories?.name || "Research Article"
-              )}
-              · PUBLISHED
-            </label>
-
-            <h3>${escapeHtml(publication.title)}</h3>
-
-            <p class="publication-meta">
-              ${escapeHtml(authorsText)}
-            </p>
-
-            <p class="publication-meta">
-              ${escapeHtml(date)}
-              ${
-                publication.doi
-                  ? " · DOI: " + escapeHtml(publication.doi)
-                  : ""
-              }
-            </p>
-
-            <p>
-              ${escapeHtml(
-                abstract.length > 240
-                  ? abstract.slice(0, 240) + "..."
-                  : abstract || "Abstract not available."
-              )}
-            </p>
-
-            <p class="publication-meta">
-              Readers: <strong>${Number(publication.views || 0)}</strong>
-            </p>
-
-            <a class="read-link"
-               href="read-publication.html?id=${encodeURIComponent(publication.id)}">
-              Read Full Article →
-            </a>
-          </article>
-        `;
-      });
-
-      grid.innerHTML = cards.join("");
 
       const categoryNames = [
         ...new Set(
-          data.map(article =>
-            article.categories?.name || "Research Article"
+          publications.map(publication =>
+            publication.categories?.name || "Research Article"
           )
         )
-      ].sort();
+      ].sort((a, b) => a.localeCompare(b));
 
       categoryNames.forEach(name => {
         const option = document.createElement("option");
@@ -357,46 +841,36 @@
         categoryFilter.appendChild(option);
       });
 
-      function filterPublications() {
-        const query = search.value.trim().toLowerCase();
-        const selectedCategory = categoryFilter.value;
+      publicationCards = publications.map(publication =>
+        renderPublication(publication, authorsByPublication)
+      );
 
-        let visible = 0;
+      grid.replaceChildren(
+        ...publicationCards.map(item => item.element)
+      );
 
-        grid.querySelectorAll(".publication-card").forEach(card => {
-          const text = card.textContent.toLowerCase();
-          const label = card.querySelector("label")
-            ?.textContent.replace("· PUBLISHED", "").trim();
-
-          const matchesText = text.includes(query);
-          const matchesCategory =
-            !selectedCategory || label === selectedCategory;
-
-          card.hidden = !(matchesText && matchesCategory);
-
-          if (!card.hidden) visible++;
-        });
-
-        $("publicationResults").textContent =
-          `${visible} published article${visible === 1 ? "" : "s"} shown.`;
-      }
-
-      search.addEventListener("input", filterPublications);
-      categoryFilter.addEventListener("change", filterPublications);
-
-      filterPublications();
-
-      status.textContent =
-        `${data.length} published article${data.length === 1 ? "" : "s"} available.`;
+      updateVisibleCards();
     }
+
+    search.addEventListener("input", updateVisibleCards);
+    categoryFilter.addEventListener("change", updateVisibleCards);
+
+    clearFilters.addEventListener("click", () => {
+      search.value = "";
+      categoryFilter.value = "";
+      updateVisibleCards();
+      search.focus();
+    });
 
     await recordPageVisit();
 
     loadPublications().catch(error => {
-      console.error(error);
+      console.error("Unexpected publication loading error:", error);
+
       status.textContent =
         "An unexpected error occurred while loading publications.";
     });
   </script>
+
 </body>
-  </html>
+</html> 
