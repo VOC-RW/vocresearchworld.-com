@@ -6,6 +6,17 @@
 <div id="items" class="cards three"></div><div id="empty" class="empty" hidden><h3>No scientific records found.</h3><p>Try a broader keyword or clear one of the filters.</p></div>
 </div></section><div id="footer"></div><script src="data.js"></script><script src="app.js"></script><script>
 const q=document.getElementById('q'), area=document.getElementById('area'), type=document.getElementById('type'), year=document.getElementById('year'), items=document.getElementById('items'), empty=document.getElementById('empty'), count=document.getElementById('resultCount');
+  const requestedArea = new URLSearchParams(window.location.search).get('area');
+
+if (requestedArea) {
+  const matchingOption = [...area.options].find(
+    option => option.value.toLowerCase() === requestedArea.toLowerCase()
+  );
+
+  if (matchingOption) {
+    area.value = matchingOption.value;
+  }
+}
 const all=Object.values(VOC.articles);
 [...new Set(all.map(a=>a.date.slice(0,4)))].sort((a,b)=>b-a).forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;year.appendChild(o)});
 function card(a){const au=VOC.author(a.authorId), pr=a.projectId?VOC.project(a.projectId):null;return `<article class="card discovery-card"><div class="card-top"><label>${VOC.esc(a.category)}</label><span>${VOC.esc(a.type)}</span></div><h3>${VOC.esc(a.title)}</h3><p>${VOC.esc(a.subtitle)}</p><p class="small"><b>${VOC.esc(au.name)}</b> · ${VOC.esc(a.date.slice(0,4))}</p><div class="tag-row">${a.keywords.slice(0,3).map(k=>`<span>${VOC.esc(k)}</span>`).join('')}</div><div class="card-links"><a href="article.html?id=${encodeURIComponent(a.id)}">Read article →</a>${pr?`<a href="project.html?id=${encodeURIComponent(pr.id)}">Research project</a>`:''}</div></article>`}
