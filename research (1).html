@@ -1,1 +1,598 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Research | VOC Research World</title><link rel="stylesheet" href="style.css"></head><body><div id="header"></div><section class="page"><div class="wrap"><p class="eyebrow">RESEARCH AREAS</p><h1>Interdisciplinary scientific research.</h1><p>Explore the scientific domains forming the foundation of VOC Research World.</p></div></section><section class="content"><div class="wrap cards three"><a class="research" href="knowledge.html"><b>01</b><h3>Biochemistry</h3><p>Metabolism, enzymes, proteins and biochemical regulation.</p></a><a class="research" href="knowledge.html"><b>02</b><h3>Analytical Science</h3><p>Spectroscopy, chromatography, measurement and interpretation.</p></a><a class="research" href="knowledge.html"><b>03</b><h3>Quality Assurance</h3><p>QA/QC, calibration, validation and laboratory systems.</p></a><a class="research" href="knowledge.html"><b>04</b><h3>Natural Products</h3><p>Natural compounds, phytochemistry and investigation.</p></a><a class="research" href="data-ai.html"><b>05</b><h3>Data & AI</h3><p>Statistics, visualization, computing and responsible AI.</p></a><a class="research" href="instrumentation.html"><b>06</b><h3>Instrumentation</h3><p>Scientific instruments and analytical workflows.</p></a><a class="research"><b>07</b><h3>Industrial Science</h3><p>Materials, production quality and laboratory testing.</p></a><a class="research"><b>08</b><h3>Student Research</h3><p>Research projects, writing and publication preparation.</p></a><a class="research"><b>09</b><h3>Scientific Education</h3><p>Structured scientific learning and educational resources.</p></a></div></section><div id="footer"></div><script src="app.js"></script></body></html>
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore VOC Research World's scientific research areas, interdisciplinary projects, laboratory innovation, biochemistry, analytical science, natural products, instrumentation, and data science.">
+  <meta name="theme-color" content="#071827">
+  <title>Research | VOC Research World</title>
+  <link rel="icon" href="logo.svg">
+  <link rel="stylesheet" href="style.css">  <style>
+    :root {
+      --research-navy: #071827;
+      --research-blue: #087fb5;
+      --research-teal: #60d2d6;
+      --research-green: #55b77a;
+      --research-ink: #183246;
+      --research-muted: #607487;
+      --research-line: #dce7ed;
+      --research-bg: #f4f8fb;
+    }
+
+    .research-page { color: var(--research-ink); }
+    .research-page * { box-sizing: border-box; }
+    .research-page a { text-decoration: none; }
+
+    .research-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 76px 0 66px;
+      color: #fff;
+      background:
+        radial-gradient(circle at 85% 20%, rgba(96,210,214,.18), transparent 30%),
+        radial-gradient(circle at 10% 100%, rgba(8,127,181,.22), transparent 35%),
+        linear-gradient(130deg, #071827, #10334a 70%, #0a2938);
+    }
+
+    .research-hero:after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .13;
+      background-image:
+        linear-gradient(rgba(255,255,255,.18) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.18) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: linear-gradient(to right, transparent, black);
+    }
+
+    .research-hero .wrap { position: relative; z-index: 1; }
+    .research-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 18px;
+      color: var(--research-teal);
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .research-eyebrow:before {
+      content: "";
+      width: 25px;
+      height: 2px;
+      background: var(--research-green);
+    }
+
+    .research-hero h1 {
+      max-width: 850px;
+      margin: 0 0 20px;
+      color: #fff;
+      font-size: clamp(2.35rem, 5.5vw, 4.5rem);
+      line-height: 1.07;
+      letter-spacing: -.045em;
+    }
+
+    .research-hero .hero-copy {
+      max-width: 720px;
+      color: #d3e2ec;
+      font-size: 1.08rem;
+      line-height: 1.85;
+    }
+
+    .research-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .research-btn {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 9px;
+      padding: 12px 19px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      font-weight: 750;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .research-btn:hover { transform: translateY(-2px); }
+    .research-btn-light { color: #082033; background: var(--research-teal); }
+    .research-btn-outline { color: #fff; border-color: rgba(255,255,255,.35); background: rgba(255,255,255,.05); }
+
+    .research-intro {
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 34px;
+      align-items: center;
+      padding: 54px 0 28px;
+    }
+
+    .research-intro h2,
+    .research-section-heading h2 {
+      margin: 0 0 14px;
+      color: var(--research-navy);
+      font-size: clamp(1.8rem, 3vw, 2.55rem);
+      line-height: 1.2;
+      letter-spacing: -.035em;
+    }
+
+    .research-intro p,
+    .research-section-heading p {
+      color: var(--research-muted);
+      line-height: 1.8;
+    }
+
+    .research-note {
+      padding: 23px;
+      border: 1px solid var(--research-line);
+      border-left: 4px solid var(--research-green);
+      border-radius: 13px;
+      background: #fff;
+      box-shadow: 0 12px 30px rgba(7,24,39,.04);
+    }
+
+    .research-note strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--research-navy);
+    }
+
+    .research-note p { margin: 0; font-size: .94rem; }
+
+    .research-areas {
+      padding: 38px 0 68px;
+      background: var(--research-bg);
+    }
+
+    .research-section-heading {
+      max-width: 760px;
+      margin-bottom: 30px;
+    }
+
+    .research-section-heading .research-eyebrow { color: var(--research-blue); }
+
+    .research-area-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .research-area-card {
+      position: relative;
+      display: flex;
+      min-height: 235px;
+      flex-direction: column;
+      padding: 25px;
+      overflow: hidden;
+      border: 1px solid var(--research-line);
+      border-radius: 15px;
+      background: #fff;
+      box-shadow: 0 7px 22px rgba(7,24,39,.035);
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+
+    .research-area-card:hover {
+      transform: translateY(-4px);
+      border-color: #a9dce2;
+      box-shadow: 0 16px 32px rgba(7,24,39,.09);
+    }
+
+    .research-area-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 23px;
+    }
+
+    .research-area-number {
+      color: var(--research-blue);
+      font-size: .8rem;
+      font-weight: 850;
+      letter-spacing: .12em;
+    }
+
+    .research-area-symbol {
+      display: grid;
+      width: 43px;
+      height: 43px;
+      place-items: center;
+      border-radius: 12px;
+      color: #075c79;
+      background: #e6f7f7;
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .research-area-card h3 {
+      margin: 0 0 10px;
+      color: var(--research-navy);
+      font-size: 1.15rem;
+      line-height: 1.35;
+    }
+
+    .research-area-card p {
+      margin: 0 0 19px;
+      color: var(--research-muted);
+      font-size: .93rem;
+      line-height: 1.75;
+    }
+
+    .research-area-link {
+      margin-top: auto;
+      color: var(--research-blue);
+      font-size: .9rem;
+      font-weight: 800;
+    }
+
+    .research-project-cta {
+      margin: 0 0 70px;
+      padding: 30px;
+      border-radius: 17px;
+      color: #fff;
+      background: linear-gradient(120deg, #0b2c40, #0b5267);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .research-project-cta h2 {
+      margin: 0 0 9px;
+      color: #fff;
+      font-size: clamp(1.4rem, 2.6vw, 2rem);
+    }
+
+    .research-project-cta p {
+      margin: 0;
+      color: #d1e3eb;
+      line-height: 1.7;
+    }
+
+    .research-project-cta .research-btn { flex-shrink: 0; }
+
+    .research-published {
+      padding: 68px 0;
+      background: #fff;
+    }
+
+    .research-published-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .research-publication-card {
+      display: flex;
+      flex-direction: column;
+      padding: 23px;
+      border: 1px solid var(--research-line);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 8px 25px rgba(7,24,39,.04);
+    }
+
+    .research-publication-card .publication-label {
+      margin-bottom: 13px;
+      color: #087d83;
+      font-size: .73rem;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .research-publication-card h3 {
+      margin: 0 0 12px;
+      color: var(--research-navy);
+      font-size: 1.12rem;
+      line-height: 1.5;
+    }
+
+    .research-publication-card p {
+      color: var(--research-muted);
+      font-size: .92rem;
+      line-height: 1.75;
+    }
+
+    .research-publication-card .publication-meta {
+      margin-top: auto;
+      font-size: .82rem;
+    }
+
+    .research-publication-card a {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--research-blue);
+      font-weight: 800;
+    }
+
+    .research-status {
+      margin-top: 22px;
+      color: var(--research-muted);
+      line-height: 1.7;
+    }
+
+    .research-end-cta {
+      padding: 48px 0;
+      background: var(--research-bg);
+    }
+
+    .research-end-cta-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .research-end-cta h2 {
+      margin: 0 0 10px;
+      color: var(--research-navy);
+    }
+
+    .research-end-cta p {
+      margin: 0;
+      color: var(--research-muted);
+      line-height: 1.7;
+    }
+
+    @media (max-width: 850px) {
+      .research-area-grid,
+      .research-published-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .research-intro { grid-template-columns: 1fr; gap: 15px; }
+    }
+
+    @media (max-width: 580px) {
+      .research-hero { padding: 55px 0 48px; }
+      .research-area-grid,
+      .research-published-grid { grid-template-columns: 1fr; }
+      .research-area-card { min-height: auto; }
+      .research-project-cta,
+      .research-end-cta-inner { align-items: flex-start; flex-direction: column; }
+      .research-project-cta { padding: 24px; }
+      .research-actions { align-items: stretch; flex-direction: column; }
+      .research-actions .research-btn { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .research-area-card,
+      .research-btn { transition: none; }
+      .research-area-card:hover,
+      .research-btn:hover { transform: none; }
+    }
+  </style></head><body>
+  <div id="header"></div>  <main class="research-page">
+    <section class="research-hero">
+      <div class="wrap">
+        <p class="research-eyebrow">Research · Innovation · Impact</p>
+        <h1>Where scientific questions become meaningful discoveries.</h1>
+        <p class="hero-copy">
+          Explore interdisciplinary research across laboratory science,
+          biochemistry, analytical methods, natural products, instrumentation,
+          quality assurance, and data-driven innovation.
+        </p>
+        <div class="research-actions">
+          <a class="research-btn research-btn-light" href="#research-areas">Explore Research Areas ↓</a>
+          <a class="research-btn research-btn-outline" href="publications.html">Read Published Research →</a>
+        </div>
+      </div>
+    </section><section class="wrap research-intro">
+  <div>
+    <p class="research-eyebrow">Our research focus</p>
+    <h2>Connecting laboratory science with real-world challenges.</h2>
+    <p>
+      VOC Research World brings scientific disciplines together to support
+      rigorous investigation, evidence-based learning, laboratory innovation,
+      and the communication of research findings. Our focus is on clear
+      methods, responsible interpretation, and work that can contribute to
+      scientific and societal progress.
+    </p>
+  </div>
+  <aside class="research-note">
+    <strong>Our research principles</strong>
+    <p>
+      Scientific integrity, transparent methods, critical analysis,
+      reproducibility, responsible innovation, and clear communication
+      guide our approach to research.
+    </p>
+  </aside>
+</section>
+
+<section class="research-areas" id="research-areas">
+  <div class="wrap">
+    <div class="research-section-heading">
+      <p class="research-eyebrow">Research domains</p>
+      <h2>Explore our areas of scientific interest.</h2>
+      <p>
+        Discover the fields that shape our research, educational resources,
+        and scientific collaborations.
+      </p>
+    </div>
+
+    <div class="research-area-grid">
+      <a class="research-area-card" href="knowledge.html">
+        <div class="research-area-top"><span class="research-area-number">01 / BIOCHEMISTRY</span><span class="research-area-symbol">β</span></div>
+        <h3>Biochemistry</h3>
+        <p>Metabolism, enzymes, proteins, cellular processes, molecular interactions, and biochemical regulation.</p>
+        <span class="research-area-link">Explore knowledge hub →</span>
+      </a>
+
+      <a class="research-area-card" href="knowledge.html">
+        <div class="research-area-top"><span class="research-area-number">02 / ANALYTICAL SCIENCE</span><span class="research-area-symbol">⌕</span></div>
+        <h3>Analytical Science</h3>
+        <p>Spectroscopy, chromatography, measurement science, sample preparation, and analytical interpretation.</p>
+        <span class="research-area-link">Explore knowledge hub →</span>
+      </a>
+
+      <a class="research-area-card" href="knowledge.html">
+        <div class="research-area-top"><span class="research-area-number">03 / QUALITY</span><span class="research-area-symbol">✓</span></div>
+        <h3>Quality Assurance</h3>
+        <p>Quality systems, quality control, calibration, validation, method performance, and laboratory standards.</p>
+        <span class="research-area-link">Explore knowledge hub →</span>
+      </a>
+
+      <a class="research-area-card" href="knowledge.html">
+        <div class="research-area-top"><span class="research-area-number">04 / NATURAL PRODUCTS</span><span class="research-area-symbol">✳</span></div>
+        <h3>Natural Products</h3>
+        <p>Phytochemistry, bioactive compounds, natural-product analysis, and evidence-based biological investigation.</p>
+        <span class="research-area-link">Explore knowledge hub →</span>
+      </a>
+
+      <a class="research-area-card" href="data-ai.html">
+        <div class="research-area-top"><span class="research-area-number">05 / DATA & AI</span><span class="research-area-symbol">⌘</span></div>
+        <h3>Data Science & AI</h3>
+        <p>Statistics, data visualization, computational methods, research data analysis, and responsible AI applications.</p>
+        <span class="research-area-link">Explore Data & AI →</span>
+      </a>
+
+      <a class="research-area-card" href="instrumentation.html">
+        <div class="research-area-top"><span class="research-area-number">06 / INSTRUMENTATION</span><span class="research-area-symbol">⌁</span></div>
+        <h3>Instrumentation</h3>
+        <p>Scientific instruments, analytical workflows, measurement principles, instrument performance, and troubleshooting.</p>
+        <span class="research-area-link">Explore instrumentation →</span>
+      </a>
+
+      <a class="research-area-card" href="knowledge.html">
+        <div class="research-area-top"><span class="research-area-number">07 / INDUSTRY</span><span class="research-area-symbol">▦</span></div>
+        <h3>Industrial Science</h3>
+        <p>Industrial raw materials, process analysis, product quality, laboratory testing, and applied scientific methods.</p>
+        <span class="research-area-link">Explore knowledge hub →</span>
+      </a>
+
+      <a class="research-area-card" href="projects.html">
+        <div class="research-area-top"><span class="research-area-number">08 / PROJECTS</span><span class="research-area-symbol">◎</span></div>
+        <h3>Research Projects</h3>
+        <p>Research questions, project development, study design, scientific documentation, and collaborative investigation.</p>
+        <span class="research-area-link">Explore projects →</span>
+      </a>
+
+      <a class="research-area-card" href="knowledge.html">
+        <div class="research-area-top"><span class="research-area-number">09 / EDUCATION</span><span class="research-area-symbol">↗</span></div>
+        <h3>Scientific Education</h3>
+        <p>Scientific explanations, research literacy, educational resources, and support for responsible scientific writing.</p>
+        <span class="research-area-link">Explore knowledge hub →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="research-project-cta">
+    <div>
+      <h2>Have a research idea worth exploring?</h2>
+      <p>Visit the project area to discover research directions, or submit your manuscript for editorial consideration.</p>
+    </div>
+    <div class="research-actions">
+      <a class="research-btn research-btn-light" href="projects.html">Explore Projects →</a>
+      <a class="research-btn research-btn-outline" href="submit.html">Submit Research →</a>
+    </div>
+  </div>
+</section>
+
+<section class="research-published">
+  <div class="wrap">
+    <div class="research-section-heading">
+      <p class="research-eyebrow">Published work</p>
+      <h2>Research from our publication collection.</h2>
+      <p>
+        Explore articles approved for publication. Article information is
+        loaded from the VOC Research World publication database.
+      </p>
+    </div>
+
+    <div id="researchPublicationStatus" class="research-status" role="status" aria-live="polite">
+      Loading published research…
+    </div>
+    <div class="research-published-grid" id="researchPublicationGrid"></div>
+    <p style="margin-top:28px">
+      <a class="research-btn research-btn-light" href="publications.html">Browse all publications →</a>
+    </p>
+  </div>
+</section>
+
+<section class="research-end-cta">
+  <div class="wrap research-end-cta-inner">
+    <div>
+      <h2>Build knowledge through credible science.</h2>
+      <p>Explore our learning resources, read published research, or get in touch with VOC Research World.</p>
+    </div>
+    <div class="research-actions">
+      <a class="research-btn research-btn-light" href="knowledge.html">Knowledge Hub →</a>
+      <a class="research-btn research-btn-outline" style="color:#0a3347;border-color:#b9cbd4;background:#fff" href="contact.html">Contact Us →</a>
+    </div>
+  </div>
+</section>
+
+  </main>  <div id="footer"></div>
+  <script src="app.js"></script>  <script type="module">
+    import { supabase } from './supabase-config.js';
+
+    const grid = document.getElementById('researchPublicationGrid');
+    const status = document.getElementById('researchPublicationStatus');
+
+    const esc = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    })[char]);
+
+    async function loadPublishedResearch() {
+      const { data, error } = await supabase
+        .from('publications')
+        .select('id,title,abstract,publication_date,doi,categories(name)')
+        .eq('status', 'published')
+        .order('publication_date', { ascending: false })
+        .limit(6);
+
+      if (error) {
+        status.textContent = 'Published research is temporarily unavailable. Please visit the Publications page.';
+        console.error('Could not load published research:', error);
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        status.textContent = 'No journal submissions have been published yet.';
+        return;
+      }
+
+      status.textContent = '';
+
+      grid.innerHTML = data.map(publication => {
+        const abstract = publication.abstract || 'Abstract not available.';
+        const shortAbstract = abstract.length > 260
+          ? abstract.slice(0, 260) + '…'
+          : abstract;
+
+        const date = publication.publication_date
+          ? new Date(publication.publication_date + 'T00:00:00').toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric'
+            })
+          : 'Publication date pending';
+
+        return `
+          <article class="research-publication-card">
+            <span class="publication-label">${esc(publication.categories?.name || 'Research Article')} · Published</span>
+            <h3>${esc(publication.title)}</h3>
+            <p>${esc(shortAbstract)}</p>
+            <p class="publication-meta">${esc(date)}${publication.doi ? ' · DOI: ' + esc(publication.doi) : ''}</p>
+            <a href="read-publication.html?id=${encodeURIComponent(publication.id)}">Read article →</a>
+          </article>
+        `;
+      }).join('');
+    }
+
+    loadPublishedResearch();
+  </script></body>
+</html>
