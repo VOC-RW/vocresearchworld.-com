@@ -715,16 +715,51 @@ if (!["reviewer", "admin", "editor"].includes(currentRole)) {
       );
     }
 
-    const { error } = await supabase
-      .from("peer_reviews")
-      .insert({
-        assignment_id: assignmentId,
-        recommendation,
-        comments_to_author: commentsToAuthor,
-        confidential_comments: confidentialComments || null
-      });
+    // Check whether a review already exists for this assignment.
+const { data: existingReview, error: checkError } = await supabase
+.from("peer_reviews")
+.select("id")
+.eq("assignment_id", assignmentId)
+.maybeSingle();
 
-    if (error) throw error;
+if (checkError) {
+  throw new Error(
+    "Could not verify whether a review already exists: " +
+    checkError.message
+  );
+}
+
+if (existingReview) {
+  await loadAssignments();
+
+  throw new Error(
+    "A review has already been submitted for this assignment. " +
+    "Your existing review has been preserved. Refresh the dashboard " +
+    "to view its current status."
+  );
+}
+
+const { error: insertError } = await supabase
+  .from("peer_reviews")
+  .insert({
+    assignment_id: assignmentId,
+    recommendation,
+    comments_to_author: commentsToAuthor,
+    confidential_comments: confidentialComments || null
+  });
+
+if (insertError) {
+  if (insertError.code === "23505") {
+    await loadAssignments();
+
+    throw new Error(
+      "A review already exists for this assignment. " +
+      "The existing review has been preserved. Refresh the dashboard."
+    );
+  }
+
+  throw insertError;
+  }
 
     result.hidden = false;
     result.className = "review-result status-box success";
