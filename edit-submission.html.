@@ -1,870 +1,988 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Edit Submission | VOC Research World</title>
+    <title>Edit Submission | VOC Research World</title>
 
-  <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
-  <style>
-    :root {
-      --navy: #10243a;
-      --blue: #2463a6;
-      --green: #21804b;
-      --border: #dce4ed;
-      --muted: #64748b;
-      --background: #f5f8fc;
-    }
+    <style>
+        :root {
+            --navy: #10243a;
+            --blue: #2463a6;
+            --green: #21804b;
+            --border: #dce4ed;
+            --muted: #64748b;
+            --background: #f5f8fc;
+        }
 
-    body {
-      margin: 0;
-      background: var(--background);
-    }
+        body {
+            margin: 0;
+            background: var(--background);
+        }
 
-    .edit-page {
-      padding: 45px 0 70px;
-    }
+        .edit-page {
+            padding: 45px 0 70px;
+        }
 
-    .edit-container {
-      width: min(900px, calc(100% - 32px));
-      margin: auto;
-    }
+        .edit-container {
+            width: min(900px, calc(100% - 32px));
+            margin: auto;
+        }
 
-    .edit-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 8px 25px rgba(16, 36, 58, 0.05);
-    }
+        .edit-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 8px 25px rgba(16, 36, 58, 0.05);
+        }
 
-    .edit-card h1 {
-      color: var(--navy);
-      margin-top: 0;
-    }
+        .edit-card h1 {
+            color: var(--navy);
+            margin-top: 0;
+        }
 
-    .eyebrow {
-      color: var(--blue);
-      font-weight: 700;
-      font-size: 0.8rem;
-      letter-spacing: 1.5px;
-    }
+        .eyebrow {
+            color: var(--blue);
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+        }
 
-    .description {
-      color: var(--muted);
-      line-height: 1.7;
-    }
+        .description {
+            color: var(--muted);
+            line-height: 1.7;
+        }
 
-    .notice {
-      padding: 15px;
-      border-radius: 9px;
-      margin: 20px 0;
-      background: #edf5ff;
-      border-left: 4px solid var(--blue);
-      line-height: 1.6;
-      overflow-wrap: anywhere;
-    }
+        .notice {
+            padding: 15px;
+            border-radius: 9px;
+            margin: 20px 0;
+            background: #edf5ff;
+            border-left: 4px solid var(--blue);
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
 
-    .field {
-      margin-bottom: 21px;
-    }
+        .field {
+            margin-bottom: 21px;
+        }
 
-    .field label {
-      display: block;
-      font-weight: 650;
-      margin-bottom: 8px;
-      color: var(--navy);
-    }
+        .field label {
+            display: block;
+            font-weight: 650;
+            margin-bottom: 8px;
+            color: var(--navy);
+        }
 
-    .field input,
-    .field select,
-    .field textarea {
-      display: block;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      background: #fff;
-      font: inherit;
-      color: #172b40;
-    }
+        .field input,
+        .field select,
+        .field textarea {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #fff;
+            font: inherit;
+            color: #172b40;
+        }
 
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus {
-      outline: 2px solid #9bc5f4;
-      border-color: var(--blue);
-    }
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            outline: 2px solid #9bc5f4;
+            border-color: var(--blue);
+        }
 
-    .field textarea {
-      min-height: 190px;
-      resize: vertical;
-    }
+        .field textarea {
+            min-height: 190px;
+            resize: vertical;
+        }
 
-    .help {
-      display: block;
-      margin-top: 7px;
-      color: var(--muted);
-      font-size: 0.88rem;
-      line-height: 1.5;
-    }
+        .help {
+            display: block;
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
 
-    .file-box {
-      border: 1px dashed #9caec1;
-      padding: 15px;
-      border-radius: 9px;
-      background: #f8fafc;
-      overflow-wrap: anywhere;
-    }
+        .file-box {
+            border: 1px dashed #9caec1;
+            padding: 15px;
+            border-radius: 9px;
+            background: #f8fafc;
+            overflow-wrap: anywhere;
+        }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 25px;
-    }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
 
-    .action-button {
-      border: 0;
-      border-radius: 8px;
-      padding: 12px 18px;
-      font: inherit;
-      font-weight: 650;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-      text-align: center;
-    }
+        .action-button {
+            border: 0;
+            border-radius: 8px;
+            padding: 12px 18px;
+            font: inherit;
+            font-weight: 650;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
 
-    .primary-button {
-      background: var(--blue);
-      color: white;
-    }
+        .primary-button {
+            background: var(--blue);
+            color: white;
+        }
 
-    .secondary-button {
-      background: #e9eef5;
-      color: var(--navy);
-    }
+        .secondary-button {
+            background: #e9eef5;
+            color: var(--navy);
+        }
 
-    .action-button:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
+        .action-button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
 
-    .result {
-      padding: 15px;
-      border-radius: 9px;
-      margin-top: 20px;
-      line-height: 1.6;
-      overflow-wrap: anywhere;
-    }
+        .result {
+            padding: 15px;
+            border-radius: 9px;
+            margin-top: 20px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
 
-    .result[hidden] {
-      display: none;
-    }
+        .result[hidden] {
+            display: none;
+        }
 
-    .result.success {
-      color: #176437;
-      background: #eaf8ee;
-      border: 1px solid #b9e5c5;
-    }
+        .result.success {
+            color: #176437;
+            background: #eaf8ee;
+            border: 1px solid #b9e5c5;
+        }
 
-    .result.error {
-      color: #8c2020;
-      background: #fff0f0;
-      border: 1px solid #f1c3c3;
-    }
+        .result.error {
+            color: #8c2020;
+            background: #fff0f0;
+            border: 1px solid #f1c3c3;
+        }
 
-    .result.info {
-      color: #173d69;
-      background: #edf5ff;
-      border: 1px solid #c6dcf8;
-    }
+        .result.info {
+            color: #173d69;
+            background: #edf5ff;
+            border: 1px solid #c6dcf8;
+        }
 
-    .small-link {
-      color: var(--blue);
-      font-weight: 600;
-    }
+        .small-link {
+            color: var(--blue);
+            font-weight: 600;
+        }
 
-    @media (max-width: 600px) {
-      .edit-page {
-        padding: 25px 0 45px;
-      }
+        @media (max-width: 600px) {
+            .edit-page {
+                padding: 25px 0 45px;
+            }
 
-      .edit-card {
-        padding: 19px;
-      }
+            .edit-card {
+                padding: 19px;
+            }
 
-      .actions {
-        flex-direction: column;
-      }
+            .actions {
+                flex-direction: column;
+            }
 
-      .action-button {
-        width: 100%;
-        box-sizing: border-box;
-      }
-    }
-  </style>
+            .action-button {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <div id="header"></div>
+    <div id="header"></div>
 
-  <main class="edit-page">
-    <div class="edit-container">
+    <main class="edit-page">
+        <div class="edit-container">
 
-      <div class="edit-card">
+            <div class="edit-card">
 
-        <p class="eyebrow">AUTHOR WORKSPACE</p>
+                <p class="eyebrow">AUTHOR WORKSPACE</p>
 
-        <h1 id="pageTitle">Edit Research Submission</h1>
+                <h1 id="pageTitle">Edit Research Submission</h1>
 
-        <p class="description">
-          Update your manuscript information, replace your manuscript
-          file if necessary, and resubmit your work for editorial
-          consideration.
-        </p>
+                <p class="description">
+                    Update your manuscript information, replace your manuscript
+                    file if necessary, and resubmit your work for editorial
+                    consideration.
+                </p>
 
-        <div id="statusNotice" class="notice" role="status">
-          Checking your account and submission...
-        </div>
+                <div id="statusNotice" class="notice" role="status">
+                    Checking your account and submission...
+                </div>
 
-        <form id="editForm" hidden>
+                <form id="editForm" hidden>
 
-          <div class="field">
-            <label for="reference">Submission reference</label>
-            <input id="reference" type="text" readonly>
-            <small class="help">
-              Your reference number remains unchanged when you revise
-              this submission.
-            </small>
-          </div>
+                    <div class="field">
+                        <label for="reference">Submission reference</label>
 
-          <div class="field">
-            <label for="title">Manuscript title *</label>
-            <input
-              id="title"
-              type="text"
-              maxlength="300"
-              required
-            >
-          </div>
+                        <input
+                            id="reference"
+                            type="text"
+                            readonly
+                        >
 
-          <div class="field">
-            <label for="category">Research area *</label>
-            <select id="category" required>
-              <option value="">Loading categories...</option>
-            </select>
-          </div>
+                        <small class="help">
+                            Your reference number remains unchanged when
+                            you revise this submission.
+                        </small>
+                    </div>
 
-          <div class="field">
-            <label for="submissionType">Submission type *</label>
-            <select id="submissionType" required>
-              <option value="">Select submission type</option>
-              <option value="Research Article">Research Article</option>
-              <option value="Review Article">Review Article</option>
-              <option value="Research Note">Research Note</option>
-              <option value="Technical Note">Technical Note</option>
-              <option value="Method">Method</option>
-              <option value="Educational Resource">
-                Educational Resource
-              </option>
-              <option value="Research Proposal">Research Proposal</option>
-            </select>
-          </div>
+                    <div class="field">
+                        <label for="title">Manuscript title *</label>
 
-          <div class="field">
-            <label for="keywords">Keywords</label>
-            <input
-              id="keywords"
-              type="text"
-              maxlength="1000"
-              placeholder="e.g. Biochemistry, analytical chemistry, data analysis"
-            >
-          </div>
+                        <input
+                            id="title"
+                            type="text"
+                            maxlength="300"
+                            required
+                        >
+                    </div>
 
-          <div class="field">
-            <label for="institution">Institution / affiliation</label>
-            <input
-              id="institution"
-              type="text"
-              maxlength="500"
-            >
-          </div>
+                    <div class="field">
+                        <label for="category">Research area *</label>
 
-          <div class="field">
-            <label for="abstract">Abstract / research summary *</label>
-            <textarea
-              id="abstract"
-              required
-              placeholder="Enter your research objectives, methods, major findings and conclusion."
-            ></textarea>
-          </div>
+                        <select id="category" required>
+                            <option value="">Loading categories...</option>
+                        </select>
+                    </div>
 
-          <div class="field">
-            <label>Current manuscript file</label>
+                    <div class="field">
+                        <label for="submissionType">Submission type *</label>
 
-            <div class="file-box">
-              <p id="currentFile">
-                Checking the current manuscript...
-              </p>
+                        <select id="submissionType" required>
+                            <option value="">Select submission type</option>
+                            <option value="Research Article">
+                                Research Article
+                            </option>
+                            <option value="Review Article">
+                                Review Article
+                            </option>
+                            <option value="Research Note">
+                                Research Note
+                            </option>
+                            <option value="Technical Note">
+                                Technical Note
+                            </option>
+                            <option value="Method">Method</option>
+                            <option value="Educational Resource">
+                                Educational Resource
+                            </option>
+                            <option value="Research Proposal">
+                                Research Proposal
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="keywords">Keywords</label>
+
+                        <input
+                            id="keywords"
+                            type="text"
+                            maxlength="1000"
+                            placeholder="e.g. Biochemistry, analytical chemistry, data analysis"
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="institution">
+                            Institution / affiliation
+                        </label>
+
+                        <input
+                            id="institution"
+                            type="text"
+                            maxlength="500"
+                        >
+                    </div>
+
+                    <div class="field">
+                        <label for="abstract">
+                            Abstract / research summary *
+                        </label>
+
+                        <textarea
+                            id="abstract"
+                            required
+                            placeholder="Enter your research objectives, methods, major findings and conclusion."
+                        ></textarea>
+                    </div>
+
+                    <div class="field">
+                        <label>Current manuscript file</label>
+
+                        <div class="file-box">
+                            <p id="currentFile">
+                                Checking the current manuscript...
+                            </p>
+                        </div>
+
+                        <small class="help">
+                            Your current manuscript remains in private storage.
+                            It will not be made public by this editing process.
+                        </small>
+                    </div>
+
+                    <div class="field">
+                        <label for="manuscript">
+                            Replace manuscript file (optional)
+                        </label>
+
+                        <input
+                            id="manuscript"
+                            type="file"
+                            accept=".pdf,.doc,.docx,.txt"
+                        >
+
+                        <small class="help">
+                            Accepted formats: PDF, DOC, DOCX and TXT.
+                            Maximum size: 10 MB. Leave this empty if you do not
+                            need to replace the current file.
+                        </small>
+                    </div>
+
+                    <div class="notice">
+                        <strong>Before resubmitting:</strong>
+
+                        <p>
+                            Verify that the information is correct.
+                            Resubmission returns your manuscript to the
+                            editorial workflow. Editorial decisions and
+                            reviewer notes cannot be changed from this page.
+                        </p>
+                    </div>
+
+                    <div class="actions">
+
+                        <button
+                            id="saveButton"
+                            class="action-button primary-button"
+                            type="submit"
+                        >
+                            Save and Resubmit
+                        </button>
+
+                        <a
+                            class="action-button secondary-button"
+                            href="dashboard.html"
+                        >
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+                <div
+                    id="result"
+                    class="result"
+                    role="status"
+                    aria-live="polite"
+                    hidden
+                ></div>
+
+                <div class="actions">
+                    <a
+                        class="action-button secondary-button"
+                        href="dashboard.html"
+                    >
+                        Return to Author Dashboard
+                    </a>
+                </div>
+
             </div>
-
-            <small class="help">
-              Your current manuscript remains in private storage.
-              It will not be made public by this editing process.
-            </small>
-          </div>
-
-          <div class="field">
-            <label for="manuscript">
-              Replace manuscript file (optional)
-            </label>
-
-            <input
-              id="manuscript"
-              type="file"
-              accept=".pdf,.doc,.docx,.txt"
-            >
-
-            <small class="help">
-              Accepted formats: PDF, DOC, DOCX and TXT.
-              Maximum size: 10 MB. Leave this empty if you do not
-              need to replace the current file.
-            </small>
-          </div>
-
-          <div class="notice">
-            <strong>Before resubmitting:</strong>
-            <p>
-              Verify that the information is correct. Resubmission
-              returns your manuscript to the editorial workflow.
-              Editorial decisions and reviewer notes cannot be changed
-              from this page.
-            </p>
-          </div>
-
-          <div class="actions">
-
-            <button
-              id="saveButton"
-              class="action-button primary-button"
-              type="submit"
-            >
-              Save and Resubmit
-            </button>
-
-            <a
-              class="action-button secondary-button"
-              href="dashboard.html"
-            >
-              Cancel
-            </a>
-
-          </div>
-
-        </form>
-
-        <div
-          id="result"
-          class="result"
-          role="status"
-          aria-live="polite"
-          hidden
-        ></div>
-
-        <div class="actions">
-          <a
-            class="action-button secondary-button"
-            href="dashboard.html"
-          >
-            Return to Author Dashboard
-          </a>
         </div>
+    </main>
 
-      </div>
-    </div>
-  </main>
+    <div id="footer"></div>
 
-  <div id="footer"></div>
+    <script src="app.js"></script>
 
-  <script src="app.js"></script>
+    <script type="module">
+        import { supabase } from "./supabase-config.js";
 
-  <script type="module">
-    import { supabase } from "./supabase-config.js";
+        const form = document.querySelector("#editForm");
+        const notice = document.querySelector("#statusNotice");
+        const result = document.querySelector("#result");
+        const saveButton = document.querySelector("#saveButton");
 
-    const form = document.querySelector("#editForm");
-    const notice = document.querySelector("#statusNotice");
-    const result = document.querySelector("#result");
-    const saveButton = document.querySelector("#saveButton");
+        const titleInput = document.querySelector("#title");
+        const categorySelect = document.querySelector("#category");
+        const typeSelect = document.querySelector("#submissionType");
+        const keywordsInput = document.querySelector("#keywords");
+        const institutionInput = document.querySelector("#institution");
+        const abstractInput = document.querySelector("#abstract");
+        const manuscriptInput = document.querySelector("#manuscript");
 
-    const titleInput = document.querySelector("#title");
-    const categorySelect = document.querySelector("#category");
-    const typeSelect = document.querySelector("#submissionType");
-    const keywordsInput = document.querySelector("#keywords");
-    const institutionInput = document.querySelector("#institution");
-    const abstractInput = document.querySelector("#abstract");
-    const manuscriptInput = document.querySelector("#manuscript");
+        const currentFile = document.querySelector("#currentFile");
+        const referenceInput = document.querySelector("#reference");
 
-    const currentFile = document.querySelector("#currentFile");
-    const referenceInput = document.querySelector("#reference");
+        const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
-    const MAX_FILE_SIZE = 10 * 1024 * 1024;
+        const EDITABLE_STATUSES = [
+            "draft",
+            "revision_required"
+        ];
 
-    const EDITABLE_STATUSES = [
-      "draft",
-      "revision_required"
-    ];
+        const ALLOWED_TYPES = [
+            "Research Article",
+            "Review Article",
+            "Research Note",
+            "Technical Note",
+            "Method",
+            "Educational Resource",
+            "Research Proposal"
+        ];
 
-    const ALLOWED_TYPES = [
-      "Research Article",
-      "Review Article",
-      "Research Note",
-      "Technical Note",
-      "Method",
-      "Educational Resource",
-      "Research Proposal"
-    ];
+        let sessionUser = null;
+        let submission = null;
+        let busy = false;
 
-    let sessionUser = null;
-    let submission = null;
-    let busy = false;
+        const params = new URLSearchParams(window.location.search);
+        const submissionId = params.get("id");
 
-    const params = new URLSearchParams(window.location.search);
-    const submissionId = params.get("id");
+        function showNotice(message, error = false) {
+            notice.textContent = message;
 
-    function showNotice(message, error = false) {
-      notice.textContent = message;
-      notice.style.background = error ? "#fff0f0" : "#edf5ff";
-      notice.style.borderLeftColor = error ? "#b42323" : "#2463a6";
-      notice.style.color = error ? "#8c2020" : "#173d69";
-    }
+            notice.style.background = error
+                ? "#fff0f0"
+                : "#edf5ff";
 
-    function showResult(message, type = "info") {
-      result.replaceChildren();
+            notice.style.borderLeftColor = error
+                ? "#b42323"
+                : "#2463a6";
 
-      const paragraph = document.createElement("p");
-      paragraph.textContent = message;
-
-      result.appendChild(paragraph);
-      result.className = "result " + type;
-      result.hidden = false;
-
-      result.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-    }
-
-    function hideResult() {
-      result.hidden = true;
-      result.replaceChildren();
-    }
-
-    function safeFileName(name) {
-      const cleaned = name
-        .normalize("NFKD")
-        .replace(/[^a-zA-Z0-9._-]/g, "_")
-        .replace(/_+/g, "_")
-        .slice(-150);
-
-      return cleaned || "manuscript";
-    }
-
-    function validateFile(file) {
-      if (!file) return null;
-
-      if (file.size === 0) {
-        return "The selected file is empty.";
-      }
-
-      if (file.size > MAX_FILE_SIZE) {
-        return "The manuscript exceeds the 10 MB file-size limit.";
-      }
-
-      if (!/\.(pdf|doc|docx|txt)$/i.test(file.name)) {
-        return "Unsupported file type. Use PDF, DOC, DOCX or TXT.";
-      }
-
-      return null;
-    }
-
-    function canEdit(status) {
-      return EDITABLE_STATUSES.includes(status);
-    }
-
-    function displayCurrentFile(path) {
-      if (!path) {
-        currentFile.textContent =
-          "No manuscript path is recorded for this submission.";
-        return;
-      }
-
-      const filename = path.split("/").pop() || "Manuscript file";
-      currentFile.textContent = filename;
-    }
-
-    async function getSession() {
-      const {
-        data: { session },
-        error
-      } = await supabase.auth.getSession();
-
-      if (error) throw error;
-
-      if (!session) {
-        throw new Error(
-          "You must sign in to your author account before editing a submission."
-        );
-      }
-
-      return session;
-    }
-
-    async function loadCategories(selectedId) {
-      const { data, error } = await supabase
-        .from("categories")
-        .select("id,name")
-        .order("name");
-
-      if (error) throw error;
-
-      categorySelect.replaceChildren();
-
-      const placeholder = document.createElement("option");
-      placeholder.value = "";
-      placeholder.textContent = "Select a research area";
-      categorySelect.appendChild(placeholder);
-
-      (data || []).forEach(category => {
-        const option = document.createElement("option");
-        option.value = category.id;
-        option.textContent = category.name;
-        categorySelect.appendChild(option);
-      });
-
-      if (selectedId) {
-        categorySelect.value = selectedId;
-      }
-    }
-
-    async function initialize() {
-      try {
-        if (!submissionId) {
-          throw new Error(
-            "No submission ID was provided. Open this page using the Edit or Revise button in your author dashboard."
-          );
+            notice.style.color = error
+                ? "#8c2020"
+                : "#173d69";
         }
 
-        sessionUser = await getSession();
+        function showResult(message, type = "info") {
+            result.replaceChildren();
 
-        const { data, error } = await supabase
-          .from("submissions")
-          .select(
-            "id,title,abstract,manuscript_url,category_id,submitted_by,status,submission_type,keywords,institution,submission_reference"
-          )
-          .eq("id", submissionId)
-          .eq("submitted_by", sessionUser.user.id)
-          .maybeSingle();
+            const paragraph = document.createElement("p");
+            paragraph.textContent = message;
 
-        if (error) throw error;
+            result.appendChild(paragraph);
+            result.className = "result " + type;
+            result.hidden = false;
 
-        if (!data) {
-          throw new Error(
-            "This submission could not be found under your author account. Check that you are signed in to the correct account."
-          );
+            result.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
         }
 
-        submission = data;
-
-        if (!canEdit(submission.status)) {
-          throw new Error(
-            "This submission cannot be edited because its current status is '" +
-            submission.status +
-            "'. Authors may edit drafts or manuscripts marked revision required."
-          );
+        function hideResult() {
+            result.hidden = true;
+            result.replaceChildren();
         }
 
-        await loadCategories(submission.category_id);
+        function safeFileName(name) {
+            const cleaned = name
+                .normalize("NFKD")
+                .replace(/[^a-zA-Z0-9._-]/g, "_")
+                .replace(/_+/g, "_")
+                .slice(-150);
 
-        titleInput.value = submission.title || "";
-        abstractInput.value = submission.abstract || "";
-        typeSelect.value = submission.submission_type || "";
-        keywordsInput.value = submission.keywords || "";
-        institutionInput.value = submission.institution || "";
-        referenceInput.value = submission.submission_reference || submission.id;
-
-        displayCurrentFile(submission.manuscript_url);
-
-        document.querySelector("#pageTitle").textContent =
-          submission.status === "revision_required"
-            ? "Revise Your Manuscript"
-            : "Edit Your Draft";
-
-        showNotice(
-          submission.status === "revision_required"
-            ? "The editor has requested a revision. Update your manuscript details and resubmit when ready."
-            : "You are editing a draft. Review the details before submitting it for editorial consideration."
-        );
-
-        form.hidden = false;
-
-      } catch (error) {
-        console.error("Edit page initialization error:", error);
-
-        showNotice(
-          error.message || "Unable to load this submission.",
-          true
-        );
-
-        form.hidden = true;
-      }
-    }
-
-    form.addEventListener("submit", async event => {
-      event.preventDefault();
-      hideResult();
-
-      if (busy) return;
-
-      if (!sessionUser || !submission) {
-        showResult(
-          "The submission has not loaded. Refresh the page and try again.",
-          "error"
-        );
-        return;
-      }
-
-      if (!form.reportValidity()) return;
-
-      if (!canEdit(submission.status)) {
-        showResult(
-          "This submission is no longer editable.",
-          "error"
-        );
-        return;
-      }
-
-      const title = titleInput.value.trim();
-      const abstract = abstractInput.value.trim();
-      const categoryId = categorySelect.value;
-      const submissionType = typeSelect.value;
-      const keywords = keywordsInput.value.trim();
-      const institution = institutionInput.value.trim();
-      const replacementFile = manuscriptInput.files[0] || null;
-
-      if (!title || !abstract || !categoryId || !submissionType) {
-        showResult(
-          "Please complete all required fields.",
-          "error"
-        );
-        return;
-      }
-
-      if (!ALLOWED_TYPES.includes(submissionType)) {
-        showResult(
-          "Select a valid submission type.",
-          "error"
-        );
-        return;
-      }
-
-      if (replacementFile && !submission.manuscript_url) {
-        showResult(
-          "This record has no current manuscript path. Please contact the site administrator before replacing the file.",
-          "error"
-        );
-        return;
-      }
-
-      const fileError = validateFile(replacementFile);
-
-      if (fileError) {
-        showResult(fileError, "error");
-        return;
-      }
-
-      busy = true;
-      saveButton.disabled = true;
-      saveButton.textContent = "Saving revision...";
-
-      let uploadedPath = null;
-
-      try {
-        /*
-         * Refresh authentication before writing to Supabase.
-         */
-        const {
-          data: { session },
-          error: sessionError
-        } = await supabase.auth.getSession();
-
-        if (sessionError) throw sessionError;
-
-        if (!session || session.user.id !== sessionUser.user.id) {
-          throw new Error(
-            "Your login session has expired or changed. Sign in again."
-          );
+            return cleaned || "manuscript";
         }
 
-        /*
-         * Reload the record to ensure it is still editable.
-         */
-        const { data: latest, error: latestError } = await supabase
-          .from("submissions")
-          .select("id,status,submitted_by,manuscript_url,submission_reference")
-          .eq("id", submission.id)
-          .eq("submitted_by", session.user.id)
-          .maybeSingle();
+        function validateFile(file) {
+            if (!file) {
+                return null;
+            }
 
-        if (latestError) throw latestError;
+            if (file.size === 0) {
+                return "The selected file is empty.";
+            }
 
-        if (!latest) {
-          throw new Error(
-            "The submission could not be found or is no longer accessible."
-          );
+            if (file.size > MAX_FILE_SIZE) {
+                return "The manuscript exceeds the 10 MB file-size limit.";
+            }
+
+            if (!/\.(pdf|doc|docx|txt)$/i.test(file.name)) {
+                return "Unsupported file type. Use PDF, DOC, DOCX or TXT.";
+            }
+
+            return null;
         }
 
-        if (!canEdit(latest.status)) {
-          throw new Error(
-            "The submission status has changed to '" +
-            latest.status +
-            "'. It can no longer be edited from this page."
-          );
+        function canEdit(status) {
+            return EDITABLE_STATUSES.includes(status);
         }
 
-        /*
-         * Build the database update.
-         * Protected editorial fields are deliberately not changed.
-         */
-        const patch = {
-          title,
-          abstract,
-          category_id: categoryId,
-          submission_type: submissionType,
-          keywords: keywords || null,
-          institution: institution || null,
-          status: "submitted"
-        };
+        function displayCurrentFile(path) {
+            if (!path) {
+                currentFile.textContent =
+                    "No manuscript path is recorded for this submission.";
 
-        /*
-         * A replacement is stored under the authenticated user's
-         * UUID so the existing private-storage policy can enforce
-         * ownership. The bucket remains private.
-         */
-        if (replacementFile) {
-          const reference =
-            latest.submission_reference || latest.id;
+                return;
+            }
 
-          const newPath =
-            session.user.id + "/" +
-            reference + "/revision-" +
-            Date.now() + "-" +
-            safeFileName(replacementFile.name);
+            const filename = path.split("/").pop() || "Manuscript file";
 
-          const { data: uploaded, error: uploadError } =
-            await supabase.storage
-              .from("manuscripts")
-              .upload(newPath, replacementFile, {
-                cacheControl: "3600",
-                upsert: false
-              });
-
-          if (uploadError) throw uploadError;
-
-          uploadedPath = uploaded.path;
-          patch.manuscript_url = uploadedPath;
+            currentFile.textContent = filename;
         }
 
-        /*
-         * Update only this author's submission.
-         */
-        const { data: updated, error: updateError } = await supabase
-          .from("submissions")
-          .update(patch)
-          .eq("id", submission.id)
-          .eq("submitted_by", session.user.id)
-          .select("id,status,submission_reference")
-          .maybeSingle();
+        async function getSession() {
+            const {
+                data: { session },
+                error
+            } = await supabase.auth.getSession();
 
-        if (updateError) throw updateError;
+            if (error) {
+                throw error;
+            }
 
-        if (!updated) {
-          throw new Error(
-            "Supabase did not update the submission. Check the author update policy and the submission's current status."
-          );
+            if (!session) {
+                throw new Error(
+                    "You must sign in to your author account before editing a submission."
+                );
+            }
+
+            return session;
         }
 
-        submission.status = updated.status;
+        async function loadCategories(selectedId) {
+            const { data, error } = await supabase
+                .from("categories")
+                .select("id,name")
+                .order("name");
 
-        if (uploadedPath) {
-          submission.manuscript_url = uploadedPath;
+            if (error) {
+                throw error;
+            }
+
+            categorySelect.replaceChildren();
+
+            const placeholder = document.createElement("option");
+            placeholder.value = "";
+            placeholder.textContent = "Select a research area";
+
+            categorySelect.appendChild(placeholder);
+
+            (data || []).forEach(category => {
+                const option = document.createElement("option");
+
+                option.value = category.id;
+                option.textContent = category.name;
+
+                categorySelect.appendChild(option);
+            });
+
+            if (selectedId) {
+                categorySelect.value = selectedId;
+            }
         }
 
-        form.hidden = true;
+        async function initialize() {
+            try {
+                if (!submissionId) {
+                    throw new Error(
+                        "No submission ID was provided. Open this page using the Edit or Revise button in your author dashboard."
+                    );
+                }
 
-        showNotice(
-          "Your revision has been saved and resubmitted. It is now awaiting editorial processing."
-        );
+                sessionUser = await getSession();
 
-        showResult(
-          "Your submission was resubmitted successfully. Reference: " +
-          (updated.submission_reference || submission.id) +
-          ". You can track its status from your author dashboard.",
-          "success"
-        );
+                const { data, error } = await supabase
+                    .from("submissions")
+                    .select(
+                        "id,title,abstract,manuscript_url,category_id,submitted_by,status,submission_type,keywords,institution,submission_reference"
+                    )
+                    .eq("id", submissionId)
+                    .eq("submitted_by", sessionUser.user.id)
+                    .maybeSingle();
 
-        const dashboardLink = document.createElement("a");
-        dashboardLink.href = "dashboard.html";
-        dashboardLink.className =
-          "action-button primary-button";
-        dashboardLink.textContent = "Return to My Submissions";
+                if (error) {
+                    throw error;
+                }
 
-        result.appendChild(document.createElement("br"));
-        result.appendChild(document.createElement("br"));
-        result.appendChild(dashboardLink);
+                if (!data) {
+                    throw new Error(
+                        "This submission could not be found under your author account. Check that you are signed in to the correct account."
+                    );
+                }
 
-      } catch (error) {
-        console.error("Revision submission error:", error);
+                submission = data;
 
-        /*
-         * If the database update fails after a new upload, attempt
-         * to remove only the newly uploaded file. Never remove the
-         * previous manuscript here.
-         */
-        if (uploadedPath) {
-          const { error: cleanupError } = await supabase.storage
-            .from("manuscripts")
-            .remove([uploadedPath]);
+                if (!canEdit(submission.status)) {
+                    throw new Error(
+                        "This submission cannot be edited because its current status is '" +
+                        submission.status +
+                        "'. Authors may edit drafts or manuscripts marked revision required."
+                    );
+                }
 
-          if (cleanupError) {
-            console.error(
-              "Replacement-file cleanup failed:",
-              cleanupError
-            );
-          }
+                await loadCategories(submission.category_id);
+
+                titleInput.value = submission.title || "";
+                abstractInput.value = submission.abstract || "";
+                typeSelect.value = submission.submission_type || "";
+                keywordsInput.value = submission.keywords || "";
+                institutionInput.value = submission.institution || "";
+
+                referenceInput.value =
+                    submission.submission_reference || submission.id;
+
+                displayCurrentFile(submission.manuscript_url);
+
+                document.querySelector("#pageTitle").textContent =
+                    submission.status === "revision_required"
+                        ? "Revise Your Manuscript"
+                        : "Edit Your Draft";
+
+                showNotice(
+                    submission.status === "revision_required"
+                        ? "The editor has requested a revision. Update your manuscript details and resubmit when ready."
+                        : "You are editing a draft. Review the details before submitting it for editorial consideration."
+                );
+
+                form.hidden = false;
+
+            } catch (error) {
+                console.error(
+                    "Edit page initialization error:",
+                    error
+                );
+
+                showNotice(
+                    error.message || "Unable to load this submission.",
+                    true
+                );
+
+                form.hidden = true;
+            }
         }
 
-        showResult(
-          "Unable to save your revision: " +
-          (error.message || "Unexpected error.") +
-          " Your previous manuscript has not intentionally been deleted.",
-          "error"
-        );
+        form.addEventListener("submit", async event => {
+            event.preventDefault();
+            hideResult();
 
-      } finally {
-        busy = false;
-        saveButton.disabled = false;
-        saveButton.textContent = "Save and Resubmit";
-      }
-    });
+            if (busy) {
+                return;
+            }
 
-    initialize();
-  </script>
+            if (!sessionUser || !submission) {
+                showResult(
+                    "The submission has not loaded. Refresh the page and try again.",
+                    "error"
+                );
+
+                return;
+            }
+
+            if (!form.reportValidity()) {
+                return;
+            }
+
+            if (!canEdit(submission.status)) {
+                showResult(
+                    "This submission is no longer editable.",
+                    "error"
+                );
+
+                return;
+            }
+
+            const title = titleInput.value.trim();
+            const abstract = abstractInput.value.trim();
+            const categoryId = categorySelect.value;
+            const submissionType = typeSelect.value;
+            const keywords = keywordsInput.value.trim();
+            const institution = institutionInput.value.trim();
+
+            const replacementFile =
+                manuscriptInput.files[0] || null;
+
+            if (
+                !title ||
+                !abstract ||
+                !categoryId ||
+                !submissionType
+            ) {
+                showResult(
+                    "Please complete all required fields.",
+                    "error"
+                );
+
+                return;
+            }
+
+            if (!ALLOWED_TYPES.includes(submissionType)) {
+                showResult(
+                    "Select a valid submission type.",
+                    "error"
+                );
+
+                return;
+            }
+
+            if (
+                replacementFile &&
+                !submission.manuscript_url
+            ) {
+                showResult(
+                    "This record has no current manuscript path. Please contact the site administrator before replacing the file.",
+                    "error"
+                );
+
+                return;
+            }
+
+            const fileError = validateFile(replacementFile);
+
+            if (fileError) {
+                showResult(fileError, "error");
+                return;
+            }
+
+            busy = true;
+            saveButton.disabled = true;
+            saveButton.textContent = "Saving revision...";
+
+            let uploadedPath = null;
+
+            try {
+                /*
+                 * Refresh authentication before writing to Supabase.
+                 */
+                const {
+                    data: { session },
+                    error: sessionError
+                } = await supabase.auth.getSession();
+
+                if (sessionError) {
+                    throw sessionError;
+                }
+
+                if (
+                    !session ||
+                    session.user.id !== sessionUser.user.id
+                ) {
+                    throw new Error(
+                        "Your login session has expired or changed. Sign in again."
+                    );
+                }
+
+                /*
+                 * Reload the record to ensure it is still editable.
+                 */
+                const { data: latest, error: latestError } =
+                    await supabase
+                        .from("submissions")
+                        .select(
+                            "id,status,submitted_by,manuscript_url,submission_reference"
+                        )
+                        .eq("id", submission.id)
+                        .eq("submitted_by", session.user.id)
+                        .maybeSingle();
+
+                if (latestError) {
+                    throw latestError;
+                }
+
+                if (!latest) {
+                    throw new Error(
+                        "The submission could not be found or is no longer accessible."
+                    );
+                }
+
+                if (!canEdit(latest.status)) {
+                    throw new Error(
+                        "The submission status has changed to '" +
+                        latest.status +
+                        "'. It can no longer be edited from this page."
+                    );
+                }
+
+                /*
+                 * Update the manuscript details without changing
+                 * editorial notes or other protected fields.
+                 */
+                const patch = {
+                    title,
+                    abstract,
+                    category_id: categoryId,
+                    submission_type: submissionType,
+                    keywords: keywords || null,
+                    institution: institution || null,
+                    status: "submitted"
+                };
+
+                /*
+                 * Store a replacement in the private manuscripts bucket.
+                 */
+                if (replacementFile) {
+                    const reference =
+                        latest.submission_reference || latest.id;
+
+                    const newPath =
+                        session.user.id + "/" +
+                        reference + "/revision-" +
+                        Date.now() + "-" +
+                        safeFileName(replacementFile.name);
+
+                    const {
+                        data: uploaded,
+                        error: uploadError
+                    } = await supabase.storage
+                        .from("manuscripts")
+                        .upload(
+                            newPath,
+                            replacementFile,
+                            {
+                                cacheControl: "3600",
+                                upsert: false
+                            }
+                        );
+
+                    if (uploadError) {
+                        throw uploadError;
+                    }
+
+                    uploadedPath = uploaded.path;
+                    patch.manuscript_url = uploadedPath;
+                }
+
+                /*
+                 * Update only the authenticated author's submission.
+                 */
+                const {
+                    data: updated,
+                    error: updateError
+                } = await supabase
+                    .from("submissions")
+                    .update(patch)
+                    .eq("id", submission.id)
+                    .eq("submitted_by", session.user.id)
+                    .select(
+                        "id,status,submission_reference"
+                    )
+                    .maybeSingle();
+
+                if (updateError) {
+                    throw updateError;
+                }
+
+                if (!updated) {
+                    throw new Error(
+                        "Supabase did not update the submission. Check the author update policy and the submission's current status."
+                    );
+                }
+
+                submission.status = updated.status;
+
+                if (uploadedPath) {
+                    submission.manuscript_url = uploadedPath;
+                }
+
+                form.hidden = true;
+
+                showNotice(
+                    "Your revision has been saved and resubmitted. It is now awaiting editorial processing."
+                );
+
+                showResult(
+                    "Your submission was resubmitted successfully. Reference: " +
+                    (
+                        updated.submission_reference ||
+                        submission.id
+                    ) +
+                    ". You can track its status from your author dashboard.",
+                    "success"
+                );
+
+                const dashboardLink =
+                    document.createElement("a");
+
+                dashboardLink.href = "dashboard.html";
+
+                dashboardLink.className =
+                    "action-button primary-button";
+
+                dashboardLink.textContent =
+                    "Return to My Submissions";
+
+                result.appendChild(
+                    document.createElement("br")
+                );
+
+                result.appendChild(
+                    document.createElement("br")
+                );
+
+                result.appendChild(dashboardLink);
+
+            } catch (error) {
+                console.error(
+                    "Revision submission error:",
+                    error
+                );
+
+                /*
+                 * If the database update fails after uploading a new file,
+                 * attempt to remove only that new file.
+                 */
+                if (uploadedPath) {
+                    const {
+                        error: cleanupError
+                    } = await supabase.storage
+                        .from("manuscripts")
+                        .remove([uploadedPath]);
+
+                    if (cleanupError) {
+                        console.error(
+                            "Replacement-file cleanup failed:",
+                            cleanupError
+                        );
+                    }
+                }
+
+                showResult(
+                    "Unable to save your revision: " +
+                    (
+                        error.message ||
+                        "Unexpected error."
+                    ) +
+                    " Your previous manuscript has not intentionally been deleted.",
+                    "error"
+                );
+
+            } finally {
+                busy = false;
+
+                saveButton.disabled = false;
+                saveButton.textContent = "Save and Resubmit";
+            }
+        });
+
+        initialize();
+    </script>
 
 </body>
 </html>
