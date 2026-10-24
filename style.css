@@ -854,3 +854,52 @@ flex-direction: column;
     background-position: center;
   }
 }
+/* VOC RESEARCH WORLD — CINEMATIC LABORATORY HERO */
+
+.home-visual-photo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 410px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5, 22, 36, 0.55),
+      rgba(5, 22, 36, 0.15)
+    ),
+    url("https://images.unsplash.com/photo-1748182448174-30c6b83443b9?auto=format&fit=crop&w=1600&q=85")
+      center / cover no-repeat,
+    linear-gradient(135deg, #071827, #10445a);
+}
+
+.home-visual-photo::before,
+.home-visual-photo::after {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.home-visual-photo::before {
+  border-color: rgba(96, 210, 214, 0.4);
+}
+
+.home-visual-photo::after {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.home-visual-photo .visual-core,
+.home-visual-photo .visual-label {
+  background: rgba(7, 24, 39, 0.86);
+  backdrop-filter: blur(8px);
+}
+
+.home-visual-photo .visual-core {
+  z-index: 2;
+}
+
+@media (max-width: 600px) {
+  .home-visual-photo {
+    min-height: 290px;
+    background-position: center;
+  }
+}
