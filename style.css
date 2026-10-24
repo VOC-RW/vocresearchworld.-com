@@ -810,3 +810,47 @@ align-items: flex-start;
 flex-direction: column;
 }
 }
+/* VOC RESEARCH WORLD — HOMEPAGE SCIENTIFIC HERO */
+
+.home-visual-photo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 410px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(5, 22, 36, 0.25),
+      rgba(5, 22, 36, 0.05)
+    ),
+    url("images/laboratory-hero.jpg") center / cover no-repeat,
+    linear-gradient(135deg, #071827, #10445a);
+}
+
+.home-visual-photo::before {
+  z-index: -1;
+  border-color: rgba(96, 210, 214, 0.35);
+}
+
+.home-visual-photo::after {
+  z-index: -1;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.home-visual-photo .visual-core {
+  background: rgba(7, 24, 39, 0.82);
+  backdrop-filter: blur(8px);
+}
+
+.home-visual-photo .visual-label {
+  background: rgba(7, 24, 39, 0.86);
+  backdrop-filter: blur(8px);
+}
+
+@media (max-width: 600px) {
+  .home-visual-photo {
+    min-height: 290px;
+    background-position: center;
+  }
+}
