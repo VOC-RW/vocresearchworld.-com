@@ -903,3 +903,26 @@ flex-direction: column;
     background-position: center;
   }
 }
+/* VOC RESEARCH WORLD — HERO STATUS LABEL */
+
+.home-hero .eyebrow {
+display: flex;
+align-items: center;
+gap: 10px;
+color: #65d6d3;
+font-size: 0.76rem;
+font-weight: 800;
+letter-spacing: 0.12em;
+line-height: 1.8;
+text-transform: uppercase;
+}
+
+.hero-status-dot {
+display: inline-block;
+flex: 0 0 8px;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: #65d6d3;
+box-shadow: 0 0 12px rgba(101, 214, 211, 0.7);
+}
