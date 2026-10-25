@@ -926,3 +926,94 @@ border-radius: 50%;
 background: #65d6d3;
 box-shadow: 0 0 12px rgba(101, 214, 211, 0.7);
 }
+/* VOC RESEARCH WORLD — HERO CONVERSION AND VISUAL POLISH */
+
+.home-hero .home-hero-grid {
+  position: relative;
+}
+
+.home-hero h1 {
+  max-width: 720px;
+  text-wrap: balance;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+.home-hero h1 em {
+  display: inline;
+  background: linear-gradient(90deg, #75e0df 0%, #7ec8ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.home-hero .lead {
+  max-width: 610px;
+}
+
+.home-hero .home-actions .btn {
+  min-height: 52px;
+  padding: 14px 23px;
+  border-radius: 9px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+}
+
+.home-hero .home-actions .primary {
+  color: #062033;
+  background: linear-gradient(135deg, #76e0dd, #8dd9ff);
+  border-color: transparent;
+}
+
+.home-hero .home-actions .primary:hover {
+  background: linear-gradient(135deg, #9aeeea, #b0e5ff);
+  box-shadow: 0 10px 26px rgba(96, 210, 214, 0.22);
+}
+
+.home-hero .home-actions .secondary {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(210, 235, 245, 0.45);
+  backdrop-filter: blur(8px);
+}
+
+.home-hero .home-actions .secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(117, 224, 223, 0.75);
+}
+
+.home-hero .home-metrics strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.home-visual-photo {
+  box-shadow: 0 24px 65px rgba(0, 0, 0, 0.22);
+}
+
+.home-visual-photo .visual-caption {
+  z-index: 3;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 6px;
+  background: rgba(7, 24, 39, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+@media (max-width: 600px) {
+  .home-hero .eyebrow {
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+  }
+
+  .home-hero .home-actions .btn {
+    min-height: 50px;
+  }
+
+  .home-hero .home-metrics {
+    margin-top: 30px;
+    padding-top: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero .home-actions .btn {
+    transition: none;
+  }
+}
