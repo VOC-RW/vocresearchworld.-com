@@ -108,6 +108,308 @@ td .title{font-weight:700;max-width:300px;overflow-wrap:anywhere}
   main{margin-top:20px}
   .stat,.panel{padding:14px}
 }
+  /* VOC RESEARCH WORLD — ADMIN DASHBOARD RESPONSIVE FIX */
+
+/* Keep all dashboard elements within their containers */
+.admin-nav,
+.admin-nav *,
+main,
+main * {
+  box-sizing: border-box;
+}
+
+/* Organised desktop and mobile navigation */
+.admin-nav {
+  width: 100%;
+  min-height: 0;
+  padding: 16px max(18px, calc((100% - 1180px) / 2));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.admin-nav .brand {
+  flex: 0 1 auto;
+  min-width: 0;
+  line-height: 1.4;
+}
+
+.admin-nav .brand small {
+  line-height: 1.6;
+}
+
+.admin-nav .navlinks {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px 16px;
+}
+
+.admin-nav .navlinks a,
+.admin-nav .navlinks button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  white-space: nowrap;
+}
+
+.admin-nav .navlinks a:hover,
+.admin-nav .navlinks button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Main dashboard alignment */
+main {
+  width: 100%;
+  max-width: 1216px;
+  margin: 30px auto;
+  padding: 0 18px;
+}
+
+.intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.intro > div {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.intro h1 {
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.intro p {
+  max-width: 650px;
+  margin-bottom: 0;
+}
+
+/* Consistent statistics cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.stat {
+  min-width: 0;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stat span {
+  line-height: 1.5;
+}
+
+.stat strong {
+  overflow-wrap: anywhere;
+}
+
+/* Clearer content panels */
+.panel {
+  min-width: 0;
+  margin: 22px 0;
+  padding: 22px;
+}
+
+.panel-head {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel h2 {
+  line-height: 1.3;
+}
+
+.panel > p {
+  max-width: 850px;
+}
+
+.tablewrap {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.formgrid > div {
+  min-width: 0;
+}
+
+/* Tablet layout */
+@media (max-width: 900px) {
+  .admin-nav {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 20px;
+  }
+
+  .admin-nav .navlinks {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Mobile layout */
+@media (max-width: 600px) {
+  .admin-nav {
+    position: relative;
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .admin-nav .brand {
+    display: block;
+    max-width: 100%;
+    font-size: 16px;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-nav .brand small {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+
+  .admin-nav .navlinks {
+    display: flex;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .admin-nav .navlinks a,
+  .admin-nav .navlinks button {
+    min-height: 40px;
+    padding: 9px 10px;
+    font-size: 12px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  main {
+    margin: 22px auto;
+    padding: 0 14px;
+  }
+
+  .intro {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .intro h1 {
+    font-size: 28px;
+  }
+
+  #refreshBtn {
+    align-self: flex-start;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin: 18px 0;
+  }
+
+  .stat {
+    min-height: 105px;
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .stat span {
+    font-size: 12px;
+  }
+
+  .stat strong {
+    font-size: 25px;
+  }
+
+  .panel {
+    margin: 16px 0;
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .panel-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .panel h2 {
+    font-size: 20px;
+  }
+
+  .panel-head button,
+  #assignBtn {
+    max-width: 100%;
+  }
+
+  .notice {
+    line-height: 1.55;
+  }
+
+  .formgrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .formgrid .wide {
+    grid-column: auto;
+  }
+
+  input,
+  select,
+  textarea {
+    min-width: 0;
+  }
+
+  .tablewrap table {
+    min-width: 720px;
+  }
+}
+
+/* Very narrow phones */
+@media (max-width: 360px) {
+  .admin-nav .brand {
+    font-size: 14px;
+  }
+
+  .cards {
+    gap: 8px;
+  }
+
+  .stat {
+    padding: 11px;
+  }
+
+  .stat span {
+    font-size: 11px;
+  }
+
+  .panel {
+    padding: 12px;
+  }
+}
 </style>
 </head>
 
