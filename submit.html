@@ -425,7 +425,95 @@ function validFile(file) {
 
   return null;
 }
+/* Extract readable text from DOCX, PDF and TXT manuscripts. */
+async function extractManuscriptText(file) {
+  const extension = file.name.split(".").pop().toLowerCase();
 
+  if (extension === "txt") {
+    const text = await file.text();
+
+    if (!text.trim()) {
+      throw new Error("The text file contains no readable text.");
+    }
+
+    return text.trim();
+  }
+
+  if (extension === "docx") {
+    if (!window.mammoth) {
+      throw new Error(
+        "The Word document reader could not load. Refresh the page and try again."
+      );
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await window.mammoth.extractRawText({
+      arrayBuffer: arrayBuffer
+    });
+
+    const text = (result.value || "").trim();
+
+    if (!text) {
+      throw new Error(
+        "No readable text was found in the Word document."
+      );
+    }
+
+    return text;
+  }
+
+  if (extension === "pdf") {
+    if (!window.pdfjsLib) {
+      throw new Error(
+        "The PDF reader could not load. Refresh the page and try again."
+      );
+    }
+
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+    const arrayBuffer = await file.arrayBuffer();
+
+    const pdf = await window.pdfjsLib.getDocument({
+      data: new Uint8Array(arrayBuffer)
+    }).promise;
+
+    const pages = [];
+
+    for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber++) {
+      const page = await pdf.getPage(pageNumber);
+      const pageContent = await page.getTextContent();
+
+      const pageText = pageContent.items
+        .map(item => item.str || "")
+        .join(" ");
+
+      pages.push(
+        "[Page " + pageNumber + "]\n" + pageText
+      );
+    }
+
+    const text = pages.join("\n\n").trim();
+
+    if (!text) {
+      throw new Error(
+        "No selectable text was found in the PDF. It may be a scanned document requiring OCR."
+      );
+    }
+
+    return text;
+  }
+
+  if (extension === "doc") {
+    throw new Error(
+      "Older DOC files cannot be extracted by this reader. Please save the document as DOCX or PDF and upload it again."
+    );
+  }
+
+  throw new Error(
+    "This manuscript format is not supported for automatic text extraction."
+  );
+}
 /* Load the signed-in account and research categories. */
 async function initializePage() {
   try {
