@@ -1,1 +1,825 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="VOC Research World author profiles and research contributions."><title>Authors | VOC Research World</title><link rel="stylesheet" href="style.css"></head><body><div id="header"></div><section class="page"><div class="wrap"><p class="eyebrow">RESEARCHERS</p><h1>People behind the science.</h1><p>Professional scientific profiles connected to articles, research projects and publications.</p></div></section><section class="content"><div class="wrap cards three" id="authorsGrid"></div></section><div id="footer"></div><script src="data.js"></script><script src="app.js"></script><script>document.getElementById('authorsGrid').innerHTML=Object.values(VOC_AUTHORS).map(a=>`<article><div class="meta">${esc(a.role)}</div><h3>${esc(a.name)}</h3><p>${esc(a.bio)}</p><p><b>Research interests</b><br>${a.interests.map(esc).join(' · ')}</p><a href="author.html?id=${encodeURIComponent(a.id)}">View profile →</a></article>`).join('');</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Join the VOC Research World author community. Create an account, develop your research profile, submit manuscripts, and contribute to scientific knowledge.">
+  <meta name="theme-color" content="#061827">
+  <title>Authors & Researchers | VOC Research World</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --ar-navy: #061827;
+      --ar-blue: #1687c9;
+      --ar-cyan: #60d2d6;
+      --ar-green: #55b77a;
+      --ar-text: #203446;
+      --ar-muted: #64748b;
+      --ar-border: #dfe9f0;
+      --ar-light: #f3f8fc;
+    }
+
+    .ar-page {
+      color: var(--ar-text);
+      overflow: hidden;
+    }
+
+    .ar-wrap {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+    }
+
+    .ar-hero {
+      position: relative;
+      padding: 76px 0;
+      color: #fff;
+      background:
+        radial-gradient(circle at 85% 18%, rgba(96,210,214,.2), transparent 28%),
+        radial-gradient(circle at 10% 100%, rgba(22,135,201,.23), transparent 36%),
+        linear-gradient(130deg, #061827, #0b2d46 65%, #10425b);
+    }
+
+    .ar-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .12;
+      background-image:
+        linear-gradient(rgba(255,255,255,.2) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.2) 1px, transparent 1px);
+      background-size: 42px 42px;
+    }
+
+    .ar-hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .ar-eyebrow {
+      display: inline-block;
+      padding: 9px 13px;
+      border: 1px solid rgba(96,210,214,.45);
+      border-radius: 30px;
+      color: #a5efed;
+      font-size: .76rem;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+    }
+
+    .ar-hero h1 {
+      margin: 22px 0 17px;
+      color: white;
+      font-size: clamp(2.4rem, 5.3vw, 4.25rem);
+      line-height: 1.08;
+      letter-spacing: -1.4px;
+    }
+
+    .ar-hero h1 span {
+      color: var(--ar-cyan);
+    }
+
+    .ar-hero p {
+      max-width: 650px;
+      color: #d2e1eb;
+      font-size: 1.04rem;
+      line-height: 1.85;
+    }
+
+    .ar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .ar-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 47px;
+      padding: 12px 18px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: var(--ar-blue);
+      color: #fff;
+      font-weight: 800;
+      text-align: center;
+      text-decoration: none;
+      transition: transform .2s ease, filter .2s ease;
+    }
+
+    .ar-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+
+    .ar-btn-outline {
+      border-color: rgba(255,255,255,.4);
+      background: rgba(255,255,255,.06);
+      color: white;
+    }
+
+    .ar-hero-panel {
+      padding: 27px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 17px;
+      background: rgba(255,255,255,.07);
+      box-shadow: 0 22px 60px rgba(0,0,0,.14);
+      backdrop-filter: blur(8px);
+    }
+
+    .ar-hero-panel h2 {
+      margin: 0 0 18px;
+      color: white;
+      font-size: 1.25rem;
+    }
+
+    .ar-benefit {
+      display: flex;
+      gap: 13px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,.13);
+    }
+
+    .ar-benefit:last-child {
+      border-bottom: 0;
+    }
+
+    .ar-benefit-icon {
+      display: grid;
+      flex: 0 0 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(96,210,214,.14);
+      font-size: 1.1rem;
+    }
+
+    .ar-benefit strong {
+      display: block;
+      margin-bottom: 5px;
+      color: white;
+    }
+
+    .ar-benefit small {
+      color: #c7d9e5;
+      line-height: 1.6;
+    }
+
+    .ar-section {
+      padding: 66px 0;
+    }
+
+    .ar-section-light {
+      background: var(--ar-light);
+    }
+
+    .ar-heading {
+      max-width: 760px;
+      margin-bottom: 30px;
+    }
+
+    .ar-kicker {
+      color: var(--ar-blue);
+      font-size: .76rem;
+      font-weight: 900;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    .ar-heading h2 {
+      margin: 10px 0 12px;
+      color: var(--ar-navy);
+      font-size: clamp(1.8rem, 3.5vw, 2.65rem);
+      line-height: 1.2;
+    }
+
+    .ar-heading p {
+      color: var(--ar-muted);
+      line-height: 1.8;
+    }
+
+    .ar-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 19px;
+    }
+
+    .ar-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 25px;
+      border: 1px solid var(--ar-border);
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 5px 20px rgba(6,24,39,.035);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .ar-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 32px rgba(6,24,39,.08);
+    }
+
+    .ar-icon {
+      display: grid;
+      width: 49px;
+      height: 49px;
+      margin-bottom: 17px;
+      place-items: center;
+      border-radius: 13px;
+      background: #e8f5fc;
+      font-size: 1.4rem;
+    }
+
+    .ar-card h3 {
+      margin: 0 0 10px;
+      color: var(--ar-navy);
+      font-size: 1.12rem;
+    }
+
+    .ar-card p {
+      flex: 1;
+      margin: 0 0 19px;
+      color: var(--ar-muted);
+      font-size: .94rem;
+      line-height: 1.8;
+    }
+
+    .ar-link {
+      align-self: flex-start;
+      color: #0879b7;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .ar-link:hover {
+      text-decoration: underline;
+    }
+
+    .ar-register-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 25px;
+      align-items: center;
+      padding: 30px;
+      border: 1px solid #c5e6d1;
+      border-radius: 15px;
+      background: #f0fbf4;
+    }
+
+    .ar-register-box h2 {
+      margin: 0 0 10px;
+      color: #174d32;
+      font-size: 1.55rem;
+    }
+
+    .ar-register-box p {
+      margin: 0;
+      color: #456754;
+      line-height: 1.8;
+    }
+
+    .ar-register-box .ar-btn {
+      background: #218653;
+    }
+
+    .ar-steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .ar-step {
+      padding: 22px;
+      border-top: 3px solid var(--ar-blue);
+      border-radius: 9px;
+      background: white;
+    }
+
+    .ar-step-number {
+      color: var(--ar-blue);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .ar-step h3 {
+      margin: 12px 0 8px;
+      color: var(--ar-navy);
+      font-size: 1rem;
+    }
+
+    .ar-step p {
+      margin: 0;
+      color: var(--ar-muted);
+      font-size: .9rem;
+      line-height: 1.75;
+    }
+
+    .ar-profiles {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 19px;
+    }
+
+    .ar-profile {
+      padding: 24px;
+      border: 1px solid var(--ar-border);
+      border-radius: 13px;
+      background: white;
+    }
+
+    .ar-profile h3 {
+      margin: 9px 0;
+      color: var(--ar-navy);
+    }
+
+    .ar-profile p {
+      color: var(--ar-muted);
+      font-size: .93rem;
+      line-height: 1.75;
+      overflow-wrap: anywhere;
+    }
+
+    .ar-role {
+      color: var(--ar-blue);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+    }
+
+    .ar-tag {
+      display: inline-block;
+      margin: 3px 4px 3px 0;
+      padding: 5px 8px;
+      border-radius: 20px;
+      background: #eaf5fb;
+      color: #17628c;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+
+    .ar-empty {
+      grid-column: 1 / -1;
+      padding: 24px;
+      border: 1px dashed #b9cbd8;
+      border-radius: 12px;
+      color: var(--ar-muted);
+      line-height: 1.8;
+    }
+
+    .ar-integrity {
+      padding: 27px;
+      border-left: 4px solid var(--ar-green);
+      border-radius: 10px;
+      background: white;
+    }
+
+    .ar-integrity h3 {
+      margin: 0 0 10px;
+      color: var(--ar-navy);
+    }
+
+    .ar-integrity p {
+      margin: 0;
+      color: var(--ar-muted);
+      line-height: 1.85;
+    }
+
+    .ar-final {
+      padding: 52px 25px;
+      border-radius: 18px;
+      background: linear-gradient(120deg, #061827, #10415d);
+      text-align: center;
+      color: white;
+    }
+
+    .ar-final h2 {
+      margin: 0 0 12px;
+      color: white;
+      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+    }
+
+    .ar-final p {
+      max-width: 680px;
+      margin: 0 auto;
+      color: #d1e2ec;
+      line-height: 1.8;
+    }
+
+    .ar-final .ar-actions {
+      justify-content: center;
+    }
+
+    @media (max-width: 900px) {
+      .ar-hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ar-grid,
+      .ar-profiles {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .ar-steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 580px) {
+      .ar-hero {
+        padding: 50px 0;
+      }
+
+      .ar-section {
+        padding: 45px 0;
+      }
+
+      .ar-grid,
+      .ar-profiles,
+      .ar-steps {
+        grid-template-columns: 1fr;
+      }
+
+      .ar-register-box {
+        grid-template-columns: 1fr;
+        padding: 23px;
+      }
+
+      .ar-actions .ar-btn {
+        width: 100%;
+      }
+
+      .ar-hero-panel {
+        padding: 21px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header"></div>
+
+  <main class="ar-page">
+
+    <!-- HERO -->
+    <section class="ar-hero">
+      <div class="ar-wrap ar-hero-grid">
+
+        <div>
+          <span class="ar-eyebrow">VOC RESEARCH COMMUNITY</span>
+
+          <h1>
+            Ideas become discoveries.
+            <span>Research creates impact.</span>
+          </h1>
+
+          <p>
+            VOC Research World welcomes students, early-career researchers,
+            laboratory scientists, and established academics who are committed
+            to advancing scientific knowledge through responsible research.
+            Begin your researcher journey and learn how to contribute.
+          </p>
+
+          <div class="ar-actions">
+            <a class="ar-btn" href="auth.html">Become an Author →</a>
+            <a class="ar-btn ar-btn-outline" href="#author-profiles">
+              Meet Our Authors
+            </a>
+          </div>
+        </div>
+
+        <aside class="ar-hero-panel">
+          <h2>Your researcher workspace</h2>
+
+          <div class="ar-benefit">
+            <div class="ar-benefit-icon">👤</div>
+            <div>
+              <strong>Create your account</strong>
+              <small>Register using your name, email address, and a secure password.</small>
+            </div>
+          </div>
+
+          <div class="ar-benefit">
+            <div class="ar-benefit-icon">📄</div>
+            <div>
+              <strong>Submit your research</strong>
+              <small>Prepare a manuscript and submit it through the research submission page.</small>
+            </div>
+          </div>
+
+          <div class="ar-benefit">
+            <div class="ar-benefit-icon">📊</div>
+            <div>
+              <strong>Track your submissions</strong>
+              <small>Use your author dashboard to check available submission information and notifications.</small>
+            </div>
+          </div>
+
+          <div class="ar-benefit">
+            <div class="ar-benefit-icon">🔬</div>
+            <div>
+              <strong>Contribute responsibly</strong>
+              <small>Follow scientific integrity, appropriate citation, and the editorial process.</small>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- REGISTRATION PATHWAY -->
+    <section class="ar-section">
+      <div class="ar-wrap">
+
+        <div class="ar-heading">
+          <span class="ar-kicker">Join the community</span>
+          <h2>How to become a VOC Research World author</h2>
+          <p>
+            You can begin with an account and develop your research contribution
+            from there. Follow the steps below to access the author portal.
+          </p>
+        </div>
+
+        <div class="ar-grid">
+
+          <article class="ar-card">
+            <div class="ar-icon">01</div>
+            <h3>Create your account</h3>
+            <p>
+              Open the account access page, select Create account, enter your
+              full name and email address, and choose a password of at least
+              eight characters. Complete email confirmation if requested.
+            </p>
+            <a class="ar-link" href="auth.html">Register now →</a>
+          </article>
+
+          <article class="ar-card">
+            <div class="ar-icon">02</div>
+            <h3>Access your dashboard</h3>
+            <p>
+              After registering and signing in, use your author dashboard to
+              view your submission history, check manuscript status, and
+              access available notifications.
+            </p>
+            <a class="ar-link" href="dashboard.html">Open author dashboard →</a>
+          </article>
+
+          <article class="ar-card">
+            <div class="ar-icon">03</div>
+            <h3>Submit your manuscript</h3>
+            <p>
+              Prepare your manuscript, check the submission requirements,
+              provide accurate details, and submit your research through
+              the designated submission form.
+            </p>
+            <a class="ar-link" href="submit.html">Submit research →</a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTHOR ACCOUNT CTA -->
+    <section class="ar-section ar-section-light">
+      <div class="ar-wrap">
+        <div class="ar-register-box">
+          <div>
+            <h2>Your research journey can begin today.</h2>
+            <p>
+              New to VOC Research World? Create an account to access the
+              author portal. Already registered? Sign in to continue.
+              Registration does not guarantee manuscript acceptance or
+              publication; submissions are subject to the applicable editorial
+              requirements and review process.
+            </p>
+          </div>
+
+          <div class="ar-actions">
+            <a class="ar-btn" href="auth.html">Create Account</a>
+            <a class="ar-btn" style="background:#061827" href="auth.html">
+              Log In
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTHOR PROFILES -->
+    <section class="ar-section" id="author-profiles">
+      <div class="ar-wrap">
+
+        <div class="ar-heading">
+          <span class="ar-kicker">Research community</span>
+          <h2>People behind the science</h2>
+          <p>
+            Explore the author profiles currently featured on VOC Research
+            World, including their research interests and areas of contribution.
+          </p>
+        </div>
+
+        <div class="ar-profiles" id="authorsGrid" aria-live="polite">
+          <div class="ar-empty">Loading author profiles…</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- PUBLICATION PATHWAY -->
+    <section class="ar-section ar-section-light">
+      <div class="ar-wrap">
+
+        <div class="ar-heading">
+          <span class="ar-kicker">From manuscript to publication</span>
+          <h2>Understand the research publication pathway</h2>
+          <p>
+            Scientific publication involves more than uploading a document.
+            A manuscript must meet the applicable requirements and undergo
+            the relevant editorial process.
+          </p>
+        </div>
+
+        <div class="ar-steps">
+
+          <article class="ar-step">
+            <span class="ar-step-number">STAGE 01</span>
+            <h3>Prepare your work</h3>
+            <p>
+              Develop your research question, use appropriate methods,
+              analyze the evidence, and write a clear manuscript.
+            </p>
+          </article>
+
+          <article class="ar-step">
+            <span class="ar-step-number">STAGE 02</span>
+            <h3>Submit for consideration</h3>
+            <p>
+              Provide the required manuscript and submission information
+              through the VOC submission process.
+            </p>
+          </article>
+
+          <article class="ar-step">
+            <span class="ar-step-number">STAGE 03</span>
+            <h3>Editorial assessment</h3>
+            <p>
+              The submission may be assessed and reviewed, with revisions
+              requested where appropriate.
+            </p>
+          </article>
+
+          <article class="ar-step">
+            <span class="ar-step-number">STAGE 04</span>
+            <h3>Decision and publication</h3>
+            <p>
+              The editorial decision determines whether a manuscript is
+              accepted, requires revision, or is declined. Accepted work
+              may proceed to publication.
+            </p>
+          </article>
+
+        </div>
+
+        <div class="ar-actions">
+          <a class="ar-btn" href="publications.html">Explore Publications →</a>
+          <a class="ar-btn" style="background:#061827" href="submit.html">
+            Start a Submission
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RESEARCH INTEGRITY -->
+    <section class="ar-section">
+      <div class="ar-wrap">
+
+        <div class="ar-integrity">
+          <h3>Our commitment to responsible research</h3>
+          <p>
+            Authors are expected to report findings honestly, cite sources
+            accurately, acknowledge legitimate contributions, protect
+            confidential information, and follow applicable ethical and
+            laboratory safety requirements. Do not fabricate or manipulate
+            data, plagiarize another person's work, or claim authorship
+            without a legitimate contribution. Obtain appropriate supervision,
+            permissions, and ethical approvals before conducting regulated
+            research. AI tools, where used, should be used responsibly and
+            disclosed when required by the applicable guidelines.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="ar-section">
+      <div class="ar-wrap">
+        <div class="ar-final">
+          <h2>Have research worth sharing?</h2>
+          <p>
+            Take the next step: create your account, access the author portal,
+            and prepare to contribute to a growing scientific knowledge community.
+          </p>
+
+          <div class="ar-actions">
+            <a class="ar-btn" href="auth.html">Join VOC Research World</a>
+            <a class="ar-btn ar-btn-outline" href="student-research.html">
+              Student Research Centre
+            </a>
+            <a class="ar-btn ar-btn-outline" href="contact.html">
+              Contact Us
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+
+  <script>
+    (function () {
+      const grid = document.getElementById("authorsGrid");
+
+      function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, function (character) {
+          return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+          }[character];
+        });
+      }
+
+      try {
+        const authorData = window.VOC_AUTHORS || {};
+        const authors = Array.isArray(authorData)
+          ? authorData
+          : Object.values(authorData);
+
+        if (!authors.length) {
+          grid.innerHTML =
+            '<div class="ar-empty">No author profiles are currently available. New researchers can still use the account registration pathway above.</div>';
+          return;
+        }
+
+        grid.innerHTML = authors.map(function (author) {
+          const name = author.name || "Researcher";
+          const role = author.role || "Research Contributor";
+          const bio = author.bio || "Scientific research profile.";
+          const interests = Array.isArray(author.interests)
+            ? author.interests
+            : [];
+
+          const interestTags = interests.length
+            ? interests.map(function (interest) {
+                return '<span class="ar-tag">' +
+                  escapeHTML(interest) + '</span>';
+              }).join("")
+            : '<span class="ar-tag">Scientific Research</span>';
+
+          const profileURL = author.id
+            ? "author.html?id=" + encodeURIComponent(author.id)
+            : "authors.html#author-profiles";
+
+          return (
+            '<article class="ar-profile">' +
+              '<div class="ar-role">' + escapeHTML(role) + '</div>' +
+              '<h3>' + escapeHTML(name) + '</h3>' +
+              '<p>' + escapeHTML(bio) + '</p>' +
+              '<p><strong>Research interests</strong></p>' +
+              '<div>' + interestTags + '</div>' +
+              '<p style="margin-top:18px">' +
+                '<a class="ar-link" href="' + escapeHTML(profileURL) +
+                '">View profile →</a>' +
+              '</p>' +
+            '</article>'
+          );
+        }).join("");
+
+      } catch (error) {
+        console.error("Unable to display author profiles:", error);
+        grid.innerHTML =
+          '<div class="ar-empty">Author profiles could not be displayed. Please refresh the page or try again later.</div>';
+      }
+    })();
+  </script>
+
+</body>
+</html>
