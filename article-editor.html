@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Knowledge Hub Article Editor | VOC Research World</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.editor-shell{max-width:980px;margin:auto}.editor-panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:clamp(20px,4vw,36px);box-shadow:0 12px 35px #0618270b}.editor-heading{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap}.editor-heading h2{margin:0}.editor-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.editor-toolbar button,.editor-toolbar a{border:0;cursor:pointer}.status-note{padding:13px 16px;border-radius:10px;background:#eef7fa;color:#214b5c;font-size:13px;margin:16px 0}.status-note.error{background:#fff0ee;color:#9a3024}.status-note.success{background:#eaf8ef;color:#20663b}.help,.editor-meta{font-size:12px;color:var(--muted)}.required{color:#bd3b36}.field textarea#content{min-height:360px;line-height:1.75}.field textarea#excerpt{min-height:110px}.article-row{margin:12px 0}.article-row .card{height:100%}@media(max-width:600px){.editor-panel{padding:18px}.editor-toolbar>*{width:100%;text-align:center}}
+</style>
+</head>
+<body>
+<div id="header"></div>
+<section class="page"><div class="wrap"><p class="eyebrow">CONTRIBUTE TO SCIENCE</p><h1>Knowledge Hub Article Editor.</h1><p>Write evidence-informed scientific articles for VOC Research World. Save your work as a draft or submit it for editorial review.</p></div></section>
+<section class="content"><div class="wrap editor-shell">
+<p class="muted">Authors can manage their own eligible articles. Only administrators can publish directly.</p>
+<div id="notice" class="status-note" role="status">Checking your session…</div>
+<div id="editor" class="editor-panel" hidden>
+<div class="editor-heading"><h2>Article details</h2><span id="statusLabel" class="editor-meta">New article</span></div>
+<form id="articleForm">
+<div class="field"><label for="title">Article title <span class="required">*</span></label><input id="title" maxlength="220" required placeholder="e.g. Phytochemical Screening of Selected Medicinal Plants"></div>
+<div class="field"><label for="category">Research area <span class="required">*</span></label><select id="category" required><option value="">Loading research areas…</option></select></div>
+<div class="field"><label for="excerpt">Abstract / summary <span class="required">*</span></label><textarea id="excerpt" maxlength="1800" required placeholder="Summarise the purpose, scope and key message of your article."></textarea><p class="help">Use a concise summary and avoid claims that are not supported by evidence.</p></div>
+<div class="field"><label for="content">Full article <span class="required">*</span></label><textarea id="content" required placeholder="Write your article here. Use clear headings such as Introduction, Main Discussion, Conclusion and References. Separate sections with blank lines."></textarea><p class="help">Include appropriate in-text citations and a reference list for scientific claims. Do not submit confidential personal or patient information.</p></div>
+<div class="editor-toolbar">
+<button type="button" id="saveDraft" class="btn ghost">Save Draft</button>
+<button type="button" id="submitArticle" class="btn primary">Submit for Review</button>
+<button type="button" id="publishArticle" class="btn primary" hidden>Publish Article</button>
+<a class="btn ghost" href="knowledge.html">Back to Knowledge Hub</a>
+</div>
+<p class="help">Submitting an article sends it into the editorial workflow. Publication is not guaranteed; editors may request revisions.</p>
+</form>
+</div>
+<section id="myArticles" style="padding-top:35px"><h2>Your articles</h2><div id="articleList" class="cards three"></div></section>
+</div></section>
+<div id="footer"></div>
+<script src="app.js"></script>
+<script type="module">
+import { supabase } from './supabase-config.js';
+const $ = id => document.getElementById(id);
+const notice = $('notice');
+let user = null, isAdmin = false, currentId = null;
+const params = new URLSearchParams(location.search);
+function message(text, kind=''){ notice.textContent=text; notice.className='status-note'+(kind?' '+kind:''); }
+function safe(value){return String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function makeSlug(title,id){const base=title.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,130)||'scientific-article';return base+'-'+id.slice(0,8);}
+function setBusy(busy){$('saveDraft').disabled=busy;$('submitArticle').disabled=busy;$('publishArticle').disabled=busy;}
+async function loadCategories(){
+ const {data,error}=await supabase.from('categories').select('id,name').order('name');
+ if(error) throw error;
+ $('category').innerHTML='<option value="">Choose a research area</option>'+(data||[]).map(c=>'<option value="'+safe(c.id)+'">'+safe(c.name)+'</option>').join('');
+}
+async function loadMyArticles(){
+ const {data,error}=await supabase.from('knowledge_articles').select('id,title,status,updated_at').eq('author_id',user.id).order('updated_at',{ascending:false});
+ if(error){$('articleList').innerHTML='<article class="card"><p>Could not load your article list: '+safe(error.message)+'</p></article>';return;}
+ if(!data?.length){$('articleList').innerHTML='<article class="card"><p>You have not created any articles yet. Start with the form above.</p></article>';return;}
+ $('articleList').innerHTML=data.map(a=>'<article class="card article-row"><label>'+safe(a.status.replaceAll('_',' '))+'</label><h3>'+safe(a.title)+'</h3><p class="small">Updated '+safe(new Date(a.updated_at).toLocaleDateString())+'</p><a href="article-editor.html?id='+encodeURIComponent(a.id)+'">Open article →</a></article>').join('');
+}
+async function loadArticle(){
+ if(!currentId)return;
+ const {data,error}=await supabase.from('knowledge_articles').select('id,title,slug,excerpt,content,category_id,author_id,status').eq('id',currentId).maybeSingle();
+ if(error)throw error;
+ if(!data)throw new Error('Article not found, or you do not have permission to view it.');
+ if(data.author_id!==user.id&&!isAdmin)throw new Error('You can only edit your own articles.');
+ $('title').value=data.title||'';$('excerpt').value=data.excerpt||'';$('content').value=data.content||'';$('category').value=data.category_id||'';
+ $('statusLabel').textContent='Status: '+data.status.replaceAll('_',' ');
+ if(isAdmin){$('publishArticle').hidden=false;}
+ else if(['published','archived','under_review'].includes(data.status)){
+ ['title','excerpt','content','category'].forEach(id=>$(id).disabled=true);
+ $('saveDraft').disabled=true;$('submitArticle').disabled=true;
+ message('This article is '+data.status.replaceAll('_',' ')+'. Editing is restricted while it is in this state.');
+ }
+}
+async function save(status){
+ const title=$('title').value.trim(),excerpt=$('excerpt').value.trim(),content=$('content').value.trim(),category_id=$('category').value;
+ if(!title||!excerpt||!content||!category_id){message('Complete the title, research area, summary and full article before saving.','error');return;}
+ if(status==='published'&&!isAdmin){message('Only an administrator can publish an article.','error');return;}
+ setBusy(true);message('Saving article…');
+ try{
+  const payload={title,excerpt,content,category_id,author_id:user.id,status,updated_at:new Date().toISOString()};
+  if(status==='published')payload.published_at=new Date().toISOString();
+  if(currentId){
+   const {data:old,error:readError}=await supabase.from('knowledge_articles').select('id,slug').eq('id',currentId).single();
+   if(readError)throw readError;
+   payload.slug=old.slug||makeSlug(title,currentId);
+   const {error}=await supabase.from('knowledge_articles').update(payload).eq('id',currentId);
+   if(error)throw error;
+  }else{
+   // Generate the UUID first so the slug is unique and stable.
+   const tempId=crypto.randomUUID();
+   payload.id=tempId;payload.slug=makeSlug(title,tempId);
+   const {error}=await supabase.from('knowledge_articles').insert(payload);
+   if(error)throw error;
+   currentId=tempId;history.replaceState({},'','article-editor.html?id='+encodeURIComponent(currentId));
+  }
+  $('statusLabel').textContent='Status: '+status.replaceAll('_',' ');
+  message(status==='published'?'Article published successfully.':'Article saved as '+status.replaceAll('_',' ')+'.','success');
+  await loadMyArticles();
+ }catch(e){message('Could not save article: '+(e?.message||'Unknown error'),'error');}
+ finally{setBusy(false);}
+}
+$('saveDraft').addEventListener('click',()=>save('draft'));
+$('submitArticle').addEventListener('click',()=>save('submitted'));
+$('publishArticle').addEventListener('click',()=>save('published'));
+(async()=>{
+ try{
+  const {data,error}=await supabase.auth.getSession();if(error)throw error;
+  user=data.session?.user;
+  if(!user){message('Please sign in before writing an article. Redirecting to login…');setTimeout(()=>location.href='auth.html?next='+encodeURIComponent('article-editor.html'+location.search),1000);return;}
+  const {data:profile,error:profileError}=await supabase.from('profiles').select('role').eq('id',user.id).maybeSingle();
+  if(profileError)throw profileError;
+  isAdmin=profile?.role==='admin';
+  await loadCategories();
+  $('editor').hidden=false;
+  $('publishArticle').hidden=!isAdmin;
+  message(isAdmin?'Administrator access verified. You can publish articles directly.':'Signed in. Save a draft or submit an article for editorial review.','success');
+  currentId=params.get('id');
+  if(currentId)await loadArticle();
+  await loadMyArticles();
+ }catch(e){message('Unable to initialise the editor: '+(e?.message||'Unknown error'),'error');}
+})();
+</script>
+</body>
+</html>
