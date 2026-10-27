@@ -16,6 +16,7 @@ const H = `
       <a href="index.html">Home</a>
       <a href="research.html">Research</a>
       <a href="research-projects.html">Projects</a>
+      <a href="student-research.html">Student Research</a>
       <a href="knowledge.html">Knowledge Hub</a>
       <a href="publications.html">Publications</a>
       <a href="authors.html">Authors</a>
@@ -54,6 +55,7 @@ const F = `
       <div class="footer-title">RESEARCH</div>
       <a href="research.html">Research Areas</a>
       <a href="research-projects.html">Research Projects</a>
+      <a href="student-research.html">Student Research Centre</a>
       <a href="instrumentation.html">Instrumentation</a>
       <a href="data-ai.html">Data &amp; AI</a>
     </div>
