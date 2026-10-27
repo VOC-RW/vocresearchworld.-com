@@ -705,16 +705,17 @@ async function publishSubmission(submission) {
   const now = new Date().toISOString();
 
   const publicationRecord = {
-    title: submission.title,
-    slug: existing?.slug || makeSlug(submission.title, submission.id),
-    abstract: submission.abstract || null,
-    category_id: submission.category_id || null,
-    submission_id: submission.id,
-    publication_date: now.slice(0, 10),
-    pdf_url: submission.manuscript_url || null,
-    featured: false,
-    status: "published"
-  };
+  title: submission.title,
+  slug: existing?.slug || makeSlug(submission.title, submission.id),
+  abstract: submission.abstract || null,
+  content: submission.content || null,
+  category_id: submission.category_id || null,
+  submission_id: submission.id,
+  publication_date: now.slice(0, 10),
+  pdf_url: submission.manuscript_url || null,
+  featured: false,
+  status: "published"
+};
 
   let publicationId;
 
@@ -799,10 +800,10 @@ async function loadSubmissions() {
   const { data, error } = await supabase
     .from("submissions")
     .select(
-      "id,title,abstract,category_id,manuscript_url,status," +
-      "reviewer_notes,submitted_at,created_at,submission_reference," +
-      "author_name,author_email,institution,submitted_by"
-    )
+  "id,title,abstract,content,category_id,manuscript_url,status," +
+  "reviewer_notes,submitted_at,created_at,submission_reference," +
+  "author_name,author_email,institution,submitted_by"
+)
     .order("created_at", { ascending: false });
 
   if (error) {
