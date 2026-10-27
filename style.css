@@ -1017,3 +1017,21 @@ box-shadow: 0 0 12px rgba(101, 214, 211, 0.7);
     transition: none;
   }
 }
+/* VOC RESEARCH WORLD — MOBILE NAVIGATION FIX */
+@media (max-width: 950px) {
+  .links {
+    max-height: calc(100vh - 82px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .links a {
+    display: block;
+    width: 100%;
+  }
+
+  .links a.primary {
+    margin-top: 8px;
+    margin-bottom: 12px;
+  }
+}
