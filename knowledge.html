@@ -1,25 +1,49 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Knowledge Hub | VOC Research World</title><link rel="stylesheet" href="style.css"></head><body><div id="header"></div>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Knowledge Hub | VOC Research World</title><link rel="stylesheet" href="style.css">
+</head>
+<body><div id="header"></div>
 <section class="page"><div class="wrap"><p class="eyebrow">SCIENTIFIC KNOWLEDGE</p><h1>VOC Knowledge Hub.</h1><p>Discover research notes, method notes, quality resources and scientific education through a structured publication discovery system.</p></div></section>
 <section class="content"><div class="wrap">
-<div class="discovery-head"><div><p class="eyebrow">DISCOVERY</p><h2>Search scientific knowledge.</h2><p class="muted">Search by title, author, keyword, research area or publication type.</p></div><div id="resultCount" class="result-count"></div></div>
-<div class="discovery"><input id="q" class="search" placeholder="Search title, author, keyword, project or topic..." autocomplete="off"><div class="filter-row"><select id="area"><option value="">All research areas</option><option>Biochemistry</option><option>Analytical Science</option><option>Quality Assurance</option><option>Data & AI</option><option>Instrumentation</option><option>Natural Products</option><option>Industrial Science</option></select><select id="type"><option value="">All publication types</option><option>Research Article</option><option>Review</option><option>Research Note</option><option>Technical Note</option><option>Method Note</option><option>Quality Note</option><option>Educational Resource</option></select><select id="year"><option value="">All years</option></select><button id="clear" class="filter-clear">Clear filters</button></div></div>
+<div class="discovery-head"><div><p class="eyebrow">DISCOVERY</p><h2>Search scientific knowledge.</h2><p class="muted">Browse editorial resources and articles published by VOC Research World contributors.</p></div><div id="resultCount" class="result-count"></div></div>
+<div class="discovery"><input id="q" class="search" placeholder="Search title, author, topic or research area..." autocomplete="off"><div class="filter-row"><select id="area"><option value="">All research areas</option></select><select id="type"><option value="">All publication types</option><option>Research Article</option><option>Review</option><option>Research Note</option><option>Technical Note</option><option>Method Note</option><option>Quality Note</option><option>Educational Resource</option></select><select id="year"><option value="">All years</option></select><button id="clear" class="filter-clear">Clear filters</button></div></div>
+<p id="dbStatus" class="small muted" role="status">Loading published articles…</p>
 <div id="items" class="cards three"></div><div id="empty" class="empty" hidden><h3>No scientific records found.</h3><p>Try a broader keyword or clear one of the filters.</p></div>
-</div></section><div id="footer"></div><script src="data.js"></script><script src="app.js"></script><script>
-const q=document.getElementById('q'), area=document.getElementById('area'), type=document.getElementById('type'), year=document.getElementById('year'), items=document.getElementById('items'), empty=document.getElementById('empty'), count=document.getElementById('resultCount');
-  const requestedArea = new URLSearchParams(window.location.search).get('area');
-
-if (requestedArea) {
-  const matchingOption = [...area.options].find(
-    option => option.value.toLowerCase() === requestedArea.toLowerCase()
-  );
-
-  if (matchingOption) {
-    area.value = matchingOption.value;
-  }
+<p class="small muted">Are you a registered contributor? <a href="article-editor.html">Write or submit an article</a>.</p>
+</div></section><div id="footer"></div>
+<script src="data.js"></script><script src="app.js"></script>
+<script type="module">
+import { supabase } from './supabase-config.js';
+const $=id=>document.getElementById(id), q=$('q'),area=$('area'),type=$('type'),year=$('year'),items=$('items'),empty=$('empty'),count=$('resultCount');
+let records=[];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function staticRecords(){return Object.values(window.VOC.articles).map(a=>({id:a.id,title:a.title,excerpt:a.subtitle,category:a.category,type:a.type,year:a.date.slice(0,4),author:window.VOC.author(a.authorId).name,keywords:a.keywords||[],href:'article.html?id='+encodeURIComponent(a.id),isStatic:true}));}
+async function loadPublished(){
+  const [articlesRes,catsRes,profilesRes]=await Promise.all([
+    supabase.from('knowledge_articles').select('id,title,slug,excerpt,category_id,author_id,status,published_at,created_at').eq('status','published').order('published_at',{ascending:false}),
+    supabase.from('categories').select('id,name'),
+    supabase.from('profiles').select('id,full_name,username')
+  ]);
+  if(articlesRes.error) throw articlesRes.error;
+  const cats=new Map((catsRes.data||[]).map(c=>[c.id,c.name]));
+  const people=new Map((profilesRes.data||[]).map(p=>[p.id,p.full_name||p.username||'VOC Research World contributor']));
+  return (articlesRes.data||[]).map(a=>({id:a.id,title:a.title,excerpt:a.excerpt||'',category:cats.get(a.category_id)||'Scientific Knowledge',type:'Research Article',year:String((a.published_at||a.created_at||'').slice(0,4)||''),author:people.get(a.author_id)||'VOC Research World contributor',keywords:[],href:'article.html?id='+encodeURIComponent(a.id)+'&source=db',isStatic:false}));
 }
-const all=Object.values(VOC.articles);
-[...new Set(all.map(a=>a.date.slice(0,4)))].sort((a,b)=>b-a).forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;year.appendChild(o)});
-function card(a){const au=VOC.author(a.authorId), pr=a.projectId?VOC.project(a.projectId):null;return `<article class="card discovery-card"><div class="card-top"><label>${VOC.esc(a.category)}</label><span>${VOC.esc(a.type)}</span></div><h3>${VOC.esc(a.title)}</h3><p>${VOC.esc(a.subtitle)}</p><p class="small"><b>${VOC.esc(au.name)}</b> · ${VOC.esc(a.date.slice(0,4))}</p><div class="tag-row">${a.keywords.slice(0,3).map(k=>`<span>${VOC.esc(k)}</span>`).join('')}</div><div class="card-links"><a href="article.html?id=${encodeURIComponent(a.id)}">Read article →</a>${pr?`<a href="project.html?id=${encodeURIComponent(pr.id)}">Research project</a>`:''}</div></article>`}
-function run(){const term=q.value.trim().toLowerCase(), av=area.value.toLowerCase(), tv=type.value.toLowerCase(), yv=year.value;const out=all.filter(a=>{const au=VOC.author(a.authorId),pr=a.projectId?VOC.project(a.projectId):null;const hay=[a.title,a.subtitle,a.category,a.type,a.date,au.name,au.role,pr?.title,pr?.area,...a.keywords].join(' ').toLowerCase();return (!term||hay.includes(term))&&(!av||a.category.toLowerCase()===av||pr?.area.toLowerCase().includes(av)||a.keywords.some(k=>k.toLowerCase()===av))&&(!tv||a.type.toLowerCase()===tv)&&(!yv||a.date.startsWith(yv))});items.innerHTML=out.map(card).join('');empty.hidden=out.length!==0;count.textContent=`${out.length} record${out.length===1?'':'s'} found`}
-[q,area,type,year].forEach(el=>el.addEventListener('input',run));document.getElementById('clear').onclick=()=>{q.value='';area.value='';type.value='';year.value='';run()};run();
+function fillFilters(){
+  const areas=[...new Set(records.map(r=>r.category).filter(Boolean))].sort();
+  area.innerHTML='<option value="">All research areas</option>'+areas.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');
+  const years=[...new Set(records.map(r=>r.year).filter(Boolean))].sort((a,b)=>b.localeCompare(a));
+  year.innerHTML='<option value="">All years</option>'+years.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');
+  const requested=new URLSearchParams(location.search).get('area');
+  if(requested){const match=[...area.options].find(o=>o.value.toLowerCase()===requested.toLowerCase());if(match)area.value=match.value;}
+}
+function card(a){return `<article class="card discovery-card"><div class="card-top"><label>${esc(a.category)}</label><span>${esc(a.type)}</span></div><h3>${esc(a.title)}</h3><p>${esc(a.excerpt)}</p><p class="small"><b>${esc(a.author)}</b>${a.year?' · '+esc(a.year):''}</p><div class="tag-row">${a.keywords.slice(0,3).map(k=>`<span>${esc(k)}</span>`).join('')}</div><div class="card-links"><a href="${a.href}">Read article →</a></div></article>`}
+function run(){const term=q.value.trim().toLowerCase(),av=area.value.toLowerCase(),tv=type.value.toLowerCase(),yv=year.value;const out=records.filter(a=>{const hay=[a.title,a.excerpt,a.category,a.type,a.year,a.author,...a.keywords].join(' ').toLowerCase();return(!term||hay.includes(term))&&(!av||a.category.toLowerCase()===av)&&(!tv||a.type.toLowerCase()===tv)&&(!yv||a.year===yv)});items.innerHTML=out.map(card).join('');empty.hidden=out.length!==0;count.textContent=`${out.length} record${out.length===1?'':'s'} found`;}
+[q,area,type,year].forEach(el=>el.addEventListener('input',run));
+$('clear').onclick=()=>{q.value='';area.value='';type.value='';year.value='';run();};
+records=staticRecords();fillFilters();run();
+try{const live=await loadPublished();records=[...live,...staticRecords()];fillFilters();run();$('dbStatus').textContent=live.length?`${live.length} database-published article${live.length===1?'':'s'} loaded, alongside editorial resources.`:'No database articles have been published yet. Editorial resources remain available.';}
+catch(e){$('dbStatus').textContent='Live articles could not be loaded right now. Showing the existing Knowledge Hub resources. ('+(e.message||'connection issue')+')';}
 </script></body></html>
