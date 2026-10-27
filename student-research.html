@@ -717,9 +717,10 @@
       }
 
       function renderProjects() {
-        const projects = Array.isArray(window.VOC_PROJECTS)
-          ? window.VOC_PROJECTS
-          : [];
+        const projects = window.VOC_PROJECTS &&
+  typeof window.VOC_PROJECTS === "object"
+    ? Object.values(window.VOC_PROJECTS)
+    : [];
 
         if (!projects.length) {
           container.innerHTML =
