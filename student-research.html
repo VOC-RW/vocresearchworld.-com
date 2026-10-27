@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore student research opportunities, learn research skills, discover projects, and prepare for responsible scientific publication with VOC Research World.">
+  <meta name="theme-color" content="#061827">
+  <title>Student Research | VOC Research World</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --sr-navy: #061827;
+      --sr-blue: #1687c9;
+      --sr-cyan: #60d2d6;
+      --sr-green: #55b77a;
+      --sr-white: #ffffff;
+      --sr-muted: #64748b;
+      --sr-border: #e1eaf1;
+      --sr-light: #f3f8fc;
+    }
+
+    .sr-page {
+      color: #182b3b;
+      overflow: hidden;
+    }
+
+    .sr-wrap {
+      width: min(1180px, 92%);
+      margin: 0 auto;
+    }
+
+    .sr-hero {
+      position: relative;
+      padding: 76px 0;
+      color: white;
+      background:
+        radial-gradient(circle at 85% 20%, rgba(96,210,214,.20), transparent 28%),
+        radial-gradient(circle at 10% 90%, rgba(22,135,201,.25), transparent 35%),
+        linear-gradient(135deg, #061827, #0b2c45 65%, #10425b);
+    }
+
+    .sr-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .15;
+      background-image:
+        linear-gradient(rgba(255,255,255,.14) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.14) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to right, black, transparent);
+    }
+
+    .sr-hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .sr-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 13px;
+      border: 1px solid rgba(96,210,214,.45);
+      border-radius: 30px;
+      color: #a9f0ee;
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    .sr-hero h1 {
+      margin: 22px 0 17px;
+      max-width: 720px;
+      color: white;
+      font-size: clamp(2.3rem, 5.2vw, 4.3rem);
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+    }
+
+    .sr-hero h1 span {
+      color: var(--sr-cyan);
+    }
+
+    .sr-hero p {
+      max-width: 650px;
+      color: #d2e2ee;
+      font-size: 1.06rem;
+      line-height: 1.85;
+    }
+
+    .sr-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 27px;
+    }
+
+    .sr-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 47px;
+      padding: 12px 19px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: var(--sr-blue);
+      color: white;
+      font-weight: 800;
+      text-decoration: none;
+      transition: .2s ease;
+    }
+
+    .sr-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+
+    .sr-btn-light {
+      border-color: rgba(255,255,255,.4);
+      background: rgba(255,255,255,.07);
+      color: white;
+    }
+
+    .sr-roadmap {
+      padding: 27px;
+      border: 1px solid rgba(255,255,255,.17);
+      border-radius: 18px;
+      background: rgba(255,255,255,.07);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 22px 60px rgba(0,0,0,.15);
+    }
+
+    .sr-roadmap h2 {
+      margin: 0 0 21px;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .sr-step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255,255,255,.13);
+    }
+
+    .sr-step:last-child {
+      border-bottom: 0;
+    }
+
+    .sr-step-number {
+      display: grid;
+      flex: 0 0 36px;
+      height: 36px;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(96,210,214,.15);
+      color: #9df1ee;
+      font-weight: 900;
+    }
+
+    .sr-step strong {
+      display: block;
+      margin-bottom: 5px;
+      color: white;
+    }
+
+    .sr-step small {
+      color: #c6d8e5;
+      line-height: 1.6;
+    }
+
+    .sr-section {
+      padding: 66px 0;
+    }
+
+    .sr-section-light {
+      background: var(--sr-light);
+    }
+
+    .sr-section-heading {
+      max-width: 720px;
+      margin-bottom: 30px;
+    }
+
+    .sr-kicker {
+      color: var(--sr-blue);
+      font-size: .77rem;
+      font-weight: 900;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    .sr-section-heading h2 {
+      margin: 10px 0 12px;
+      color: var(--sr-navy);
+      font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+      line-height: 1.2;
+    }
+
+    .sr-section-heading p {
+      color: var(--sr-muted);
+      line-height: 1.8;
+    }
+
+    .sr-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 19px;
+    }
+
+    .sr-card {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 25px;
+      border: 1px solid var(--sr-border);
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 5px 20px rgba(6,24,39,.035);
+      transition: transform .22s ease, box-shadow .22s ease;
+    }
+
+    .sr-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 36px rgba(6,24,39,.09);
+    }
+
+    .sr-icon {
+      display: grid;
+      width: 49px;
+      height: 49px;
+      margin-bottom: 17px;
+      place-items: center;
+      border-radius: 13px;
+      background: #e8f5fc;
+      font-size: 1.45rem;
+    }
+
+    .sr-card h3 {
+      margin: 0 0 10px;
+      color: var(--sr-navy);
+      font-size: 1.13rem;
+    }
+
+    .sr-card p {
+      flex: 1;
+      margin: 0 0 20px;
+      color: var(--sr-muted);
+      font-size: .94rem;
+      line-height: 1.75;
+    }
+
+    .sr-link {
+      align-self: flex-start;
+      color: #0879b7;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .sr-link:hover {
+      text-decoration: underline;
+    }
+
+    .sr-project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 19px;
+    }
+
+    .sr-project-card {
+      padding: 23px;
+      border: 1px solid var(--sr-border);
+      border-radius: 13px;
+      background: white;
+    }
+
+    .sr-project-card h3 {
+      margin: 14px 0 10px;
+      color: var(--sr-navy);
+      font-size: 1.08rem;
+      line-height: 1.45;
+    }
+
+    .sr-project-card p {
+      color: var(--sr-muted);
+      font-size: .92rem;
+      line-height: 1.7;
+    }
+
+    .sr-badge {
+      display: inline-block;
+      padding: 6px 9px;
+      border-radius: 20px;
+      background: #e8f5fc;
+      color: #096a9e;
+      font-size: .72rem;
+      font-weight: 800;
+    }
+
+    .sr-empty {
+      grid-column: 1 / -1;
+      padding: 28px;
+      border: 1px dashed #b9cbd8;
+      border-radius: 13px;
+      background: white;
+      color: var(--sr-muted);
+      line-height: 1.8;
+    }
+
+    .sr-workflow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 15px;
+    }
+
+    .sr-workflow article {
+      padding: 22px;
+      border-top: 3px solid var(--sr-blue);
+      border-radius: 9px;
+      background: white;
+    }
+
+    .sr-workflow .sr-num {
+      color: var(--sr-blue);
+      font-size: .8rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .sr-workflow h3 {
+      margin: 12px 0 8px;
+      color: var(--sr-navy);
+      font-size: 1rem;
+    }
+
+    .sr-workflow p {
+      margin: 0;
+      color: var(--sr-muted);
+      font-size: .9rem;
+      line-height: 1.7;
+    }
+
+    .sr-integrity {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 25px;
+      align-items: center;
+      padding: 31px;
+      border: 1px solid #c8e8d4;
+      border-radius: 15px;
+      background: #f0fbf4;
+    }
+
+    .sr-integrity h2 {
+      margin: 0 0 10px;
+      color: #174d32;
+      font-size: 1.45rem;
+    }
+
+    .sr-integrity p {
+      margin: 0;
+      color: #456754;
+      line-height: 1.8;
+    }
+
+    .sr-final {
+      padding: 55px 25px;
+      border-radius: 18px;
+      background: linear-gradient(120deg, #061827, #10415d);
+      text-align: center;
+      color: white;
+    }
+
+    .sr-final h2 {
+      margin: 0 0 13px;
+      color: white;
+      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+    }
+
+    .sr-final p {
+      max-width: 650px;
+      margin: 0 auto;
+      color: #d1e2ec;
+      line-height: 1.8;
+    }
+
+    .sr-final .sr-actions {
+      justify-content: center;
+    }
+
+    .sr-status {
+      margin: 15px 0 0;
+      color: var(--sr-muted);
+      font-size: .9rem;
+    }
+
+    @media (max-width: 900px) {
+      .sr-hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sr-grid,
+      .sr-project-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .sr-workflow {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 580px) {
+      .sr-hero {
+        padding: 52px 0;
+      }
+
+      .sr-grid,
+      .sr-project-grid,
+      .sr-workflow {
+        grid-template-columns: 1fr;
+      }
+
+      .sr-section {
+        padding: 46px 0;
+      }
+
+      .sr-integrity {
+        grid-template-columns: 1fr;
+        padding: 23px;
+      }
+
+      .sr-roadmap {
+        padding: 21px;
+      }
+
+      .sr-actions .sr-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sr-page">
+
+    <header class="site-header">
+      <div class="wrap nav">
+        <a class="brand" href="index.html">
+          <img src="logo.svg" alt="VOC Research World logo">
+          <span>
+            <strong>VOC RESEARCH WORLD</strong>
+            <small>SCIENCE · INNOVATION · GLOBAL IMPACT</small>
+          </span>
+        </a>
+        <button class="menu" aria-label="Menu">☰</button>
+        <nav class="links">
+          <a href="index.html">Home</a>
+          <a href="research.html">Research</a>
+          <a href="research-projects.html">Projects</a>
+          <a href="knowledge.html">Knowledge Hub</a>
+          <a href="publications.html">Publications</a>
+          <a href="authors.html">Authors</a>
+          <a href="instrumentation.html">Instrumentation</a>
+          <a href="data-ai.html">Data &amp; AI</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+          <a href="submit.html">Submit Research</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="sr-hero">
+        <div class="sr-wrap sr-hero-grid">
+          <div>
+            <span class="sr-eyebrow">VOC Student Research Centre</span>
+            <h1>Your research journey <span>starts here.</span></h1>
+            <p>
+              Discover scientific ideas, explore research projects, develop
+              practical research skills, and learn how to communicate your
+              findings responsibly. Build your foundation as a future researcher
+              with VOC Research World.
+            </p>
+            <div class="sr-actions">
+              <a class="sr-btn" href="#student-projects">Explore Projects →</a>
+              <a class="sr-btn sr-btn-light" href="knowledge.html">Learn Research Skills</a>
+            </div>
+          </div>
+
+          <aside class="sr-roadmap">
+            <h2>Your pathway into research</h2>
+            <div class="sr-step">
+              <span class="sr-step-number">01</span>
+              <div>
+                <strong>Explore</strong>
+                <small>Discover research areas, scientific questions, and existing projects.</small>
+              </div>
+            </div>
+            <div class="sr-step">
+              <span class="sr-step-number">02</span>
+              <div>
+                <strong>Learn</strong>
+                <small>Study research methods, laboratory practice, data analysis, and scientific writing.</small>
+              </div>
+            </div>
+            <div class="sr-step">
+              <span class="sr-step-number">03</span>
+              <div>
+                <strong>Prepare</strong>
+                <small>Develop a clear research question, suitable method, and well-organized manuscript.</small>
+              </div>
+            </div>
+            <div class="sr-step">
+              <span class="sr-step-number">04</span>
+              <div>
+                <strong>Share responsibly</strong>
+                <small>Follow research ethics and the appropriate review and submission process.</small>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="sr-section">
+        <div class="sr-wrap">
+          <div class="sr-section-heading">
+            <span class="sr-kicker">Start exploring</span>
+            <h2>Everything you need to take your next step</h2>
+            <p>
+              Whether you are choosing a research topic, learning laboratory
+              methods, or preparing your first manuscript, start with the area
+              that best matches your current goal.
+            </p>
+          </div>
+
+          <div class="sr-grid">
+            <article class="sr-card">
+              <div class="sr-icon">🔬</div>
+              <h3>Discover Research Areas</h3>
+              <p>Explore biochemistry, analytical science, quality assurance, natural products, instrumentation, industrial science, and data and AI.</p>
+              <a class="sr-link" href="research.html">Explore research areas →</a>
+            </article>
+
+            <article class="sr-card">
+              <div class="sr-icon">🧪</div>
+              <h3>Explore Research Projects</h3>
+              <p>Browse available projects and scientific investigations to understand the questions researchers are working to answer.</p>
+              <a class="sr-link" href="research-projects.html">Browse projects →</a>
+            </article>
+
+            <article class="sr-card">
+              <div class="sr-icon">📚</div>
+              <h3>Build Research Skills</h3>
+              <p>Develop your understanding of research design, literature reviews, scientific terminology, and evidence-based reasoning.</p>
+              <a class="sr-link" href="knowledge.html">Visit Knowledge Hub →</a>
+            </article>
+
+            <article class="sr-card">
+              <div class="sr-icon">📄</div>
+              <h3>Read Scientific Publications</h3>
+              <p>Learn from published research and observe how scientific questions, methods, results, and discussions are presented.</p>
+              <a class="sr-link" href="publications.html">Explore publications →</a>
+            </article>
+
+            <article class="sr-card">
+              <div class="sr-icon">👩‍🔬</div>
+              <h3>Meet the Authors</h3>
+              <p>Discover the people contributing to the research community and learn about the author pathway.</p>
+              <a class="sr-link" href="authors.html">Explore author profiles →</a>
+            </article>
+
+            <article class="sr-card">
+              <div class="sr-icon">📝</div>
+              <h3>Prepare Your Manuscript</h3>
+              <p>When your work is ready, review the submission requirements and use the research submission page to begin the process.</p>
+              <a class="sr-link" href="submit.html">Go to research submission →</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="sr-section sr-section-light" id="student-projects">
+        <div class="sr-wrap">
+          <div class="sr-section-heading">
+            <span class="sr-kicker">Research in action</span>
+            <h2>Explore research projects</h2>
+            <p>
+              Use the project cards below to discover research topics listed
+              on the VOC platform. Open a project to learn more about it.
+            </p>
+          </div>
+
+          <div id="sr-project-list" class="sr-project-grid">
+            <div class="sr-empty">Loading available research projects…</div>
+          </div>
+
+          <p class="sr-status" id="sr-project-status" aria-live="polite"></p>
+
+          <div class="sr-actions">
+            <a class="sr-btn" href="research-projects.html">View All Projects →</a>
+            <a class="sr-btn sr-btn-light" style="background:#fff;color:#096a9e;border-color:#cfe0ea" href="research.html">Explore Research Areas</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sr-section">
+        <div class="sr-wrap">
+          <div class="sr-section-heading">
+            <span class="sr-kicker">Your research workflow</span>
+            <h2>From an idea to a scientific manuscript</h2>
+            <p>
+              Research requires a clear question, a suitable method, careful
+              analysis, and honest reporting. These steps provide a starting
+              framework; specific projects may require additional procedures.
+            </p>
+          </div>
+
+          <div class="sr-workflow">
+            <article>
+              <span class="sr-num">STEP 01</span>
+              <h3>Define the question</h3>
+              <p>Identify a problem, review existing literature, and determine what you want to investigate.</p>
+            </article>
+            <article>
+              <span class="sr-num">STEP 02</span>
+              <h3>Plan the method</h3>
+              <p>Choose an appropriate design, identify required resources, and obtain necessary approvals before starting.</p>
+            </article>
+            <article>
+              <span class="sr-num">STEP 03</span>
+              <h3>Analyze and write</h3>
+              <p>Record genuine observations, analyze data appropriately, cite sources, and report limitations.</p>
+            </article>
+            <article>
+              <span class="sr-num">STEP 04</span>
+              <h3>Prepare and submit</h3>
+              <p>Check manuscript quality, authorship, references, ethics requirements, and the submission guidelines.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="sr-section sr-section-light">
+        <div class="sr-wrap">
+          <div class="sr-integrity">
+            <div>
+              <h2>Research integrity comes first.</h2>
+              <p>
+                Scientific progress depends on honesty, accurate reporting,
+                proper citation, responsible data handling, and respect for
+                research participants and laboratory safety. Never fabricate
+                results, plagiarize another person's work, or claim authorship
+                without a legitimate contribution. Obtain required supervision
+                and approvals before conducting experiments or collecting data.
+              </p>
+            </div>
+            <a class="sr-btn" href="knowledge.html">Build Your Knowledge</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sr-section">
+        <div class="sr-wrap">
+          <div class="sr-final">
+            <h2>Ready to take your next step?</h2>
+            <p>
+              Continue learning, discover research opportunities, and prepare
+              to contribute meaningful work to the scientific community.
+            </p>
+            <div class="sr-actions">
+              <a class="sr-btn" href="research-projects.html">Explore Projects</a>
+              <a class="sr-btn sr-btn-light" href="submit.html">Submit Research</a>
+              <a class="sr-btn sr-btn-light" href="contact.html">Contact VOC</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>© <span id="sr-year"></span> VOC Research World. Science · Innovation · Global Impact.</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+
+  <script>
+    document.getElementById("sr-year").textContent = new Date().getFullYear();
+
+    (function () {
+      const container = document.getElementById("sr-project-list");
+      const status = document.getElementById("sr-project-status");
+
+      function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, function (character) {
+          return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+          }[character];
+        });
+      }
+
+      function renderProjects() {
+        const projects = Array.isArray(window.VOC_PROJECTS)
+          ? window.VOC_PROJECTS
+          : [];
+
+        if (!projects.length) {
+          container.innerHTML =
+            '<div class="sr-empty">' +
+            '<strong>No project cards are available to display here yet.</strong><br>' +
+            'You can still explore the complete project directory. Visit the ' +
+            '<a href="research-projects.html">Research Projects page</a> ' +
+            'to check the projects currently listed on VOC Research World.' +
+            '</div>';
+          status.textContent = "";
+          return;
+        }
+
+        container.innerHTML = projects.slice(0, 6).map(function (project) {
+          const title = project.title || project.name || "Research project";
+          const description = project.description || project.summary ||
+            project.abstract || "Open this project to learn more about its research focus.";
+          const area = project.area || project.category || project.field ||
+            "Scientific Research";
+          const id = project.id || project.slug || "";
+          const href = id
+            ? "project.html?id=" + encodeURIComponent(id)
+            : "research-projects.html";
+
+          return (
+            '<article class="sr-project-card">' +
+              '<span class="sr-badge">' + escapeHTML(area) + '</span>' +
+              '<h3>' + escapeHTML(title) + '</h3>' +
+              '<p>' + escapeHTML(description) + '</p>' +
+              '<a class="sr-link" href="' + escapeHTML(href) + '">Explore project →</a>' +
+            '</article>'
+          );
+        }).join("");
+
+        status.textContent = "Showing up to six projects. Visit the complete project directory to explore more.";
+      }
+
+      renderProjects();
+    })();
+  </script>
+</body>
+</html>
