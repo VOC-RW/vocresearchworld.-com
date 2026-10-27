@@ -1,7 +1,36 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Research Article | VOC Research World</title><link rel="stylesheet" href="style.css"></head><body><div id="header"></div><section class="content"><article class="wrap article" id="article"></article></section><div id="footer"></div><script src="data.js"></script><script src="app.js"></script><script>
-const a=article(new URLSearchParams(location.search).get('id')||'metabolism'); const au=author(a.authorId); const pr=project(a.projectId);
-document.title=a.title+' | VOC Research World';
-const refs=a.references.map(id=>referenceItem(VOC.references[id])).join('');
-function referenceItem(r){return `<li>${esc(r.authors)} (${r.year}). <i>${esc(r.title)}</i>. ${esc(r.source)}</li>`;}
-document.getElementById('article').innerHTML=`<div class="meta">${esc(a.category)} · ${esc(a.type)} · ${esc(a.date.slice(0,4))}</div><h1>${esc(a.title)}</h1><p><a href="author.html?id=${encodeURIComponent(au.id)}"><b>${esc(au.name)}</b></a> · ${esc(au.affiliation)}</p><p class="lead">${esc(a.subtitle)}</p><div class="abstract"><b>Abstract</b><p>${esc(a.sections[0][1])}</p></div>${a.sections.slice(1).map(s=>`<h2>${esc(s[0])}</h2><p>${esc(s[1])}</p>`).join('')}<h2>Research project</h2><p>This article is connected to <a href="project.html?id=${encodeURIComponent(pr.id)}"><b>${esc(pr.title)}</b></a>.</p><h2>Keywords</h2><p>${a.keywords.map(k=>`<span class="pill">${esc(k)}</span>`).join(' ')}</p><h2>References</h2><ol>${refs}</ol><h2>Related articles</h2><div class="cards three">${a.related.map(id=>articleCard(article(id))).join('')}</div><p><a class="btn primary" href="knowledge.html">← Back to Knowledge Hub</a></p>`;
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Research Article | VOC Research World</title><link rel="stylesheet" href="style.css">
+<style>.live-article{max-width:900px}.live-article .article-body{white-space:pre-wrap;line-height:1.85}.live-article .article-summary{padding:20px;background:#f1f7fa;border-left:4px solid var(--blue);border-radius:8px}.live-article .article-meta{color:var(--muted);font-size:14px;margin-bottom:18px}</style>
+</head><body><div id="header"></div><section class="content"><article class="wrap article" id="article"><p class="muted">Loading article…</p></article></section><div id="footer"></div>
+<script src="data.js"></script><script src="app.js"></script>
+<script type="module">
+import { supabase } from './supabase-config.js';
+const root=document.getElementById('article'),params=new URLSearchParams(location.search),id=params.get('id')||'metabolism';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function renderStatic(){
+ const a=window.VOC.article(id),au=window.VOC.author(a.authorId),pr=window.VOC.project(a.projectId);
+ document.title=a.title+' | VOC Research World';
+ const refs=a.references.map(rid=>{const r=window.VOC.references[rid];return r?`<li>${esc(r.authors)} (${esc(r.year)}). <i>${esc(r.title)}</i>. ${esc(r.source)}</li>`:''}).join('');
+ root.innerHTML=`<div class="meta">${esc(a.category)} · ${esc(a.type)} · ${esc(a.date.slice(0,4))}</div><h1>${esc(a.title)}</h1><p><a href="authors.html"><b>${esc(au.name)}</b></a> · ${esc(au.affiliation)}</p><p class="lead">${esc(a.subtitle)}</p><div class="abstract"><b>Abstract</b><p>${esc(a.sections[0][1])}</p></div>${a.sections.slice(1).map(s=>`<h2>${esc(s[0])}</h2><p>${esc(s[1])}</p>`).join('')}<h2>Research project</h2><p>This article is connected to <a href="research-projects.html"><b>${esc(pr.title)}</b></a>.</p><h2>Keywords</h2><p>${a.keywords.map(k=>`<span class="pill">${esc(k)}</span>`).join(' ')}</p><h2>References</h2><ol>${refs}</ol><p><a class="btn primary" href="knowledge.html">← Back to Knowledge Hub</a></p>`;
+}
+async function renderDatabase(){
+ const {data:a,error}=await supabase.from('knowledge_articles').select('id,title,excerpt,content,category_id,author_id,status,published_at,created_at').eq('id',id).eq('status','published').maybeSingle();
+ if(error)throw error;if(!a)return false;
+ const [catRes,authorRes]=await Promise.all([
+   a.category_id?supabase.from('categories').select('name').eq('id',a.category_id).maybeSingle():Promise.resolve({data:null}),
+   a.author_id?supabase.from('profiles').select('full_name,username,affiliation,department,position').eq('id',a.author_id).maybeSingle():Promise.resolve({data:null})
+ ]);
+ const cat=catRes.data?.name||'Scientific Knowledge',p=authorRes.data||{},author=p.full_name||p.username||'VOC Research World contributor';
+ document.title=a.title+' | VOC Research World';
+ const body=String(a.content||'').trim();
+ const formatted=body.split(/\n{2,}/).map(block=>{const line=block.trim();if(!line)return '';if(/^#{1,3}\s+/.test(line)){const level=Math.min(3,(line.match(/^#+/)||['#'])[0].length);return `<h${level}>${esc(line.replace(/^#{1,3}\s+/,''))}</h${level}>`;}return `<p>${esc(line).replace(/\n/g,'<br>')}</p>`;}).join('');
+ root.className='wrap article live-article';
+ root.innerHTML=`<p class="article-meta">${esc(cat)} · Published ${esc((a.published_at||a.created_at||'').slice(0,10))}</p><h1>${esc(a.title)}</h1><p><b>${esc(author)}</b>${p.affiliation?' · '+esc(p.affiliation):p.department?' · '+esc(p.department):''}</p>${a.excerpt?`<div class="article-summary"><b>Abstract / Summary</b><p>${esc(a.excerpt)}</p></div>`:''}<div class="article-body">${formatted||'<p>No article text has been added.</p>'}</div><p><a class="btn primary" href="knowledge.html">← Back to Knowledge Hub</a></p>`;
+ return true;
+}
+try{
+ const isDb=params.get('source')==='db'||/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+ if(isDb){const found=await renderDatabase();if(!found)root.innerHTML='<h1>Article unavailable</h1><p>This article may not be published or may no longer be available.</p><p><a href="knowledge.html">Return to Knowledge Hub</a></p>';}
+ else renderStatic();
+}catch(e){root.innerHTML='<h1>Unable to load article</h1><p>There was a problem loading this article. Please return to the Knowledge Hub and try again.</p><p class="small">'+esc(e.message||'Unknown error')+'</p><p><a href="knowledge.html">Return to Knowledge Hub</a></p>';}
 </script></body></html>
