@@ -696,9 +696,10 @@ form.addEventListener("submit", async event => {
       await supabase
         .from("submissions")
         .insert({
-          title: title,
-          abstract: abstract,
-          manuscript_url: uploadedPath,
+  title: title,
+  abstract: abstract,
+  content: extractedContent,
+  manuscript_url: uploadedPath,
           category_id: categoryId,
           submitted_by: session.user.id,
           status: "submitted",
