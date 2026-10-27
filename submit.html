@@ -525,6 +525,9 @@ async function initializePage() {
     if (error) throw error;
 
     currentSession = session;
+    submitButton.textContent = "Extracting manuscript text...";
+
+const extractedContent = await extractManuscriptText(file);
 
     if (!session) {
       setAccountMessage(
