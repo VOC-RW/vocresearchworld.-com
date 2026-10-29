@@ -27,3 +27,5 @@ Do not move CSS/JS into an `assets/` folder unless all HTML paths are changed ac
 ## What V6.1 does not claim
 
 This is still a static frontend. It does not yet have a database, authentication, real manuscript upload, editorial dashboard, or CMS. Those are later backend stages.
+
+[![OpenRepos](https://img.shields.io/endpoint?url=https://openrepos.org/status/voc-research-world.openrepos.org.json&style=flat-square)](https://voc-research-world.openrepos.org/)
