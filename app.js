@@ -3,7 +3,7 @@ const H = `
   <div class="wrap nav">
 
     <a class="brand" href="index.html">
-      <img src="logo.svg" alt="VOC Research World">
+      <img src="file_0000000077fc81f4bf3357b9c22eae72.png" alt="VOC Research World Connected Logo">
       <span>
         <strong>VOC RESEARCH WORLD</strong>
         <small>SCIENCE · INNOVATION · GLOBAL IMPACT</small>
@@ -39,7 +39,7 @@ const F = `
 
     <div>
       <a class="brand" href="index.html">
-        <img src="logo.svg" alt="VOC Research World">
+        <img src="file_0000000077fc81f4bf3357b9c22eae72.png" alt="VOC Research World Connected Logo">
         <span>
           <strong>VOC RESEARCH WORLD</strong>
           <small>SCIENCE · INNOVATION · GLOBAL IMPACT</small>
