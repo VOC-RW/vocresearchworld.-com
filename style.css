@@ -1035,3 +1035,39 @@ box-shadow: 0 0 12px rgba(101, 214, 211, 0.7);
     margin-bottom: 12px;
   }
 }
+/* VOC CONNECTED LOGO — VISIBILITY UPGRADE */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.brand img {
+  display: block;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  object-position: center;
+  flex-shrink: 0;
+}
+
+.brand strong {
+  font-size: 14px;
+  letter-spacing: 0.11em;
+}
+
+@media (max-width: 600px) {
+  .brand img {
+    width: 54px;
+    height: 54px;
+  }
+
+  .brand {
+    gap: 9px;
+  }
+
+  .brand strong {
+    font-size: 12px;
+  }
+}
