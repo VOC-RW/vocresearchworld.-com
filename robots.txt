@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://voc-rw.github.io/vocresearchworld.-com/sitemap.xml
+Sitemap: https://voc-research-world.runs-at.dev/sitemap.xml
