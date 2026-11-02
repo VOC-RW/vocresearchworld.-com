@@ -75,6 +75,7 @@ const F = `
       <a href="founder.html">Founder &amp; Creator</a>
       <a href="submit.html">Submit Research</a>
       <a href="contact.html">Contact</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
     </div>
 
     <div>
