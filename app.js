@@ -26,6 +26,7 @@ const H = `
       <a href="data-ai.html">Data &amp; AI</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
       <a class="primary" href="submit.html">Submit Research</a>
     </nav>
 
