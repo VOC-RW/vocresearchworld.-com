@@ -37,7 +37,8 @@
     r2:{id:'r2', authors:'Skoog DA, Holler FJ, Crouch SR', year:2018, title:'Principles of Instrumental Analysis', source:'Cengage Learning.'},
     r3:{id:'r3', authors:'Miller JN, Miller JC', year:2018, title:'Statistics and Chemometrics for Analytical Chemistry', source:'Pearson.'},
     r4:{id:'r4', authors:'World Health Organization', year:2011, title:'Laboratory Quality Management System: Handbook', source:'WHO.'},
-    r5:{id:'r5', authors:'VOC Research World', year:2026, title:'VOC Scientific Knowledge Series', source:'VOC Research World.'}
+   r5:{id:'r5', authors:'VOC Research World', year:2026, title:'VOC Scientific Knowledge Series', source:'VOC Research World.'},
+r6:{id:'r6', authors:'International Organization for Standardization', year:2022, title:'ISO 15189:2022 Medical laboratories — Requirements for quality and competence', source:'ISO.'}
   };
 
   const articles = {
@@ -150,25 +151,78 @@
       ]
     },
 
+    
     qa:{
       id:'qa',
-      type:'Quality Note',
+      type:'Educational Resource',
       category:'Quality Assurance',
-      title:'Quality Assurance versus Quality Control',
-      subtitle:'How QA and QC work together in laboratory systems.',
-      date:'2026-01-10',
+      title:'Quality Assurance and Quality Control in the Laboratory: Principles, Systems and Applications',
+      subtitle:'A comprehensive guide to laboratory quality management, internal quality control, external quality assessment, accreditation and corrective action.',
+      date:'2026-11-03',
       authorId:'editorial',
       projectId:'instrumentation-workflow',
-      keywords:['quality assurance','quality control','calibration','validation'],
-      references:['r4','r5'],
-      related:['uvvis','data'],
+      keywords:[
+        'quality assurance',
+        'quality control',
+        'laboratory quality management',
+        'internal quality control',
+        'external quality assessment',
+        'ISO 15189',
+        'calibration',
+        'validation',
+        'accuracy and precision',
+        'corrective action'
+      ],
+      references:['r2','r3','r4','r6'],
+      related:['uvvis','data','biochemical-analysis'],
       sections:[
-        ['Abstract','Quality assurance and quality control are related but distinct components of a laboratory quality system.'],
-        ['Quality Assurance','QA focuses on planned and systematic activities that create confidence that a process can consistently produce fit-for-purpose results.'],
-        ['Quality Control','QC focuses on operational checks and measurements used to determine whether analytical results meet defined requirements.'],
-        ['Integrated Practice','Calibration, method verification, documentation, competency, equipment maintenance and control materials can work together within a broader quality system.']
+        ['Abstract',
+        'Quality assurance (QA) and quality control (QC) are essential components of a reliable laboratory quality management system. They help laboratories produce results that are accurate, reliable, reproducible and fit for their intended purpose. This article explains the differences between QA and QC, laboratory procedures, equipment management, internal quality control, external quality assessment, accreditation principles and the management of non-conformities.'],
+
+        ['1. Introduction to Laboratory Quality Management',
+        'Laboratory quality management refers to the coordinated activities used to direct, control and continually improve laboratory operations. The objective is to ensure that personnel, equipment, procedures, reagents, facilities and information systems work together to produce dependable results. Quality is not determined only by the final analytical measurement. It depends on the entire laboratory process, from the initial request and specimen collection to analysis, reporting and result interpretation.'],
+
+        ['2. Understanding Quality Assurance',
+        'Quality assurance is the planned and systematic set of activities implemented to provide confidence that laboratory processes will consistently meet defined quality requirements. QA is preventive in orientation. It includes staff training, documented procedures, equipment maintenance programmes, method verification, internal audits, document control, risk management and continuous improvement. A well-designed QA system aims to prevent errors before they affect laboratory results.'],
+
+        ['3. Understanding Quality Control',
+        'Quality control consists of operational techniques and activities used to monitor whether an analytical process is performing within specified limits. In a laboratory, QC may involve analysing control materials, monitoring calibration performance, examining replicate measurements and reviewing control charts. QC helps detect changes in analytical performance, such as random error, systematic error, instrument drift and reagent deterioration. When results fall outside established acceptance criteria, the laboratory should investigate before releasing affected patient or research results.'],
+
+        ['4. Differences Between QA and QC',
+        'QA and QC have related but different functions. QA focuses on the overall system and prevention of quality failures, whereas QC focuses on monitoring the performance of specific processes and measurements. For example, staff competency assessment, document control and internal audits are QA activities. Running control samples and evaluating analytical control charts are QC activities. Both are necessary because a laboratory may have good procedures but still produce unreliable measurements if its analytical performance is not monitored.'],
+
+        ['5. Standard Operating Procedures and Documentation',
+        'A standard operating procedure (SOP) is an approved document that describes how a specific laboratory activity should be performed. SOPs promote consistency, traceability and reproducibility. They may cover specimen reception, reagent preparation, instrument operation, calibration, analytical testing, equipment cleaning, result reporting and waste disposal. Controlled documents should have clear identification, approval, revision history and access to the current authorised version. Laboratory records should be complete, legible, traceable and protected from unauthorised alteration.'],
+
+        ['6. Calibration, Verification and Validation',
+        'Calibration establishes the relationship between instrument response and known reference values under specified conditions. Verification provides objective evidence that a laboratory can meet stated requirements when using an established method or procedure. Validation evaluates whether a method is suitable for its intended use. Depending on the application, performance characteristics may include accuracy, precision, analytical measuring range, linearity, detection capability and robustness. These activities should be planned, documented and reviewed according to the method and applicable quality requirements.'],
+
+        ['7. Internal Quality Control',
+        'Internal quality control involves routine monitoring of analytical performance within the laboratory. Control materials with known or assigned values may be analysed alongside patient or research samples. Results are compared with established control limits and reviewed for unexpected patterns. Control charts, including Levey–Jennings charts, can help visualise analytical performance over time. Westgard multirules may be used in appropriate settings to support the interpretation of control results. The choice of control rules and acceptance limits should reflect the analytical method, risk and laboratory requirements.'],
+
+        ['8. External Quality Assessment and Proficiency Testing',
+        'External quality assessment (EQA) is a process in which an external provider evaluates a laboratory’s performance using materials or other assessment methods. In proficiency testing, participating laboratories analyse supplied samples and their results are compared with assigned values or peer-group performance where appropriate. EQA can reveal performance problems that may not be detected by internal controls alone. Participation should be followed by review, investigation of unsatisfactory performance and documented corrective action. EQA does not replace internal quality control.'],
+
+        ['9. Accuracy, Precision and Measurement Uncertainty',
+        'Accuracy describes the closeness of a measured result to an appropriate reference value, while precision describes the closeness of agreement between repeated measurements under specified conditions. A method can be precise without being accurate if it produces consistent results that are systematically biased. Measurement uncertainty expresses the dispersion of values that could reasonably be attributed to a measured quantity. Understanding these concepts helps laboratory professionals assess method performance, interpret results and communicate the limitations of measurements.'],
+
+        ['10. Equipment and Reagent Management',
+        'Laboratory equipment should be selected, installed, maintained and monitored according to its intended use. Equipment records may include identification, location, service history, calibration status, maintenance activities and performance checks. Reagents and consumables should be appropriately labelled, stored and monitored for expiry, stability and suitability. Equipment malfunction, unsuitable reagents or poor storage conditions can compromise analytical results even when the operator follows the written procedure.'],
+
+        ['11. Non-Conformities and Corrective Actions',
+        'A non-conformity occurs when a laboratory activity or result fails to meet a specified requirement. Examples include the use of expired reagents, failed quality-control results, incorrect specimen identification, equipment malfunction and incomplete records. When a problem is identified, the laboratory should contain the immediate issue, assess its impact, document the event, investigate its cause and implement appropriate corrective action. Corrective action should address the underlying cause rather than merely correcting the immediate error. Follow-up evaluation helps determine whether the action was effective.'],
+
+        ['12. ISO 15189 and Laboratory Accreditation',
+        'ISO 15189:2022 specifies requirements for quality and competence in medical laboratories. It addresses areas such as impartiality, confidentiality, personnel competence, facilities, equipment, pre-examination processes, examination procedures, post-examination activities and management-system requirements. Accreditation is a formal recognition by an authorised accreditation body that a laboratory has demonstrated competence against applicable requirements within a defined scope. Accreditation is not achieved simply by purchasing equipment or writing SOPs; it requires demonstrated implementation, technical competence, documented evidence and ongoing assessment.'],
+
+        ['13. Continuous Improvement and Laboratory Performance',
+        'Quality management is a continuous process. Laboratories can review performance indicators such as turnaround time, rejected specimens, control failures, amended reports, equipment downtime, customer feedback and audit findings. Internal audits and management reviews help identify opportunities for improvement. Staff should be encouraged to report problems and participate in quality activities. A learning-oriented quality culture supports better processes and more dependable laboratory services.'],
+
+        ['14. Conclusion',
+        'Quality assurance and quality control work together to protect the reliability of laboratory results. QA establishes and improves the systems that support quality, while QC monitors whether analytical processes continue to perform acceptably. SOPs, calibration, validation, internal controls, external assessment, staff competence, equipment management and corrective actions are all important parts of effective laboratory practice. A strong quality management system helps laboratories produce results that are technically sound, traceable and appropriate for their intended use.']
       ]
     },
+
 
     'biochemical-analysis':{
       id:'biochemical-analysis',
