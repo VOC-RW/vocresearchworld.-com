@@ -51,7 +51,59 @@
       ['Quality Assurance','QA focuses on planned and systematic activities that create confidence that a process can consistently produce fit-for-purpose results.'],
       ['Quality Control','QC focuses on operational checks and measurements used to determine whether analytical results meet defined requirements.'],
       ['Integrated Practice','Calibration, method verification, documentation, competency, equipment maintenance and control materials can work together within a broader quality system.']
-    ]}
+    ]} 
+    biochemical-analysis: {
+      id:'biochemical-analysis',
+      type:'Educational Resource',
+      category:'Biochemistry',
+      title:'Fundamentals of Biochemical Analysis in the Laboratory',
+      subtitle:'Principles, analytical methods, specimen handling and interpretation of biochemical results.',
+      date:'2026-11-03',
+      authorId:'editorial',
+      projectId:'instrumentation-workflow',
+      keywords:[
+        'biochemical analysis',
+        'clinical biochemistry',
+        'enzymes',
+        'metabolites',
+        'laboratory methods',
+        'quality control'
+      ],
+      references:['r1','r2','r4'],
+      related:['metabolism','uvvis','qa'],
+      sections:[
+        ['Abstract',
+        'Biochemical analysis is the systematic investigation of chemical substances and biochemical processes in biological materials. It provides information about metabolites, enzymes, proteins, carbohydrates, lipids, electrolytes and other substances involved in cellular and physiological functions. This article introduces the fundamental principles, analytical approaches, specimen requirements and quality considerations that support reliable biochemical laboratory investigations.'],
+
+        ['1. Introduction to Biochemical Analysis',
+        'Biochemical analysis involves the measurement and interpretation of chemical components in biological samples. Depending on the research question, samples may include blood, serum, plasma, urine, tissue extracts and other biological materials. The results help researchers understand metabolic processes, investigate biochemical changes and study the relationship between molecular processes and biological function.'],
+
+        ['2. Major Classes of Biochemical Substances',
+        'Important analyte groups include carbohydrates such as glucose, lipids such as cholesterol and triglycerides, proteins and amino acids, enzymes, electrolytes and metabolic waste products such as urea and creatinine. Each analyte has specific chemical properties that influence its selection, measurement and interpretation. Understanding the biological function of an analyte is essential before selecting an analytical method.'],
+
+        ['3. Principles of Analytical Methods',
+        'Biochemical laboratories employ several analytical techniques. Spectrophotometry measures the absorption of light by a substance or a reaction product. Colorimetric methods estimate analyte concentration through the intensity of a coloured product. Enzyme-based assays measure reactions catalysed by specific enzymes. Chromatographic methods separate components of mixtures, while electrophoretic techniques separate molecules according to properties such as charge and size. The method selected should be appropriate for the analyte, sample matrix and intended analytical purpose.'],
+
+        ['4. Specimen Collection and Preparation',
+        'Reliable biochemical results begin with appropriate specimen collection and handling. Factors such as patient preparation, collection technique, anticoagulant selection, sample labelling, transport temperature, processing time and storage conditions can affect analytical results. Haemolysis, contamination and inappropriate storage may introduce errors. Laboratories should follow validated procedures for specimen collection, separation, preservation and rejection of unsuitable samples.'],
+
+        ['5. Calibration and Quality Control',
+        'Calibration establishes the relationship between an instrument response and known reference concentrations or values. Quality control evaluates whether an analytical procedure continues to perform within defined acceptance limits. Laboratories may use control materials, blanks, calibration standards, replicate measurements and documented equipment checks. Calibration and quality control are complementary activities and should be supported by appropriate records and corrective actions when results fall outside acceptable limits.'],
+
+        ['6. Interpretation of Biochemical Results',
+        'Analytical results should not be interpreted in isolation. Interpretation requires attention to measurement units, reference intervals, analytical uncertainty, specimen quality, biological variation and the purpose of the investigation. A result outside a reference interval does not automatically establish a diagnosis. Scientific conclusions must consider the relevant biological context and, where appropriate, additional laboratory findings.'],
+
+        ['7. Common Sources of Analytical Error',
+        'Errors may arise before, during or after analysis. Pre-analytical errors include incorrect patient or sample identification, unsuitable collection tubes and improper storage. Analytical errors may involve instrument malfunction, reagent deterioration, incorrect calibration and procedural deviations. Post-analytical errors include transcription mistakes, incorrect units and inappropriate reporting. A structured quality management system helps laboratories identify, monitor and reduce these sources of error.'],
+
+        ['8. Conclusion',
+        'Biochemical analysis is an essential component of laboratory science because it connects chemical measurements with biological interpretation. Reliable results depend on sound analytical principles, appropriate specimen handling, validated methods, calibration, quality control and careful interpretation. Laboratory professionals must understand both the scientific basis of each method and the limitations that influence the quality of reported results.'],
+
+        ['References and Further Reading',
+        'Nelson and Cox, Lehninger Principles of Biochemistry (2021); Skoog, Holler and Crouch, Principles of Instrumental Analysis (2018); World Health Organization, Laboratory Quality Management System: Handbook (2011).']
+      ]
+    },
+
   };
 
   const projects = {
