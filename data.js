@@ -51,8 +51,8 @@
       ['Quality Assurance','QA focuses on planned and systematic activities that create confidence that a process can consistently produce fit-for-purpose results.'],
       ['Quality Control','QC focuses on operational checks and measurements used to determine whether analytical results meet defined requirements.'],
       ['Integrated Practice','Calibration, method verification, documentation, competency, equipment maintenance and control materials can work together within a broader quality system.']
-    ]} 
-    biochemical-analysis: {
+       ]},
+    'biochemical-analysis': {
       id:'biochemical-analysis',
       type:'Educational Resource',
       category:'Biochemistry',
