@@ -61,25 +61,74 @@
       ]
     },
 
+    
     uvvis:{
       id:'uvvis',
-      type:'Method Note',
+      type:'Educational Resource',
       category:'Analytical Science',
-      title:'UV–Visible Spectrophotometry',
-      subtitle:'Principles, calibration, Beer–Lambert law and interpretation.',
-      date:'2026-02-18',
+      title:'UV–Visible Spectrophotometry: Principles, Instrumentation and Laboratory Applications',
+      subtitle:'A comprehensive guide to light absorption, Beer–Lambert law, instrument operation, calibration and analytical applications.',
+      date:'2026-11-03',
       authorId:'editorial',
       projectId:'instrumentation-workflow',
-      keywords:['UV-Vis','spectrophotometry','Beer-Lambert law','calibration'],
-      references:['r2','r4','r5'],
-      related:['data','metabolism'],
+      keywords:[
+        'UV-Visible spectrophotometry',
+        'electromagnetic radiation',
+        'Beer-Lambert law',
+        'absorbance',
+        'transmittance',
+        'wavelength selection',
+        'calibration',
+        'quality control',
+        'analytical instrumentation'
+      ],
+      references:['r1','r2','r3','r4'],
+      related:['data','metabolism','qa'],
       sections:[
-        ['Abstract','UV–Visible spectrophotometry measures the interaction between radiation and matter and is widely used for quantitative and qualitative laboratory analysis.'],
-        ['Principle','A sample absorbs selected wavelengths of electromagnetic radiation. Under suitable conditions, absorbance is related to concentration through the Beer–Lambert relationship.'],
-        ['Calibration and Quality','Reliable analysis requires an appropriate blank, standards or calibration materials, suitable wavelength selection, clean optical cells and quality-control checks. Calibration performance should be assessed rather than assumed.'],
-        ['Interpretation','Results should be reported with units, calibration information and relevant uncertainty or quality-control observations. Deviations from linearity may arise from chemical, instrumental or procedural factors.']
+        ['Abstract',
+        'UV–Visible spectrophotometry is an analytical technique that measures the absorption of ultraviolet and visible radiation by chemical substances. It is widely applied in biochemistry, pharmaceutical analysis, environmental monitoring, food science and industrial quality control. This article examines its theoretical principles, instrumentation, analytical procedures, calibration, quality assurance and common laboratory applications.'],
+
+        ['1. Introduction to UV–Visible Spectrophotometry',
+        'UV–Visible spectrophotometry is based on the interaction of electromagnetic radiation with matter. When light passes through a sample, certain wavelengths may be absorbed by molecules or ions. The amount of radiation absorbed depends on the chemical properties of the substance, its concentration, the wavelength selected and the optical path length. The technique is particularly useful for substances that absorb ultraviolet or visible light directly or can be converted into coloured reaction products.'],
+
+        ['2. Electromagnetic Radiation and Molecular Absorption',
+        'Electromagnetic radiation consists of energy transmitted through oscillating electric and magnetic fields. The ultraviolet region commonly used in laboratory UV–Vis analysis is approximately 200–400 nm, while the visible region is approximately 400–700 nm. When a molecule absorbs radiation of an appropriate energy, electrons may move from a lower-energy state to a higher-energy state. Common electronic transitions include pi to pi-star and n to pi-star transitions. The wavelength absorbed depends on the molecular structure and its electronic environment.'],
+
+        ['3. The Beer–Lambert Law',
+        'The Beer–Lambert law describes the relationship between absorbance and the concentration of an absorbing substance under suitable conditions. It is expressed as A = εlc, where A is absorbance, ε is the molar absorptivity, l is the optical path length and c is the concentration. Absorbance is also related to transmittance by A = log10(I0/I), where I0 represents incident light intensity and I represents transmitted light intensity. For a fixed wavelength and path length, absorbance is proportional to concentration within the validated linear working range.'],
+
+        ['4. Main Components of a UV–Visible Spectrophotometer',
+        'A typical UV–Visible spectrophotometer contains a radiation source, wavelength selector or monochromator, sample holder, detector and signal-processing or display system. Deuterium lamps are commonly used for ultraviolet radiation, while tungsten-halogen lamps are commonly used for visible and near-infrared regions. The monochromator selects the required wavelength using optical components such as slits, prisms or diffraction gratings. The sample holder positions the cuvette in the light path. The detector measures transmitted radiation and converts it into an electrical signal for processing and display.'],
+
+        ['5. Types of UV–Visible Spectrophotometers',
+        'Single-beam instruments measure the blank and sample in sequence using one optical path. Double-beam instruments divide radiation into sample and reference paths, allowing comparison during measurement. Array-based instruments may use multiple detector elements to collect information across a range of wavelengths. Instrument selection depends on analytical requirements, sample throughput, wavelength range, measurement stability and available resources.'],
+
+        ['6. Sample Preparation and Cuvette Selection',
+        'Good sample preparation is essential for reliable measurement. Samples should be homogeneous, appropriately diluted and free from unwanted particles that may scatter light. The solvent or reagent blank should contain the same relevant components as the sample, except for the analyte being measured. Quartz cuvettes are generally required for ultraviolet measurements because ordinary glass absorbs strongly in parts of the UV region. Glass or suitable plastic cuvettes may be used for compatible visible-range measurements. Cuvettes should be clean, correctly oriented and handled by their non-optical surfaces to reduce fingerprints and contamination.'],
+
+        ['7. General Laboratory Operating Procedure',
+        'A typical analysis begins by switching on the instrument and allowing it to stabilize according to the manufacturer’s instructions. The appropriate wavelength and measurement mode are selected. A suitable blank is prepared and used to establish the reference baseline. Calibration standards are measured when quantitative analysis requires a calibration curve. The sample is then introduced into a suitable cuvette and its absorbance is recorded. Replicate measurements and appropriate quality-control materials may be used to assess measurement consistency. The procedure must follow the validated method and the instrument operating manual.'],
+
+        ['8. Calibration and Quantitative Analysis',
+        'Quantitative UV–Vis analysis commonly uses standards of known concentration to establish a calibration relationship between concentration and absorbance. A calibration graph is constructed by plotting absorbance against concentration. A suitable regression model may then be used to estimate the concentration of an unknown sample within the validated calibration range. The calibration should be evaluated for linearity, residual patterns, range and consistency with quality requirements. Samples outside the working range may require appropriate dilution and remeasurement. A high coefficient of determination alone does not prove that a calibration model is suitable.'],
+
+        ['9. Applications in Biochemistry and Laboratory Science',
+        'UV–Visible spectrophotometry is used in biochemical assays to measure substances such as proteins, nucleic acids and metabolites, depending on the analytical method. Enzyme assays may monitor the formation or disappearance of a light-absorbing compound over time. In pharmaceutical analysis, the technique can support drug-content determination and dissolution studies. In environmental analysis, suitable methods may be used to estimate selected contaminants. In food science, it can support colour measurements and the determination of selected chemical constituents. The method must be validated or verified for its intended analytical application.'],
+
+        ['10. Quality Assurance and Quality Control',
+        'Reliable spectrophotometric measurements require appropriate quality assurance and quality control. Important practices include instrument performance checks, wavelength accuracy assessment, photometric accuracy checks, baseline evaluation, blank measurements, calibration verification and the use of suitable control materials. Cuvette condition, reagent quality, temperature and instrument stability should also be considered. Acceptance criteria should be defined before analysis, and unexpected results should be investigated and documented.'],
+
+        ['11. Common Sources of Analytical Error',
+        'Errors may result from unsuitable blanks, incorrect wavelength selection, dirty or scratched cuvettes, air bubbles, sample turbidity, incorrect dilution, unstable reagents, instrument drift and inappropriate calibration. Chemical factors such as changes in pH, complex formation and analyte instability may also affect absorbance. Deviations from Beer–Lambert behaviour can occur at high concentrations, when chemical interactions become significant or when instrumental conditions are unsuitable. Good laboratory practice helps identify and reduce these errors.'],
+
+        ['12. Advantages and Limitations',
+        'UV–Visible spectrophotometry is relatively rapid, widely available, often economical and suitable for many quantitative analytical procedures. It can support kinetic measurements and routine laboratory testing. However, not all substances absorb sufficiently in the UV–visible region. Interfering substances, overlapping absorption bands, sample turbidity and matrix effects may reduce selectivity. Reliable analysis therefore depends on appropriate method development, sample preparation, calibration and quality assessment.'],
+
+        ['13. Conclusion',
+        'UV–Visible spectrophotometry is an important analytical technique that connects the interaction of light with matter to qualitative and quantitative chemical investigation. Understanding electromagnetic radiation, molecular absorption, the Beer–Lambert law and instrument components provides a foundation for its effective use. Accurate results require suitable sample preparation, correct wavelength selection, calibration, quality control and careful interpretation. Its applications across biochemistry, pharmaceutical science, environmental analysis and industrial laboratories make it a valuable instrument in modern analytical science.']
       ]
     },
+
 
     data:{
       id:'data',
