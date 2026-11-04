@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071b2b">
+  <meta name="description" content="Explore science, health, laboratory, computing and engineering subjects at VOC Learning Academy.">
+  <title>Subject Directory | VOC Learning Academy</title>
+  <link rel="icon" href="../logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/academy.css">
+
+  <style>
+    .directory-hero {
+      background: linear-gradient(120deg, #071b2b, #14527a);
+      color: white;
+      padding: 65px 5%;
+    }
+
+    .directory-hero h1 {
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1.2;
+      margin-bottom: 15px;
+    }
+
+    .directory-hero h1 span {
+      color: #65bce9;
+    }
+
+    .directory-hero p:not(.eyebrow) {
+      max-width: 720px;
+      color: #d0dce5;
+      font-size: 15px;
+    }
+
+    .level-section {
+      padding: 35px 0;
+      background: #eaf4fb;
+    }
+
+    .level-options {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .level-option {
+      background: white;
+      border: 1px solid #dce5eb;
+      border-radius: 7px;
+      padding: 17px;
+      color: #071b2b;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      transition: .2s ease;
+    }
+
+    .level-option:hover {
+      border-color: #1676b9;
+      transform: translateY(-3px);
+    }
+
+    .directory-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+    }
+
+    .directory-card {
+      background: white;
+      border: 1px solid #dce5eb;
+      border-radius: 9px;
+      padding: 27px;
+      box-shadow: 0 12px 35px rgba(7, 27, 43, .06);
+    }
+
+    .directory-card .number {
+      color: #2b9b70;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .directory-card h3 {
+      color: #071b2b;
+      font-size: 21px;
+      margin: 10px 0;
+    }
+
+    .directory-card p {
+      color: #687987;
+      font-size: 13px;
+      margin-bottom: 17px;
+    }
+
+    .subject-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .subject-list a {
+      display: inline-block;
+      background: #f1f6f9;
+      border: 1px solid #dce5eb;
+      border-radius: 20px;
+      padding: 7px 12px;
+      color: #24445b;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .subject-list a:hover {
+      background: #eaf4fb;
+      border-color: #1676b9;
+      color: #1676b9;
+    }
+
+    .learning-note {
+      margin-top: 35px;
+      padding: 25px;
+      border-left: 4px solid #2b9b70;
+      background: #f4f7fa;
+      border-radius: 5px;
+    }
+
+    .learning-note h3 {
+      color: #071b2b;
+      margin-bottom: 8px;
+    }
+
+    .learning-note p {
+      color: #687987;
+      font-size: 13px;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 25px;
+      color: #1676b9;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      .level-options {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .directory-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .directory-card {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="header">
+  <a class="brand" href="./">
+    <img src="../logo.svg" alt="VOC Research World">
+    <span>
+      <strong>VOC LEARNING ACADEMY</strong>
+      <small>A VOC Research World initiative</small>
+    </span>
+  </a>
+
+  <nav aria-label="Main navigation">
+    <a href="./">Home</a>
+    <a href="#departments">Departments</a>
+    <a href="#levels">Learning Levels</a>
+    <a href="#support">Learning Support</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="directory-hero">
+    <div class="container">
+      <p class="eyebrow">VOC LEARNING ACADEMY · SUBJECT DIRECTORY</p>
+
+      <h1>Explore knowledge.<br><span>Discover your subject.</span></h1>
+
+      <p>
+        Find your academic field, explore subjects and build
+        understanding through structured learning. Whether you
+        are in secondary school, college or university, your
+        learning journey starts here.
+      </p>
+
+      <a class="button primary" href="#departments" style="margin-top:25px;">
+        Explore Departments →
+      </a>
+    </div>
+  </section>
+
+  <section class="level-section" id="levels">
+    <div class="container">
+      <p class="eyebrow">CHOOSE YOUR LEARNING STAGE</p>
+
+      <h2>Where are you in your academic journey?</h2>
+
+      <div class="level-options">
+        <a class="level-option" href="#secondary">Secondary School</a>
+        <a class="level-option" href="#college">College / Polytechnic</a>
+        <a class="level-option" href="#university">University</a>
+        <a class="level-option" href="#independent">Independent Learning</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="departments">
+    <div class="container">
+      <p class="eyebrow">OUR FIVE INITIAL DEPARTMENTS</p>
+
+      <h2>Science and Technology Subjects</h2>
+
+      <p class="section-intro">
+        Explore the academic disciplines currently planned
+        for the Academy's initial learning focus.
+      </p>
+
+      <div class="directory-grid">
+
+        <article class="directory-card">
+          <span class="number">01 · NATURAL SCIENCES</span>
+          <h3>Basic and Natural Sciences</h3>
+          <p>
+            Build a strong understanding of the fundamental
+            principles governing the natural world.
+          </p>
+
+          <div class="subject-list">
+            <a href="#secondary">Biology</a>
+            <a href="#secondary">Chemistry</a>
+            <a href="#secondary">Physics</a>
+            <a href="#secondary">Mathematics</a>
+            <a href="#secondary">General Science</a>
+          </div>
+        </article>
+
+        <article class="directory-card">
+          <span class="number">02 · LIFE AND HEALTH SCIENCES</span>
+          <h3>Life and Health Sciences</h3>
+          <p>
+            Explore living systems, biological processes,
+            human health and molecular science.
+          </p>
+
+          <div class="subject-list">
+            <a href="#university">Biochemistry</a>
+            <a href="#college">Microbiology</a>
+            <a href="#university">Anatomy</a>
+            <a href="#university">Physiology</a>
+            <a href="#university">Genetics</a>
+            <a href="#college">Human Biology</a>
+          </div>
+        </article>
+
+        <article class="directory-card">
+          <span class="number">03 · LABORATORY AND APPLIED SCIENCES</span>
+          <h3>Laboratory and Applied Sciences</h3>
+          <p>
+            Understand laboratory techniques, analytical
+            measurements, scientific instruments and quality systems.
+          </p>
+
+          <div class="subject-list">
+            <a href="#university">Science Laboratory Technology</a>
+            <a href="#university">Analytical Chemistry</a>
+            <a href="#college">Instrumentation</a>
+            <a href="#college">Quality Assurance</a>
+            <a href="#college">Industrial Science</a>
+          </div>
+        </article>
+
+        <article class="directory-card">
+          <span class="number">04 · COMPUTING AND DIGITAL SCIENCES</span>
+          <h3>Computing, Data and AI</h3>
+          <p>
+            Develop digital knowledge and understand how
+            computers, data and intelligent systems work.
+          </p>
+
+          <div class="subject-list">
+            <a href="#secondary">Computer Science</a>
+            <a href="#college">Programming</a>
+            <a href="#college">Data Analysis</a>
+            <a href="#university">Data Science</a>
+            <a href="#university">Artificial Intelligence</a>
+          </div>
+        </article>
+
+        <article class="directory-card">
+          <span class="number">05 · ENGINEERING AND TECHNOLOGY</span>
+          <h3>Engineering and Technology</h3>
+          <p>
+            Explore engineering principles, applied technology,
+            systems and practical problem-solving.
+          </p>
+
+          <div class="subject-list">
+            <a href="#college">Electrical Engineering</a>
+            <a href="#college">Mechanical Engineering</a>
+            <a href="#college">Computer Engineering</a>
+            <a href="#college">Electronics</a>
+            <a href="#college">Technology Foundations</a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="learning-note">
+        <h3>More subjects will be introduced.</h3>
+        <p>
+          These are initial academic subject areas. Their detailed
+          topic libraries, learning materials and teacher-led
+          lessons will be developed progressively.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section muted" id="secondary">
+    <div class="container">
+      <p class="eyebrow">LEARNING LEVEL 01</p>
+      <h2>Secondary School Learning</h2>
+      <p class="section-intro">
+        Strengthen foundational knowledge, understand classroom
+        concepts and develop confidence in science and mathematics.
+      </p>
+      <p>Planned focus: introductory Biology, Chemistry, Physics, Mathematics and General Science.</p>
+    </div>
+  </section>
+
+  <section class="section" id="college">
+    <div class="container">
+      <p class="eyebrow">LEARNING LEVEL 02</p>
+      <h2>College and Polytechnic Learning</h2>
+      <p class="section-intro">
+        Develop deeper subject knowledge and connect theoretical
+        concepts with technical and practical applications.
+      </p>
+      <p>Planned focus: applied sciences, laboratory techniques, computing, engineering foundations and technical subjects.</p>
+    </div>
+  </section>
+
+  <section class="section muted" id="university">
+    <div class="container">
+      <p class="eyebrow">LEARNING LEVEL 03</p>
+      <h2>University Learning</h2>
+      <p class="section-intro">
+        Explore advanced concepts, scientific reasoning,
+        academic problem-solving and deeper subject understanding.
+      </p>
+      <p>Planned focus: university-level life sciences, analytical sciences, instrumentation, data science and engineering subjects.</p>
+    </div>
+  </section>
+
+  <section class="section" id="independent">
+    <div class="container">
+      <p class="eyebrow">LEARNING LEVEL 04</p>
+      <h2>Independent Learning</h2>
+      <p class="section-intro">
+        Learn beyond the classroom. Explore scientific ideas,
+        develop new skills and strengthen your existing knowledge
+        at your own pace.
+      </p>
+    </div>
+  </section>
+
+  <section class="join-section" id="support">
+    <div class="container join-content">
+      <div>
+        <p class="eyebrow">YOUR LEARNING JOURNEY</p>
+
+        <h2>Learn with guidance. <span>Grow with understanding.</span></h2>
+
+        <p>
+          VOC Learning Academy is developing subject-based
+          learning resources, a 24/7 AI academic tutor and
+          connections with qualified human teachers.
+        </p>
+      </div>
+
+      <div class="join-links">
+        <span class="status">DEVELOPMENT IN PROGRESS</span>
+
+        <a class="button light" href="./">
+          Return to Academy Home
+        </a>
+
+        <a href="mailto:vocresearchworld@gmail.com">
+          Contact the Academy
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container footer-content">
+    <strong>VOC LEARNING ACADEMY</strong>
+    <span>Learn. Understand. Discover. Excel.</span>
+    <a href="https://voc-research-world.runs-at.dev/">
+      VOC Research World ↗
+    </a>
+  </div>
+
+  <div class="container copyright">
+    © <span data-current-year>2026</span> VOC Learning Academy · SCIENCE · INNOVATION · GLOBAL IMPACT
+  </div>
+</footer>
+
+<script src="js/academy.js"></script>
+
+</body>
+</html>
