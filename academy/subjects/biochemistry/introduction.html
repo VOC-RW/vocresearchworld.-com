@@ -1,0 +1,737 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071b2b">
+  <meta name="description" content="Learn Introduction to Biochemistry at VOC Learning Academy through structured explanations, scientific examples and revision exercises.">
+  <title>Introduction to Biochemistry | VOC Learning Academy</title>
+  <link rel="icon" href="../../../../logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../../css/academy.css">
+
+  <style>
+    .lesson-hero {
+      background: linear-gradient(120deg, #071b2b, #14527a);
+      color: white;
+      padding: 55px 5%;
+    }
+
+    .lesson-hero h1 {
+      font-size: clamp(30px, 5vw, 46px);
+      margin: 15px 0;
+    }
+
+    .lesson-hero p {
+      max-width: 750px;
+      color: #d0dce5;
+      line-height: 1.8;
+    }
+
+    .lesson-container {
+      max-width: 1050px;
+      margin: auto;
+      padding: 45px 5%;
+    }
+
+    .lesson-section {
+      margin-bottom: 45px;
+    }
+
+    .lesson-section h2 {
+      color: #071b2b;
+      font-size: 25px;
+      margin-bottom: 15px;
+    }
+
+    .lesson-section h3 {
+      color: #14527a;
+      margin: 24px 0 10px;
+    }
+
+    .lesson-section p,
+    .lesson-section li {
+      color: #536777;
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    .lesson-section ul,
+    .lesson-section ol {
+      padding-left: 24px;
+    }
+
+    .objective-grid,
+    .application-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .lesson-card {
+      background: white;
+      border: 1px solid #dce5eb;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .lesson-card h3 {
+      margin-top: 0;
+    }
+
+    .science-note {
+      background: #eaf4fb;
+      border-left: 4px solid #1676b9;
+      padding: 20px;
+      border-radius: 5px;
+      margin: 22px 0;
+    }
+
+    .science-note p {
+      margin: 0;
+    }
+
+    .diagram {
+      background: #f4f7fa;
+      padding: 22px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 22px 0;
+    }
+
+    .diagram img {
+      width: 100%;
+      max-width: 650px;
+      border-radius: 7px;
+    }
+
+    .diagram-caption {
+      font-size: 12px;
+      color: #687987;
+      margin-top: 10px;
+    }
+
+    .lesson-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .lesson-table th,
+    .lesson-table td {
+      padding: 13px;
+      border: 1px solid #dce5eb;
+      text-align: left;
+      color: #536777;
+    }
+
+    .lesson-table th {
+      background: #eaf4fb;
+      color: #071b2b;
+    }
+
+    .question {
+      border: 1px solid #dce5eb;
+      padding: 18px;
+      border-radius: 7px;
+      margin: 15px 0;
+      background: white;
+    }
+
+    .question p {
+      margin: 5px 0;
+    }
+
+    .answer {
+      margin-top: 12px;
+      padding: 13px;
+      background: #f0f7f3;
+      border-radius: 5px;
+      color: #315e49;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .quiz-option {
+      display: block;
+      padding: 9px;
+      margin: 7px 0;
+      background: #f4f7fa;
+      border-radius: 5px;
+      cursor: pointer;
+      color: #405565;
+    }
+
+    .quiz-option input {
+      margin-right: 8px;
+    }
+
+    .quiz-result {
+      font-weight: 700;
+      margin-top: 15px;
+      color: #14527a;
+    }
+
+    .lesson-navigation {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 35px;
+    }
+
+    .lesson-navigation a {
+      color: #1676b9;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    @media(max-width:700px) {
+      .objective-grid,
+      .application-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .lesson-table {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="header">
+  <a class="brand" href="../../">
+    <img src="../../../../logo.svg" alt="VOC Research World">
+    <span>
+      <strong>VOC LEARNING ACADEMY</strong>
+      <small>A VOC Research World initiative</small>
+    </span>
+  </a>
+
+  <nav aria-label="Main navigation">
+    <a href="../../">Home</a>
+    <a href="../biochemistry.html">Biochemistry</a>
+    <a href="#lesson">Lesson</a>
+    <a href="#assessment">Assessment</a>
+  </nav>
+</header>
+
+<main>
+
+<section class="lesson-hero">
+  <div class="container">
+    <p class="eyebrow">LIFE AND HEALTH SCIENCES · BIOCHEMISTRY</p>
+
+    <h1>Topic 01: Introduction to Biochemistry</h1>
+
+    <p>
+      Discover the chemistry of life. Understand the molecules,
+      chemical reactions and biological processes responsible
+      for the structure, activities and survival of living organisms.
+    </p>
+
+    <p style="margin-top:20px;">
+      <strong>Learning level:</strong> Beginner to University Foundation
+    </p>
+  </div>
+</section>
+
+<div class="lesson-container" id="lesson">
+
+<section class="lesson-section">
+  <p class="eyebrow">WELCOME TO YOUR LESSON</p>
+  <h2>Before we begin</h2>
+
+  <p>
+    Imagine looking at a human being, a plant, a microorganism
+    or even a single living cell. Each is made up of chemical
+    substances that interact continuously to maintain life.
+    These substances include water, carbohydrates, proteins,
+    lipids, nucleic acids, vitamins and minerals.
+  </p>
+
+  <p>
+    But how does food become energy? How does the body build
+    new tissues? How do enzymes accelerate chemical reactions?
+    How does DNA store information that helps determine
+    biological characteristics?
+  </p>
+
+  <p>
+    These are some of the questions that biochemistry helps
+    us understand.
+  </p>
+</section>
+
+<section class="lesson-section">
+  <p class="eyebrow">01 · LEARNING OBJECTIVES</p>
+  <h2>What you should learn</h2>
+
+  <div class="objective-grid">
+    <article class="lesson-card">
+      <h3>Define Biochemistry</h3>
+      <p>Explain the meaning and scientific scope of biochemistry.</p>
+    </article>
+
+    <article class="lesson-card">
+      <h3>Understand its foundation</h3>
+      <p>Explain the relationship between chemistry and biology.</p>
+    </article>
+
+    <article class="lesson-card">
+      <h3>Identify biomolecules</h3>
+      <p>Recognise the major chemical substances found in living organisms.</p>
+    </article>
+
+    <article class="lesson-card">
+      <h3>Explain its importance</h3>
+      <p>Describe applications in medicine, agriculture, laboratory science and research.</p>
+    </article>
+  </div>
+</section>
+
+<section class="lesson-section">
+  <p class="eyebrow">02 · FUNDAMENTAL CONCEPT</p>
+  <h2>What is Biochemistry?</h2>
+
+  <p>
+    Biochemistry is the branch of science concerned with the
+    chemical composition, molecular structure, properties and
+    chemical reactions of substances found in living organisms.
+  </p>
+
+  <p>
+    In simpler terms, biochemistry explains life at the
+    molecular and chemical levels. It investigates what
+    living organisms are made of and how their chemical
+    components work together to sustain life.
+  </p>
+
+  <div class="science-note">
+    <p>
+      <strong>Scientific definition:</strong>
+      Biochemistry is the study of the chemical substances
+      and processes occurring in living organisms, including
+      the molecular mechanisms underlying biological functions.
+    </p>
+  </div>
+
+  <h3>Why is it called Biochemistry?</h3>
+
+  <p>
+    The word combines two major scientific ideas:
+  </p>
+
+  <ul>
+    <li><strong>Bio:</strong> Relating to life or living organisms.</li>
+    <li><strong>Chemistry:</strong> The science of matter, its composition, properties and transformations.</li>
+  </ul>
+
+  <p>
+    Therefore, biochemistry applies chemical principles
+    to the understanding of living systems.
+  </p>
+</section>
+
+<section class="lesson-section">
+  <p class="eyebrow">03 · SCIENTIFIC FOUNDATION</p>
+  <h2>Relationship between Biology and Chemistry</h2>
+
+  <p>
+    Biology studies living organisms, their structures,
+    functions, growth, reproduction and interactions.
+    Chemistry studies matter, chemical composition,
+    molecular structures and reactions.
+  </p>
+
+  <p>
+    Biochemistry connects these disciplines by explaining
+    the chemical mechanisms responsible for biological
+    activities.
+  </p>
+
+  <div class="diagram">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Biology_chemistry_biochemistry_diagram.svg/800px-Biology_chemistry_biochemistry_diagram.svg.png"
+      alt="Relationship between biology, chemistry and biochemistry"
+      loading="lazy"
+      onerror="this.style.display='none';"
+    >
+    <p class="diagram-caption">
+      Conceptual relationship between biology and chemistry.
+    </p>
+  </div>
+
+  <h3>Example: Digestion of food</h3>
+
+  <p>
+    When a person eats rice, the starch present in the rice
+    is broken down into smaller carbohydrate molecules by
+    digestive enzymes.
+  </p>
+
+  <p>
+    These molecules can subsequently be absorbed and used
+    in cellular metabolism to generate energy.
+  </p>
+
+  <p>
+    Biology explains the digestive system and its functions.
+    Chemistry explains the molecular structures and reactions.
+    Biochemistry explains the chemical processes that make
+    digestion and energy utilisation possible.
+  </p>
+</section>
+
+<section class="lesson-section">
+  <p class="eyebrow">04 · CHEMICAL COMPOSITION OF LIFE</p>
+  <h2>Major biomolecules</h2>
+
+  <p>
+    Living organisms contain different chemical substances
+    that perform specific biological functions. Many of
+    the important organic molecules are collectively called
+    biomolecules.
+  </p>
+
+  <table class="lesson-table">
+    <thead>
+      <tr>
+        <th>Biomolecule</th>
+        <th>Major function</th>
+        <th>Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Carbohydrates</td>
+        <td>Energy supply and structural support</td>
+        <td>Glucose, starch</td>
+      </tr>
+      <tr>
+        <td>Proteins</td>
+        <td>Structure, transport and catalysis</td>
+        <td>Haemoglobin, enzymes</td>
+      </tr>
+      <tr>
+        <td>Lipids</td>
+        <td>Energy storage and cell membranes</td>
+        <td>Triglycerides, phospholipids</td>
+      </tr>
+      <tr>
+        <td>Nucleic acids</td>
+        <td>Storage and expression of genetic information</td>
+        <td>DNA, RNA</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Other important chemical substances</h3>
+
+  <ul>
+    <li><strong>Water:</strong> A major biological solvent and medium for many biochemical reactions.</li>
+    <li><strong>Minerals:</strong> Inorganic elements that support biological processes, such as iron, calcium and zinc.</li>
+    <li><strong>Vitamins:</strong> Organic micronutrients required for normal physiological and metabolic functions.</li>
+  </ul>
+</section>
+
+<section class="lesson-section">
+  <p class="eyebrow">05 · CELLULAR BIOCHEMISTRY</p>
+  <h2>Biochemistry and the living cell</h2>
+
+  <p>
+    The cell is the basic structural and functional unit
+    of life. Many biochemical reactions occur inside cells,
+    often within specialised compartments called organelles.
+  </p>
+
+  <h3>Examples of important cellular structures</h3>
+
+  <ul>
+    <li><strong>Nucleus:</strong> Contains most of the cell's genetic material in eukaryotic cells.</li>
+    <li><strong>Mitochondria:</strong> Major sites of ATP production through aerobic respiration in many eukaryotic cells.</li>
+    <li><strong>Ribosomes:</strong> Sites of protein synthesis.</li>
+    <li><strong>Cytoplasm:</strong> Contains cellular components and is the site of many metabolic reactions.</li>
+    <li><strong>Cell membrane:</strong> Regulates movement of substances into and out of the cell.</li>
+  </ul>
+
+  <div class="science-note">
+    <p>
+      <strong>Remember:</strong>
+      Biochemistry does not study only the human body.
+      It also investigates chemical processes in plants,
+      animals, microorganisms and other living systems.
+    </p>
+  </div>
+</section>
+
+<section class="lesson-section">
+  <p class="eyebrow">06 · BRANCHES AND APPLICATIONS</p>
+  <h2>Major areas of biochemistry</h2>
+
+  <div class="application-grid">
+    <article class="lesson-card">
+      <h3>Structural Biochemistry</h3>
+      <p>Studies the structures and molecular organisation of biological substances.</p>
+    </article>
+
+    <article class="lesson-card">
+      <h3>Metabolic Biochemistry</h3>
+      <p>Studies chemical pathways involved in energy production and biosynthesis.</p>
+    </article>
+
+    <article class="lesson-card">
+      <h3>Enzymology</h3>
+      <p>Investigates enzymes, their mechanisms, activities and regulation.</p>
+    </article>
+
+    <article class="lesson-card">
+      <h3>Molecular Biology</h3>
+      <p>Examines DNA, RNA, gene expression and molecular mechanisms of inheritance.</p>
+    </article>
+
+    <article class="lesson-card">
+      <h3>Clinical Biochemistry</h3>
+      <p>Uses biochemical investigations to support the assessment and monitoring of health conditions.</p>
+    </article>
+
+    <article class="lesson-card">
+      <h3>Plant Biochemistry</h3>
+      <p>Studies photosynthesis, plant metabolism and the chemistry of plant products.</p>
+    </article>
+  </div>
+
+  <h3>Practical applications</h3>
+
+  <p>
+    Biochemistry contributes to many areas of modern science
+    and society.
+  </p>
+
+  <ul>
+    <li><strong>Medicine:</strong> Understanding disease mechanisms and biochemical laboratory markers.</li>
+    <li><strong>Pharmaceutical science:</strong> Supporting drug discovery and understanding drug action.</li>
+    <li><strong>Agriculture:</strong> Investigating plant growth, crop quality and nutrient metabolism.</li>
+    <li><strong>Food science:</strong> Understanding food composition, preservation and nutritional quality.</li>
+    <li><strong>Biotechnology:</strong> Applying biological molecules and processes in industrial and scientific production.</li>
+    <li><strong>Research:</strong> Investigating molecular mechanisms, biological pathways and new scientific discoveries.</li>
+  </ul>
+</section>
+
+<section class="lesson-section">
+  <p class="eyebrow">07 · BIOCHEMISTRY IN THE LABORATORY</p>
+  <h2>Connection with laboratory science</h2>
+
+  <p>
+    Biochemistry is strongly connected with laboratory
+    investigations. Scientists use analytical methods
+    to identify, measure and study biological substances.
+  </p>
+
+  <h3>Examples of laboratory methods</h3>
+
+  <ul>
+    <li><strong>Spectrophotometry:</strong> Measures light absorption to help determine the concentration of substances.</li>
+    <li><strong>Chromatography:</strong> Separates components of mixtures.</li>
+    <li><strong>Electrophoresis:</strong> Separates charged molecules using an electric field.</li>
+    <li><strong>Colorimetric methods:</strong> Estimate the concentration of substances through colour changes.</li>
+    <li><strong>Enzyme assays:</strong> Measure enzyme activity under defined experimental conditions.</li>
+  </ul>
+
+  <div class="science-note">
+    <p>
+      <strong>Laboratory example:</strong>
+      A clinical laboratory may measure glucose concentration
+      in a blood sample using an enzymatic assay. The result
+      can help healthcare professionals assess glucose
+      regulation in the appropriate clinical context.
+    </p>
+  </div>
+</section>
+
+<section class="lesson-section">
+  <p class="eyebrow">08 · LESSON SUMMARY</p>
+  <h2>What you should remember</h2>
+
+  <ul>
+    <li>Biochemistry studies the chemical basis of life.</li>
+    <li>It connects the principles of biology and chemistry.</li>
+    <li>Major biomolecules include carbohydrates, proteins, lipids and nucleic acids.</li>
+    <li>Biochemical reactions occur throughout living cells.</li>
+    <li>Enzymes help accelerate many biological chemical reactions.</li>
+    <li>Biochemistry has applications in medicine, agriculture, food science, biotechnology and laboratory research.</li>
+  </ul>
+</section>
+
+<section class="lesson-section">
+  <p class="eyebrow">09 · REVISION QUESTIONS</p>
+  <h2>Test your understanding</h2>
+
+  <div class="question">
+    <p><strong>1. Define biochemistry.</strong></p>
+    <div class="answer">
+      Biochemistry is the branch of science that studies
+      the chemical substances, molecular structures and
+      chemical processes occurring in living organisms.
+    </div>
+  </div>
+
+  <div class="question">
+    <p><strong>2. Explain the relationship between biology, chemistry and biochemistry.</strong></p>
+    <div class="answer">
+      Biology studies living organisms and their functions.
+      Chemistry studies matter and its transformations.
+      Biochemistry combines these principles to explain
+      the chemical mechanisms underlying biological processes.
+    </div>
+  </div>
+
+  <div class="question">
+    <p><strong>3. List four major biomolecules.</strong></p>
+    <div class="answer">
+      Carbohydrates, proteins, lipids and nucleic acids.
+    </div>
+  </div>
+
+  <div class="question">
+    <p><strong>4. State five applications of biochemistry.</strong></p>
+    <div class="answer">
+      Medicine, pharmaceutical science, agriculture,
+      food science and biotechnology.
+    </div>
+  </div>
+
+  <div class="question">
+    <p><strong>5. Explain the importance of biochemistry in laboratory science.</strong></p>
+    <div class="answer">
+      It provides the scientific basis for laboratory
+      investigations involving biological substances,
+      including glucose, enzymes, proteins and other
+      biochemical markers.
+    </div>
+  </div>
+</section>
+
+<section class="lesson-section" id="assessment">
+  <p class="eyebrow">10 · SELF-ASSESSMENT</p>
+  <h2>Biochemistry knowledge check</h2>
+
+  <p>Select one answer for each question, then submit your responses.</p>
+
+  <form id="quizForm">
+
+    <div class="question">
+      <p><strong>1. Biochemistry primarily studies:</strong></p>
+      <label class="quiz-option"><input type="radio" name="q1" value="a"> Rocks and minerals</label>
+      <label class="quiz-option"><input type="radio" name="q1" value="b"> Chemical processes in living organisms</label>
+      <label class="quiz-option"><input type="radio" name="q1" value="c"> Weather conditions</label>
+    </div>
+
+    <div class="question">
+      <p><strong>2. Which of these is a nucleic acid?</strong></p>
+      <label class="quiz-option"><input type="radio" name="q2" value="a"> DNA</label>
+      <label class="quiz-option"><input type="radio" name="q2" value="b"> Starch</label>
+      <label class="quiz-option"><input type="radio" name="q2" value="c"> Triglyceride</label>
+    </div>
+
+    <div class="question">
+      <p><strong>3. Which biomolecule commonly acts as a biological catalyst?</strong></p>
+      <label class="quiz-option"><input type="radio" name="q3" value="a"> Lipid</label>
+      <label class="quiz-option"><input type="radio" name="q3" value="b"> Protein enzyme</label>
+      <label class="quiz-option"><input type="radio" name="q3" value="c"> Water</label>
+    </div>
+
+    <div class="question">
+      <p><strong>4. Which organelle is a major site of ATP production in many eukaryotic cells?</strong></p>
+      <label class="quiz-option"><input type="radio" name="q4" value="a"> Ribosome</label>
+      <label class="quiz-option"><input type="radio" name="q4" value="b"> Nucleus</label>
+      <label class="quiz-option"><input type="radio" name="q4" value="c"> Mitochondrion</label>
+    </div>
+
+    <div class="question">
+      <p><strong>5. Which laboratory technique separates components of a mixture?</strong></p>
+      <label class="quiz-option"><input type="radio" name="q5" value="a"> Chromatography</label>
+      <label class="quiz-option"><input type="radio" name="q5" value="b"> Incubation only</label>
+      <label class="quiz-option"><input type="radio" name="q5" value="c"> Weighing</label>
+    </div>
+
+    <button class="button primary" type="submit">Submit Assessment</button>
+
+    <p id="quizResult" class="quiz-result" aria-live="polite"></p>
+
+  </form>
+</section>
+
+<div class="lesson-navigation">
+  <a href="../biochemistry.html">← Back to Biochemistry Topics</a>
+  <a href="../../">Academy Home →</a>
+</div>
+
+</div>
+</main>
+
+<footer>
+  <div class="container footer-content">
+    <strong>VOC LEARNING ACADEMY</strong>
+    <span>Learn. Understand. Discover. Excel.</span>
+    <a href="https://voc-research-world.runs-at.dev/">
+      VOC Research World ↗
+    </a>
+  </div>
+
+  <div class="container copyright">
+    © <span data-current-year>2026</span>
+    VOC Learning Academy · SCIENCE · INNOVATION · GLOBAL IMPACT
+  </div>
+</footer>
+
+<script src="../../js/academy.js"></script>
+
+<script>
+document.getElementById("quizForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const answers = {
+    q1: "b",
+    q2: "a",
+    q3: "b",
+    q4: "c",
+    q5: "a"
+  };
+
+  let score = 0;
+  let unanswered = 0;
+
+  for (const question in answers) {
+    const selected = document.querySelector(
+      'input[name="' + question + '"]:checked'
+    );
+
+    if (!selected) {
+      unanswered++;
+    } else if (selected.value === answers[question]) {
+      score++;
+    }
+  }
+
+  const result = document.getElementById("quizResult");
+
+  if (unanswered > 0) {
+    result.textContent =
+      "Please answer all five questions before submitting.";
+    return;
+  }
+
+  result.textContent =
+    "Your score: " + score + "/5. " +
+    (score === 5
+      ? "Excellent work! You have understood this lesson."
+      : "Good attempt. Review the lesson and try again.");
+});
+</script>
+
+</body>
+</html>
