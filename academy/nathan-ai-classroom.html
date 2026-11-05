@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#061827">
+<title>Nathan AI Classroom | VOC Learning Academy</title>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+    "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
+    "@interviewflowai/talking-avatar": "https://cdn.jsdelivr.net/npm/@interviewflowai/talking-avatar@0.3.0/dist/index.js"
+  }
+}
+</script>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f5f8;color:#183448}
+header{background:#061827;color:white;padding:17px 5%}
+header a{color:white;text-decoration:none}
+header strong{display:block;letter-spacing:1px}
+header small{color:#a9c9d9}
+.hero{padding:28px 6%;background:linear-gradient(120deg,#061827,#12618a);color:white}
+.hero h1{font-size:clamp(27px,5vw,40px);margin:8px 0}
+.hero p{line-height:1.6;max-width:750px}
+main{max-width:1200px;margin:25px auto;padding:0 14px 40px}
+.classroom{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.panel{background:white;border:1px solid #dce5eb;border-radius:13px;overflow:hidden;box-shadow:0 4px 16px #00000009}
+.heading{padding:15px;border-bottom:1px solid #e2e9ee;font-weight:bold;color:#0b3855}
+#avatar-stage{height:390px;background:radial-gradient(circle at 50% 35%,#e4f4fa,#a9c8d9)}
+#avatar-stage canvas{width:100%;height:100%;display:block}
+.controls{padding:17px}
+label{display:block;font-weight:bold;margin:13px 0 7px}
+select,input,textarea{width:100%;padding:12px;border:1px solid #cbd8e1;border-radius:7px;font:inherit;background:white}
+textarea{min-height:95px;resize:vertical}
+button{border:0;border-radius:7px;background:#1687c9;color:white;padding:12px 16px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+button.secondary{background:#e6eff4;color:#12415e}
+button.stop{background:#a63e3e}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.actions button{flex:1}
+#status{margin-top:13px;padding:11px;border-radius:7px;background:#edf5f9;font-size:13px;line-height:1.5}
+#chat{height:300px;overflow-y:auto;padding:15px;background:#fbfdfe}
+.message{padding:12px;border-radius:8px;margin-bottom:11px;line-height:1.65;overflow-wrap:anywhere;white-space:pre-wrap}
+.teacher{background:#edf6fb}
+.student{background:#e8f3ed;margin-left:10%}
+#board{min-height:180px;max-height:380px;overflow:auto;padding:17px;line-height:1.8;white-space:pre-wrap;background:#fff}
+.board-title{padding:12px 17px;background:#eaf3f8;color:#123b55;font-weight:bold;border-bottom:1px solid #dce5eb}
+.note{font-size:12px;color:#657987;line-height:1.6;margin-top:15px}
+footer{padding:23px;text-align:center;background:#061827;color:white;font-size:13px}
+footer a{color:#60d2d6}
+@media(max-width:760px){
+ .classroom{grid-template-columns:1fr}
+ #avatar-stage{height:350px}
+}
+</style>
+</head>
+
+<body>
+<header>
+<a href="./">
+<strong>VOC LEARNING ACADEMY</strong>
+<small>A VOC Research World initiative</small>
+</a>
+</header>
+
+<section class="hero">
+<p>VOC LEARNING ACADEMY · INTERACTIVE VIDEO CLASSROOM</p>
+<h1>Meet Nathan, your AI Science Teacher</h1>
+<p>Ask questions, explore scientific concepts and listen as Nathan explains the answers. Use the teaching board to follow the lesson.</p>
+</section>
+
+<main>
+<div class="classroom">
+
+<section class="panel">
+<div class="heading">Nathan · 3D AI Teacher</div>
+<div id="avatar-stage"></div>
+<div class="controls">
+<div class="actions">
+<button id="loadVoice">Load free voice engine</button>
+<button id="stopSpeech" class="stop" disabled>Stop speaking</button>
+</div>
+<div id="status" role="status" aria-live="polite">Loading Nathan's 3D classroom…</div>
+<p class="note">The first voice-engine download may take some time. It runs in your browser after loading. Device performance and available memory affect how quickly it works.</p>
+</div>
+</section>
+
+<section class="panel">
+<div class="heading">Ask Nathan a question</div>
+<div class="controls">
+<label for="subject">Subject</label>
+<select id="subject">
+<option>Biochemistry</option>
+<option>Biology</option>
+<option>Microbiology</option>
+<option>Anatomy</option>
+<option>Physics</option>
+<option>Chemistry</option>
+<option>Mathematics</option>
+<option>Laboratory Science</option>
+<option>Artificial Intelligence</option>
+<option>General Learning</option>
+</select>
+
+<label for="topic">Topic (optional)</label>
+<input id="topic" placeholder="e.g. Enzyme kinetics">
+
+<label for="question">Your question</label>
+<textarea id="question" maxlength="3000" placeholder="Ask Nathan to explain a topic, solve a problem or teach you a complete lesson..."></textarea>
+
+<label>
+<input type="checkbox" id="autoSpeak" checked style="width:auto">
+ Automatically speak Nathan's answers
+</label>
+
+<div class="actions">
+<button id="sendButton">Ask Nathan</button>
+</div>
+<p class="note">You must sign in to use the AI teaching service. The AI teaching response still depends on the available Gemini service quota.</p>
+</div>
+</section>
+
+</div>
+
+<section class="panel" style="margin-top:18px">
+<div class="board-title">Nathan's Teaching Board</div>
+<div id="board">Your lesson explanations will appear here. Ask Nathan a question to begin.</div>
+</section>
+
+<section class="panel" style="margin-top:18px">
+<div class="heading">Classroom conversation</div>
+<div id="chat" aria-live="polite">
+<div class="message teacher">Hello and welcome to VOC Learning Academy. I am Nathan, your AI science teacher. What would you like us to learn today?</div>
+</div>
+</section>
+
+<p class="note">Educational support generated by AI. Consult trusted textbooks and qualified educators when verifying important academic information.</p>
+<p><a href="ai-teacher.html">← Return to the existing AI Teacher</a></p>
+</main>
+
+<footer>
+VOC LEARNING ACADEMY<br>
+Learn. Understand. Discover. Excel.<br><br>
+<a href="https://voc-research-world.runs-at.dev/">VOC Research World</a>
+</footer>
+
+<script type="module">
+import { supabase } from "../supabase-config.js";
+import { AVATARS, TalkingAvatar } from "@interviewflowai/talking-avatar";
+
+const stage = document.getElementById("avatar-stage");
+const status = document.getElementById("status");
+const loadVoiceButton = document.getElementById("loadVoice");
+const stopButton = document.getElementById("stopSpeech");
+const sendButton = document.getElementById("sendButton");
+const question = document.getElementById("question");
+const subject = document.getElementById("subject");
+const topic = document.getElementById("topic");
+const chat = document.getElementById("chat");
+const board = document.getElementById("board");
+const autoSpeak = document.getElementById("autoSpeak");
+
+let avatar = null;
+let tts = null;
+let voiceLoading = false;
+let speaking = false;
+const history = [];
+
+function addMessage(content, role) {
+  const item = document.createElement("div");
+  item.className = "message " + role;
+  item.textContent = content;
+  chat.appendChild(item);
+  chat.scrollTop = chat.scrollHeight;
+  return item;
+}
+
+async function initialiseAvatar() {
+  try {
+    avatar = new TalkingAvatar({
+      container: stage,
+      avatarUrl: AVATARS.male,
+      onError: error => {
+        console.error("Nathan avatar:", error);
+        status.textContent = "Avatar problem: " + error.message;
+      }
+    });
+
+    await avatar.ready;
+    avatar.setStatus("listening");
+    status.textContent = "Nathan is ready. Load the voice engine to enable spoken lessons.";
+  } catch (error) {
+    console.error(error);
+    status.textContent = "Nathan could not load. Check your internet connection and refresh.";
+  }
+}
+
+async function loadVoiceEngine() {
+  if (tts || voiceLoading) return;
+
+  voiceLoading = true;
+  loadVoiceButton.disabled = true;
+  status.textContent = "Loading the local voice engine. The first download may take a while…";
+
+  try {
+    const { KokoroTTS } = await import("https://esm.sh/kokoro-js@1.2.1?bundle");
+
+    tts = await KokoroTTS.from_pretrained(
+      "onnx-community/Kokoro-82M-v1.0-ONNX",
+      {
+        dtype: "q8",
+        device: "wasm",
+        progress_callback: progress => {
+          if (progress && progress.status) {
+            status.textContent = "Voice engine: " + progress.status;
+          }
+        }
+      }
+    );
+
+    status.textContent = "Nathan's local voice engine is ready.";
+    loadVoiceButton.textContent = "Voice engine ready";
+
+  } catch (error) {
+    console.error(error);
+    status.textContent = "Voice engine could not load: " + error.message;
+    loadVoiceButton.disabled = false;
+  } finally {
+    voiceLoading = false;
+  }
+}
+
+async function speakAnswer(text) {
+  if (!avatar) {
+    status.textContent = "Nathan's avatar is not ready yet.";
+    return;
+  }
+
+  if (!tts) {
+    status.textContent = "Please load the voice engine first.";
+    return;
+  }
+
+  if (speaking) {
+    avatar.stopSpeaking();
+    speaking = false;
+  }
+
+  try {
+    status.textContent = "Generating Nathan's speech locally…";
+    speaking = true;
+    stopButton.disabled = false;
+
+    avatar.setStatus("speaking");
+
+    const audio = await tts.generate(text, {
+      voice: "bm_george",
+      speed: 1
+    });
+
+    const blob = audio.toBlob();
+    const audioFile = new File([blob], "nathan-lesson.wav", {
+      type: "audio/wav"
+    });
+
+    status.textContent = "Nathan is teaching…";
+    await avatar.speak(audioFile);
+
+    status.textContent = "Nathan has finished speaking.";
+  } catch (error) {
+    console.error(error);
+    status.textContent = "Speech could not be played: " + error.message;
+  } finally {
+    speaking = false;
+    stopButton.disabled = true;
+    if (avatar) avatar.setStatus("listening");
+  }
+}
+
+loadVoiceButton.addEventListener("click", loadVoiceEngine);
+
+stopButton.addEventListener("click", () => {
+  if (avatar) avatar.stopSpeaking();
+  speaking = false;
+  stopButton.disabled = true;
+  status.textContent = "Speech stopped.";
+  if (avatar) avatar.setStatus("listening");
+});
+
+sendButton.addEventListener("click", async () => {
+  const message = question.value.trim();
+  if (!message) {
+    question.focus();
+    return;
+  }
+
+  sendButton.disabled = true;
+  question.disabled = true;
+
+  addMessage(message, "student");
+  question.value = "";
+
+  const loading = addMessage("Nathan is preparing your explanation…", "teacher");
+  board.textContent = "Nathan is preparing the teaching material…";
+
+  try {
+    const { data: sessionData, error: sessionError } =
+      await supabase.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    if (!sessionData.session) {
+      loading.textContent = "Please sign in to use Nathan's AI classroom.";
+      const link = document.createElement("a");
+      link.href = "../auth.html";
+      link.textContent = " Sign in or create an account";
+      loading.appendChild(link);
+      board.textContent = "Please sign in before beginning your lesson.";
+      return;
+    }
+
+    const { data, error } = await supabase.functions.invoke(
+      "voc-ai-teacher",
+      {
+        body: {
+          message,
+          subject: subject.value,
+          topic: topic.value.trim(),
+          history
+        }
+      }
+    );
+
+    if (error) {
+      let detail = error.message || "The teaching request failed.";
+      try {
+        const response = await error.context.json();
+        if (response.error) detail = response.error;
+      } catch (_) {}
+      throw new Error(detail);
+    }
+
+    if (!data || !data.answer) {
+      throw new Error("Nathan returned no answer.");
+    }
+
+    loading.textContent = data.answer;
+    board.textContent = data.answer;
+
+    history.push(
+      { role: "user", content: message },
+      { role: "assistant", content: data.answer }
+    );
+
+    if (history.length > 8) {
+      history.splice(0, history.length - 8);
+    }
+
+    if (autoSpeak.checked) {
+      if (tts) {
+        await speakAnswer(data.answer);
+      } else {
+        status.textContent = "Answer ready. Load the voice engine to hear Nathan speak.";
+      }
+    }
+
+  } catch (error) {
+    console.error(error);
+    loading.textContent = "Nathan could not respond: " + error.message;
+    board.textContent = "There was a problem preparing this lesson. Please try again.";
+  } finally {
+    sendButton.disabled = false;
+    question.disabled = false;
+    question.focus();
+  }
+});
+
+window.addEventListener("pagehide", () => {
+  if (avatar) avatar.dispose();
+});
+
+initialiseAvatar();
+</script>
+</body>
+</html>
