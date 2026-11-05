@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#061827">
+  <title>Nathan | VOC Learning Academy</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #183448;
+      background: #f1f5f8;
+    }
+
+    header {
+      padding: 17px 5%;
+      background: #061827;
+      color: white;
+    }
+
+    header a {
+      color: white;
+      text-decoration: none;
+    }
+
+    header strong {
+      display: block;
+      letter-spacing: 1px;
+    }
+
+    header small {
+      color: #a9c9d9;
+    }
+
+    .hero {
+      padding: 30px 6%;
+      color: white;
+      background: linear-gradient(120deg, #061827, #12618a);
+    }
+
+    .hero h1 {
+      margin: 8px 0;
+      font-size: clamp(27px, 5vw, 40px);
+    }
+
+    .hero p {
+      max-width: 700px;
+      line-height: 1.7;
+    }
+
+    main {
+      max-width: 1050px;
+      margin: 28px auto;
+      padding: 0 15px 40px;
+    }
+
+    .classroom {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 18px;
+    }
+
+    .avatar-card, .control-card {
+      overflow: hidden;
+      background: white;
+      border: 1px solid #dce5eb;
+      border-radius: 14px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.05);
+    }
+
+    .card-heading {
+      padding: 15px;
+      border-bottom: 1px solid #e2e9ee;
+      color: #0b3855;
+      font-weight: bold;
+    }
+
+    #avatar-stage {
+      width: 100%;
+      height: 420px;
+      background: radial-gradient(circle at 50% 35%, #e4f4fa, #a9c8d9);
+    }
+
+    #avatar-stage canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .control-card {
+      padding: 20px;
+    }
+
+    .control-card h2 {
+      margin-top: 0;
+      color: #0b3855;
+    }
+
+    .control-card p {
+      line-height: 1.65;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      margin: 20px 0 9px;
+      font-weight: bold;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd8e1;
+      border-radius: 8px;
+      background: #f8fbfd;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 12px;
+      padding: 13px;
+      border: 0;
+      border-radius: 8px;
+      background: #1687c9;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #e6eff4;
+      color: #12415e;
+    }
+
+    button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    #status {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #edf5f9;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .note {
+      margin-top: 18px;
+      padding: 12px;
+      border-left: 3px solid #55b77a;
+      background: #f0f8f2;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    footer {
+      padding: 22px;
+      text-align: center;
+      background: #061827;
+      color: white;
+      font-size: 13px;
+    }
+
+    footer a {
+      color: #60d2d6;
+    }
+
+    @media (max-width: 720px) {
+      .classroom {
+        grid-template-columns: 1fr;
+      }
+
+      #avatar-stage {
+        height: 390px;
+      }
+    }
+  </style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+      "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/",
+      "@interviewflowai/talking-avatar": "https://cdn.jsdelivr.net/npm/@interviewflowai/talking-avatar@0.3.0/dist/index.js"
+    }
+  }
+  </script>
+</head>
+
+<body>
+
+  <header>
+    <a href="./">
+      <strong>VOC LEARNING ACADEMY</strong>
+      <small>A VOC Research World initiative</small>
+    </a>
+  </header>
+
+  <section class="hero">
+    <p>VOC LEARNING ACADEMY · VIDEO CLASSROOM</p>
+    <h1>Meet Nathan, your 3D AI Teacher</h1>
+    <p>
+      Welcome to the experimental video classroom.
+      This first stage tests Nathan's 3D appearance and
+      synchronised speech. The live AI conversation and
+      scientific teaching board will be added in later stages.
+    </p>
+  </section>
+
+  <main>
+    <div class="classroom">
+
+      <section class="avatar-card">
+        <div class="card-heading">
+          Nathan · VOC Science Teacher
+        </div>
+
+        <div id="avatar-stage"></div>
+      </section>
+
+      <section class="control-card">
+        <h2>Test Nathan's voice</h2>
+
+        <p>
+          Select an audio recording from your device.
+          Nathan will play the recording while his mouth
+          movements synchronise with the speech.
+        </p>
+
+        <label for="audio-file">Choose an audio file</label>
+        <input
+          id="audio-file"
+          type="file"
+          accept="audio/*"
+          disabled
+        >
+
+        <button id="play-button" disabled>
+          Play with lip-sync
+        </button>
+
+        <button id="stop-button" class="secondary" disabled>
+          Stop speech
+        </button>
+
+        <div id="status" role="status" aria-live="polite">
+          Loading Nathan's 3D classroom model…
+        </div>
+
+        <div class="note">
+          <strong>Privacy:</strong>
+          The selected recording is processed in your browser.
+          This test page does not upload the audio file to VOC.
+        </div>
+
+        <p>
+          <a href="ai-teacher.html">Return to the existing Text AI Teacher</a>
+        </p>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    VOC LEARNING ACADEMY<br>
+    Learn. Understand. Discover. Excel.<br><br>
+    <a href="https://voc-research-world.runs-at.dev/">
+      VOC Research World
+    </a>
+  </footer>
+
+  <script type="module">
+    import {
+      AVATARS,
+      TalkingAvatar
+    } from "@interviewflowai/talking-avatar";
+
+    const stage = document.getElementById("avatar-stage");
+    const fileInput = document.getElementById("audio-file");
+    const playButton = document.getElementById("play-button");
+    const stopButton = document.getElementById("stop-button");
+    const status = document.getElementById("status");
+
+    let avatar = null;
+    let selectedFile = null;
+
+    async function initialiseClassroom() {
+      try {
+        avatar = new TalkingAvatar({
+          container: stage,
+          avatarUrl: AVATARS.male,
+          onError: (error) => {
+            console.error("Nathan avatar error:", error);
+            status.textContent = "Avatar error: " + error.message;
+          }
+        });
+
+        await avatar.ready;
+
+        avatar.setStatus("listening");
+
+        fileInput.disabled = false;
+        status.textContent =
+          "Nathan is ready. Choose an audio recording to test his speech.";
+
+      } catch (error) {
+        console.error(error);
+        status.textContent =
+          "Nathan could not load. Check your internet connection and refresh the page.";
+      }
+    }
+
+    fileInput.addEventListener("change", () => {
+      selectedFile = fileInput.files?.[0] || null;
+
+      playButton.disabled = !avatar || !selectedFile;
+
+      status.textContent = selectedFile
+        ? "Selected: " + selectedFile.name + ". Tap Play with lip-sync."
+        : "Please select an audio file.";
+    });
+
+    playButton.addEventListener("click", async () => {
+      if (!avatar || !selectedFile) return;
+
+      playButton.disabled = true;
+      stopButton.disabled = false;
+
+      status.textContent = "Nathan is speaking…";
+
+      try {
+        await avatar.speak(selectedFile);
+
+        status.textContent =
+          "Nathan has finished speaking. You can test another recording.";
+
+      } catch (error) {
+        console.error(error);
+        status.textContent =
+          "Audio playback failed: " + error.message;
+
+      } finally {
+        playButton.disabled = !selectedFile;
+        stopButton.disabled = true;
+
+        if (avatar) {
+          avatar.setStatus("listening");
+        }
+      }
+    });
+
+    stopButton.addEventListener("click", () => {
+      if (avatar) avatar.stopSpeaking();
+
+      stopButton.disabled = true;
+      playButton.disabled = !selectedFile;
+      status.textContent = "Speech stopped.";
+    });
+
+    window.addEventListener("pagehide", () => {
+      if (avatar) avatar.dispose();
+    });
+
+    initialiseClassroom();
+  </script>
+
+</body>
+</html>
