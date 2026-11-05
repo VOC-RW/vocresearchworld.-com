@@ -388,7 +388,46 @@ const subject = document.getElementById("subject");
 const topic = document.getElementById("topic");
 
 const history = [];
+async function renderTeacherResponse(element, markdown) {
+  const protectedMath = String(markdown)
+    .replace(/\\\(/g, "@@VOC_MATH_INLINE_OPEN@@")
+    .replace(/\\\)/g, "@@VOC_MATH_INLINE_CLOSE@@")
+    .replace(/\\\[/g, "@@VOC_MATH_DISPLAY_OPEN@@")
+    .replace(/\\\]/g, "@@VOC_MATH_DISPLAY_CLOSE@@");
 
+  const html = window.marked
+    ? window.marked.parse(protectedMath, {
+        gfm: true,
+        breaks: false
+      })
+    : protectedMath
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\n/g, "<br>");
+
+  const safeHtml = window.DOMPurify
+    ? window.DOMPurify.sanitize(html, {
+        USE_PROFILES: { html: true }
+      })
+    : html;
+
+  element.classList.add("teacher-content");
+
+  element.innerHTML = safeHtml
+    .replace(/@@VOC_MATH_INLINE_OPEN@@/g, "\\(")
+    .replace(/@@VOC_MATH_INLINE_CLOSE@@/g, "\\)")
+    .replace(/@@VOC_MATH_DISPLAY_OPEN@@/g, "\\[")
+    .replace(/@@VOC_MATH_DISPLAY_CLOSE@@/g, "\\]");
+
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    try {
+      await window.MathJax.typesetPromise([element]);
+    } catch (err) {
+      console.warn("Math rendering issue:", err);
+    }
+  }
+}
 function addMessage(content, role = "teacher") {
   const message = document.createElement("div");
   message.className = `message ${role}`;
