@@ -493,7 +493,7 @@ form.addEventListener("submit", async (event) => {
       throw new Error("The AI Teacher returned no answer.");
     }
 
-    loading.textContent = data.answer;
+    await renderTeacherResponse(loading, data.answer);
 
     history.push(
       { role: "user", content: message },
