@@ -249,6 +249,103 @@
     </a>
   </div>
 </footer>
+<script type="module">
+import { supabase } from "../supabase-config.js";
 
+const form = document.getElementById("chatForm");
+const chat = document.getElementById("chat");
+const question = document.getElementById("question");
+const sendButton = document.getElementById("sendButton");
+const subject = document.getElementById("subject");
+const topic = document.getElementById("topic");
+
+const history = [];
+
+function addMessage(content, role = "teacher") {
+  const message = document.createElement("div");
+  message.className = `message ${role}`;
+  message.textContent = content;
+  chat.appendChild(message);
+  chat.scrollTop = chat.scrollHeight;
+  return message;
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const message = question.value.trim();
+  if (!message) return;
+
+  sendButton.disabled = true;
+  question.disabled = true;
+
+  addMessage(message, "student");
+  question.value = "";
+
+  const loading = addMessage("Your AI Teacher is preparing a response...");
+
+  try {
+    const { data: sessionData, error: sessionError } =
+      await supabase.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    if (!sessionData.session) {
+      loading.textContent =
+        "Please sign in to use the AI Teacher.";
+
+      const link = document.createElement("a");
+      link.href = "../auth.html";
+      link.textContent = " Sign in or create an account";
+      loading.appendChild(link);
+      return;
+    }
+
+    const { data, error } = await supabase.functions.invoke(
+      "voc-ai-teacher",
+      {
+        body: {
+          message,
+          subject: subject.value,
+          topic: topic.value.trim(),
+          history
+        }
+      }
+    );
+
+    if (error) {
+      let detail = error.message || "Request failed.";
+      try {
+        const response = await error.context.json();
+        if (response.error) detail = response.error;
+      } catch (_) {}
+      throw new Error(detail);
+    }
+
+    if (!data || !data.answer) {
+      throw new Error("The AI Teacher returned no answer.");
+    }
+
+    loading.textContent = data.answer;
+
+    history.push(
+      { role: "user", content: message },
+      { role: "assistant", content: data.answer }
+    );
+
+    if (history.length > 8) {
+      history.splice(0, history.length - 8);
+    }
+
+  } catch (error) {
+    loading.textContent =
+      "AI Teacher error: " + error.message;
+  } finally {
+    sendButton.disabled = false;
+    question.disabled = false;
+    question.focus();
+  }
+});
+</script>
 </body>
 </html>
