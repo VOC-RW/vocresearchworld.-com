@@ -200,8 +200,159 @@ async function initialiseAvatar() {
   }
 }
 
+
+function floatToWavBlob(samples, sampleRateHz) {
+  const dataLength = samples.length * 2;
+  const buffer = new ArrayBuffer(44 + dataLength);
+  const view = new DataView(buffer);
+
+  function writeText(offset, value) {
+    for (let i = 0; i < value.length; i++) {
+      view.setUint8(offset + i, value.charCodeAt(i));
+    }
+  }
+
+  writeText(0, "RIFF");
+  view.setUint32(4, 36 + dataLength, true);
+  writeText(8, "WAVE");
+  writeText(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRateHz, true);
+  view.setUint32(28, sampleRateHz * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeText(36, "data");
+  view.setUint32(40, dataLength, true);
+
+  let offset = 44;
+  for (let i = 0; i < samples.length; i++, offset += 2) {
+    const sample = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(
+      offset,
+      sample < 0 ? sample * 0x8000 : sample * 0x7fff,
+      true
+    );
+  }
+
+  return new Blob([buffer], { type: "audio/wav" });
+}
+
 async function loadVoiceEngine() {
   if (tts || voiceLoading) return;
+
+  voiceLoading = true;
+  loadVoiceButton.disabled = true;
+  status.textContent =
+    "Loading Nathan's free voice engine. The first download may be large…";
+
+  try {
+    const { FilesetResolver, TextToSpeech } = await import(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-audio@1.2.2/+esm"
+    );
+
+    const audioFileset = await FilesetResolver.forAudioTasks(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-audio@1.2.2/wasm"
+    );
+
+    const options = {
+      baseOptions: {
+        modelAssetPath:
+          "https://huggingface.co/litert-community/Kokoro-82M/resolve/main/kokoro_int8_gpu_fp16.litertlm",
+        delegate: "GPU"
+      },
+      defaultVoiceId: "bm_george",
+      speakingRate: 1.0,
+      cacheDirectory: ":nocache"
+    };
+
+    try {
+      status.textContent = "Preparing accelerated voice engine…";
+      tts = await TextToSpeech.createFromOptions(
+        audioFileset,
+        options
+      );
+    } catch (gpuError) {
+      console.warn("GPU unavailable; trying CPU:", gpuError);
+      status.textContent = "Trying the CPU voice engine…";
+      options.baseOptions.delegate = "CPU";
+      tts = await TextToSpeech.createFromOptions(
+        audioFileset,
+        options
+      );
+    }
+
+    status.textContent = "Nathan's local voice engine is ready.";
+    loadVoiceButton.textContent = "Voice engine ready";
+
+  } catch (error) {
+    console.error("Voice engine:", error);
+    tts = null;
+    status.textContent =
+      "Voice engine could not load: " + error.message;
+    loadVoiceButton.disabled = false;
+
+  } finally {
+    voiceLoading = false;
+  }
+}
+
+async function speakAnswer(text) {
+  if (!avatar) {
+    status.textContent = "Nathan's avatar is not ready yet.";
+    return;
+  }
+
+  if (!tts) {
+    status.textContent = "Please load the voice engine first.";
+    return;
+  }
+
+  if (speaking) {
+    avatar.stopSpeaking();
+    tts.cancel();
+    speaking = false;
+  }
+
+  try {
+    status.textContent = "Generating Nathan's speech locally…";
+    speaking = true;
+    stopButton.disabled = false;
+    avatar.setStatus("speaking");
+
+    const result = await tts.synthesize(
+      text,
+      { voiceId: "bm_george" }
+    );
+
+    const blob = floatToWavBlob(
+      result.samples,
+      result.sampleRateHz
+    );
+
+    const audioFile = new File(
+      [blob],
+      "nathan-lesson.wav",
+      { type: "audio/wav" }
+    );
+
+    status.textContent = "Nathan is teaching…";
+    await avatar.speak(audioFile);
+
+    status.textContent = "Nathan has finished speaking.";
+
+  } catch (error) {
+    console.error("Speech playback:", error);
+    status.textContent =
+      "Speech could not be played: " + error.message;
+
+  } finally {
+    speaking = false;
+    stopButton.disabled = true;
+    if (avatar) avatar.setStatus("listening");
+  }
+}
 
   voiceLoading = true;
   loadVoiceButton.disabled = true;
