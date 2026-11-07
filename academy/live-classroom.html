@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#061827">
+  <title>Live AI Classroom | VOC Learning Academy</title>
+
+  <link rel="stylesheet" href="css/academy.css">
+
+  <style>
+    body {
+      background: #061827;
+      color: #f4f8fb;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .classroom-container {
+      width: min(92%, 760px);
+      margin: 55px auto;
+    }
+
+    .classroom-card {
+      background: #0d2638;
+      border: 1px solid rgba(96, 210, 214, .25);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 15px 45px rgba(0,0,0,.25);
+    }
+
+    .classroom-card h1 {
+      color: #60d2d6;
+      margin-top: 0;
+    }
+
+    .classroom-card p {
+      line-height: 1.7;
+      color: #d4e1e9;
+    }
+
+    .status {
+      background: #102f43;
+      border-radius: 10px;
+      padding: 14px;
+      margin: 20px 0;
+      color: #d4e1e9;
+      overflow-wrap: anywhere;
+    }
+
+    .status.success {
+      border-left: 4px solid #55b77a;
+    }
+
+    .status.error {
+      border-left: 4px solid #e36b6b;
+    }
+
+    button {
+      background: #1687c9;
+      border: 0;
+      border-radius: 8px;
+      color: white;
+      padding: 13px 20px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: #60d2d6;
+      text-decoration: none;
+    }
+
+    .notice {
+      font-size: 13px;
+      color: #a9bdca !important;
+      margin-top: 18px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="classroom-container">
+    <section class="classroom-card">
+      <h1>VOC Live AI Classroom</h1>
+
+      <p>
+        Welcome to the live AI classroom. This page checks whether
+        VOC Learning Academy can securely connect to its Tavus AI
+        video service.
+      </p>
+
+      <p>
+        Your AI teacher, Nathan, is being prepared for interactive
+        live teaching sessions.
+      </p>
+
+      <div id="status" class="status" role="status" aria-live="polite">
+        Ready to check the secure Tavus connection.
+      </div>
+
+      <button id="testButton" type="button">
+        Test AI Teacher Connection
+      </button>
+
+      <p class="notice">
+        This is a connection test only. Live video sessions,
+        subscriptions, payments and credit deductions are not
+        activated by this page.
+      </p>
+
+      <a class="back-link" href="index.html">
+        ← Back to VOC Learning Academy
+      </a>
+    </section>
+  </main>
+
+  <script type="module">
+    import { supabase } from "../supabase-config.js";
+
+    const statusBox = document.getElementById("status");
+    const testButton = document.getElementById("testButton");
+
+    function showStatus(message, type = "") {
+      statusBox.textContent = message;
+      statusBox.className = "status " + type;
+    }
+
+    testButton.addEventListener("click", async () => {
+      testButton.disabled = true;
+      showStatus("Checking your account and Tavus connection...");
+
+      try {
+        const {
+          data: { session },
+          error: sessionError
+        } = await supabase.auth.getSession();
+
+        if (sessionError) {
+          throw sessionError;
+        }
+
+        if (!session || !session.access_token) {
+          showStatus(
+            "Please sign in to your VOC Learning Academy account before testing the connection.",
+            "error"
+          );
+          return;
+        }
+
+        const { data, error } = await supabase.functions.invoke(
+          "academy-tavus-connection-test",
+          {
+            body: {
+              mode: "test"
+            },
+            headers: {
+              Authorization: "Bearer " + session.access_token
+            }
+          }
+        );
+
+        if (error) {
+          throw error;
+        }
+
+        if (data && data.ok) {
+          showStatus(
+            data.message ||
+            "The secure Tavus connection test was successful.",
+            "success"
+          );
+        } else {
+          showStatus(
+            data?.message ||
+            "The connection test did not complete successfully.",
+            "error"
+          );
+        }
+
+      } catch (error) {
+        console.error("Tavus connection test:", error);
+
+        showStatus(
+          error.message ||
+          "Unable to complete the Tavus connection test. Please try again later.",
+          "error"
+        );
+
+      } finally {
+        testButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
