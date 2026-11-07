@@ -355,24 +355,62 @@ async function speakAnswer(text) {
 }
 
   voiceLoading = true;
+  async function loadVoiceEngine() {
+  if (tts || voiceLoading) return;
+
+  voiceLoading = true;
   loadVoiceButton.disabled = true;
-  status.textContent = "Loading the local voice engine. The first download may take a while…";
+  status.textContent = "Loading Nathan's local voice engine…";
 
   try {
-  const { KokoroTTS } = await import("https://cdn.jsdelivr.net/npm/kokoro-js@1.2.1/+esm");
-
-    tts = await KokoroTTS.from_pretrained(
-      "onnx-community/Kokoro-82M-v1.0-ONNX",
-      {
-        dtype: "q8",
-        device: "wasm",
-        progress_callback: progress => {
-          if (progress && progress.status) {
-            status.textContent = "Voice engine: " + progress.status;
-          }
-        }
-      }
+    const { FilesetResolver, TextToSpeech } = await import(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-audio@1.2.2/+esm"
     );
+
+    const audioFileset = await FilesetResolver.forAudioTasks(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-audio@1.2.2/wasm"
+    );
+
+    const options = {
+      baseOptions: {
+        modelAssetPath:
+          "https://huggingface.co/litert-community/Kokoro-82M/resolve/main/kokoro_int8_gpu_fp16.litertlm",
+        delegate: "GPU"
+      },
+      defaultVoiceId: "bm_george",
+      speakingRate: 1.0
+    };
+
+    try {
+      tts = await TextToSpeech.createFromOptions(
+        audioFileset,
+        options
+      );
+    } catch (gpuError) {
+      console.warn("GPU unavailable. Trying CPU.", gpuError);
+
+      options.baseOptions.delegate = "CPU";
+
+      tts = await TextToSpeech.createFromOptions(
+        audioFileset,
+        options
+      );
+    }
+
+    status.textContent = "Nathan's voice engine is ready.";
+    loadVoiceButton.textContent = "Voice engine ready";
+
+  } catch (error) {
+    console.error(error);
+    tts = null;
+    status.textContent =
+      "Voice engine could not load: " + error.message;
+    loadVoiceButton.disabled = false;
+
+  } finally {
+    voiceLoading = false;
+  }
+}
 
     status.textContent = "Nathan's local voice engine is ready.";
     loadVoiceButton.textContent = "Voice engine ready";
